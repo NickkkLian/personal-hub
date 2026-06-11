@@ -1,0 +1,64 @@
+---
+/**
+ * 装裱组件（BLUEPRINT 5.1 / 附录 A 装裱规范）：
+ * - canvas（默认）：无框画布——0.5px 极淡描边收口 + 柔影承重
+ * - float：发丝浮框——1px 墨色细框 + 10px 可见留缝（墙面透出），仅 featured 展品用
+ * 任何 ≥2px 深色粗边框全站禁用。统一左上定向光，hover = 射灯亮起。
+ */
+interface Props {
+  variant?: "canvas" | "float";
+  /** 是否启用 hover 射灯/抬升（列表卡用，静态展示关闭） */
+  interactive?: boolean;
+  class?: string;
+}
+const { variant = "canvas", interactive = false, class: className } = Astro.props;
+---
+
+{
+  variant === "float" ? (
+    <div class:list={["exhibit-float", interactive && "exhibit-hover", className]}>
+      <div class="exhibit-float-inner">
+        <slot />
+      </div>
+    </div>
+  ) : (
+    <div class:list={["exhibit-canvas", interactive && "exhibit-hover", className]}>
+      <slot />
+    </div>
+  )
+}
+
+<style>
+  .exhibit-canvas {
+    background: var(--surface);
+    border: 0.5px solid color-mix(in oklab, var(--text) 10%, transparent);
+    border-radius: var(--radius-frame);
+    box-shadow: var(--shadow-exhibit);
+  }
+
+  .exhibit-float {
+    border: 1px solid var(--line-frame);
+    border-radius: var(--radius-frame);
+    padding: 10px; /* 留缝：墙面从缝中透出 */
+    box-shadow: var(--shadow-exhibit);
+    background: transparent;
+  }
+  .exhibit-float-inner {
+    background: var(--surface);
+    border: 0.5px solid color-mix(in oklab, var(--text) 8%, transparent);
+    border-radius: 2px;
+    height: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .exhibit-hover {
+      transition:
+        transform var(--dur-move) var(--ease-gallery),
+        box-shadow var(--dur-move) var(--ease-gallery);
+    }
+  }
+  .exhibit-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+import { t, type Locale } from "../i18n";
+import { siteConfig } from "../config/site";
+import Logo from "./Logo.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="relative border-t border-hair">
+  <div class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-8">
+    <div class="flex flex-col gap-3">
+      <Logo size={26} />
+      <p class="meta-mono">EST. 2026 · GALERIE VIVANTE</p>
+      <p class="max-w-md text-sm text-muted">{t(locale, "footer.colophon")}</p>
+    </div>
+    <div class="flex flex-col gap-2 sm:items-end">
+      <ul class="flex gap-4">
+        {
+          siteConfig.site.socials.map((s) => (
+            <li>
+              <a
+                href={s.url}
+                rel="me noopener"
+                target="_blank"
+                class="meta-mono text-muted transition-colors hover:text-text"
+              >
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="text-xs text-muted">
+        © {year} {siteConfig.site.title[locale]} · {t(locale, "footer.rights")}
+      </p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,150 @@
+---
+/**
+ * 背景纵深系统（BLUEPRINT 附录 A · 方案 B+ 七平面的静态基建版）：
+ * ① 光场层 + ④ 墙地分界 在 global.css 的 body 背景中
+ * 本组件渲染：② 颜料雾 + 幽灵字 ⑤ 微尘层 以及画布纹理
+ * 全部纯 CSS/SVG，零 JS、零图片请求；reduced-motion 时漂移与微尘静止。
+ * 出血原则：幽灵字与色雾允许越出视口，页面四边开放。
+ */
+interface Props {
+  /** 模块房间色变量名，如 "--room-writing"；不传则用黄铜中性色 */
+  room?: string;
+  /** 幽灵字（4–5% 对比度的超大水印，允许出血） */
+  ghost?: string;
+}
+const { room, ghost } = Astro.props;
+const roomVar = room ? `var(${room})` : "var(--brass)";
+---
+
+<div class="backdrop" aria-hidden="true" style={`--room-paint: ${roomVar}`}>
+  {ghost && <div class="ghost font-display">{ghost}</div>}
+  <div class="mist mist-a"></div>
+  <div class="mist mist-b"></div>
+  <div class="dust">
+    <i style="left:12%;top:22%;animation-delay:0s"></i>
+    <i style="left:78%;top:14%;animation-delay:-6s"></i>
+    <i style="left:62%;top:58%;animation-delay:-12s"></i>
+    <i style="left:28%;top:74%;animation-delay:-18s"></i>
+    <i style="left:88%;top:42%;animation-delay:-9s"></i>
+    <i style="left:44%;top:36%;animation-delay:-15s"></i>
+  </div>
+  <!-- 画布纹理：内联 feTurbulence 油画布噪点 -->
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="canvas-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence>
+      <feColorMatrix type="saturate" values="0"></feColorMatrix>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#canvas-grain)"></rect>
+  </svg>
+</div>
+
+<style>
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* ② 幽灵字：超大低对比水印，越界出血 */
+  .ghost {
+    position: absolute;
+    top: 4rem;
+    right: -0.08em;
+    font-size: clamp(7rem, 24vw, 22rem);
+    font-weight: 600;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--ghost-ink);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /* ② 颜料雾：房间色重度虚化色场，缓慢漂移 */
+  .mist {
+    position: absolute;
+    width: 55vmax;
+    height: 55vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--room-paint) 0%, transparent 62%);
+    opacity: 0.07;
+    filter: blur(60px);
+  }
+  .mist-a {
+    top: -18vmax;
+    left: -12vmax;
+  }
+  .mist-b {
+    bottom: -22vmax;
+    right: -16vmax;
+    opacity: 0.05;
+  }
+
+  /* ⑤ 微尘层：同屏 ≤6 颗颜料微粒，光柱中缓慢漂浮 */
+  .dust i {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--room-paint);
+    opacity: 0.18;
+  }
+
+  .grain {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: var(--canvas-grain-opacity);
+    mix-blend-mode: multiply;
+  }
+  :global([data-theme="dark"]) .grain {
+    mix-blend-mode: screen;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mist-a {
+      animation: drift-a 46s var(--ease-gallery) infinite alternate;
+    }
+    .mist-b {
+      animation: drift-b 58s var(--ease-gallery) infinite alternate;
+    }
+    .dust i {
+      animation: float 24s linear infinite;
+    }
+  }
+  /* 移动端减量：隐藏微尘 */
+  @media (max-width: 640px) {
+    .dust {
+      display: none;
+    }
+  }
+
+  @keyframes drift-a {
+    to {
+      transform: translate(6vmax, 4vmax);
+    }
+  }
+  @keyframes drift-b {
+    to {
+      transform: translate(-5vmax, -6vmax);
+    }
+  }
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.18;
+    }
+    88% {
+      opacity: 0.12;
+    }
+    100% {
+      transform: translateY(-9vh) translateX(1.5vw);
+      opacity: 0;
+    }
+  }
+</style>

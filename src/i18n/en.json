@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "writing": "Writing",
+    "music-wall": "Album Wall",
+    "my-music": "My Music",
+    "knowledge": "Knowledge",
+    "life": "Life",
+    "menu": "Kitchen",
+    "mystery": "Mystery",
+    "social": "Channels",
+    "about": "About",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
+  },
+  "module": {
+    "projects": {
+      "title": "Projects",
+      "ghost": "ATELIER",
+      "intro": "Open-source experiments, tools and studies."
+    },
+    "writing": {
+      "title": "Writing",
+      "ghost": "BIBLIOTHÈQUE",
+      "intro": "Essays, ideas and fragments of thought."
+    },
+    "music-wall": {
+      "title": "Album Wall",
+      "ghost": "GALERIE",
+      "intro": "Records I keep returning to, hung on a wall."
+    },
+    "my-music": {
+      "title": "My Music",
+      "ghost": "STUDIO",
+      "intro": "Original works from the studio."
+    },
+    "knowledge": {
+      "title": "Knowledge",
+      "ghost": "OBSERVATOIRE",
+      "intro": "A constellation of connected ideas."
+    },
+    "life": {
+      "title": "Life",
+      "ghost": "VOYAGE",
+      "intro": "Footprints across corners of the world."
+    },
+    "menu": {
+      "title": "Kitchen",
+      "ghost": "CUISINE",
+      "intro": "A private menu of home dishes."
+    },
+    "mystery": {
+      "title": "Mystery",
+      "ghost": "ARCHIVES",
+      "intro": "Case files of puzzles and tricks."
+    },
+    "social": {
+      "title": "Channels",
+      "ghost": "ÉMISSION",
+      "intro": "Selected work across platforms."
+    },
+    "about": {
+      "title": "About",
+      "ghost": "PORTRAIT",
+      "intro": "Who I am, and how to reach me."
+    }
+  },
+  "home": {
+    "ghost": "GALERIE",
+    "heroKicker": "Personal Hub",
+    "enter": "Enter",
+    "hallTitle": "The Rooms",
+    "hallSubtitle": "Each room holds one domain. More rooms open over time.",
+    "roomLabel": "Room"
+  },
+  "placeholder": {
+    "title": "This room is being installed",
+    "body": "The works for this gallery are on their way. Please come back soon.",
+    "label": "WORK IN PROGRESS"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "colophon": "Built as a quiet gallery — static, fast, and open."
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "themeToggle": "Switch between light and dark theme",
+    "langSwitch": "切换到中文",
+    "mainNav": "Main navigation"
+  },
+  "notFound": {
+    "title": "Room not found",
+    "body": "This gallery has no such room — it may be closed, or it never existed.",
+    "back": "Back to the entrance hall"
+  },
+  "langTag": {
+    "originalZh": "Original: Chinese",
+    "originalEn": "Original: English"
+  }
+}

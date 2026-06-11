@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "首页",
+    "projects": "开源项目",
+    "writing": "文字",
+    "music-wall": "专辑墙",
+    "my-music": "原创音乐",
+    "knowledge": "知识图谱",
+    "life": "生活地图",
+    "menu": "私房菜单",
+    "mystery": "谜题档案",
+    "social": "自媒体",
+    "about": "关于",
+    "menuOpen": "打开菜单",
+    "menuClose": "关闭菜单"
+  },
+  "module": {
+    "projects": {
+      "title": "开源项目",
+      "ghost": "ATELIER",
+      "intro": "开源实验、工具与研究。"
+    },
+    "writing": {
+      "title": "文字",
+      "ghost": "BIBLIOTHÈQUE",
+      "intro": "文章、观点与思想的碎片。"
+    },
+    "music-wall": {
+      "title": "专辑墙",
+      "ghost": "GALERIE",
+      "intro": "那些反复重听的唱片，挂在墙上。"
+    },
+    "my-music": {
+      "title": "原创音乐",
+      "ghost": "STUDIO",
+      "intro": "来自录音室的原创作品。"
+    },
+    "knowledge": {
+      "title": "知识图谱",
+      "ghost": "OBSERVATOIRE",
+      "intro": "一片由观念连成的星座。"
+    },
+    "life": {
+      "title": "生活地图",
+      "ghost": "VOYAGE",
+      "intro": "散落在世界各个角落的足迹。"
+    },
+    "menu": {
+      "title": "私房菜单",
+      "ghost": "CUISINE",
+      "intro": "一份家常菜的私人菜单。"
+    },
+    "mystery": {
+      "title": "谜题档案",
+      "ghost": "ARCHIVES",
+      "intro": "谜题与诡计的卷宗。"
+    },
+    "social": {
+      "title": "自媒体",
+      "ghost": "ÉMISSION",
+      "intro": "各平台的精选内容。"
+    },
+    "about": {
+      "title": "关于",
+      "ghost": "PORTRAIT",
+      "intro": "我是谁，以及如何联系我。"
+    }
+  },
+  "home": {
+    "ghost": "GALERIE",
+    "heroKicker": "个人主页",
+    "enter": "进入",
+    "hallTitle": "展厅",
+    "hallSubtitle": "每间展厅陈列一个领域，更多展厅将陆续开放。",
+    "roomLabel": "展厅"
+  },
+  "placeholder": {
+    "title": "本展厅布展中",
+    "body": "这间展厅的作品正在路上，欢迎稍后再来。",
+    "label": "WORK IN PROGRESS"
+  },
+  "footer": {
+    "rights": "保留所有权利。",
+    "colophon": "以一座安静画廊的方式构建——静态、迅速、开放。"
+  },
+  "a11y": {
+    "skipToContent": "跳转到正文",
+    "themeToggle": "切换深色 / 浅色主题",
+    "langSwitch": "Switch to English",
+    "mainNav": "主导航"
+  },
+  "notFound": {
+    "title": "展厅不存在",
+    "body": "画廊里没有这间展厅——它可能已关闭，或从未存在。",
+    "back": "回到门厅"
+  },
+  "langTag": {
+    "originalZh": "原文：中文",
+    "originalEn": "原文：英文"
+  }
+}

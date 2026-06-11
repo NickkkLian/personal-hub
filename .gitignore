@@ -1,0 +1,21 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# environment / secrets — never commit tokens
+.env
+.env.*
+
+# sync script output (generated, P1+)
+src/data/*.normalized.json
+public/covers/
+
+# os / editor
+.DS_Store
+*.log
+
+# claude code personal local settings (skills/ 等项目级配置仍纳入版本控制)
+.claude/settings.local.json

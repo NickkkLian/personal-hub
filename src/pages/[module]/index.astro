@@ -1,0 +1,21 @@
+---
+/**
+ * 模块路由（英文）：路径由 site.config.json 的开关决定。
+ * 关闭的模块不会出现在 getStaticPaths 中 → 不产出 HTML、
+ * 不进 sitemap、访问返回 404 —— 模块开关的核心实现。
+ */
+import { enabledModules, type ModuleId } from "../../config/site";
+import { MODULE_PAGES } from "../../modules/registry";
+
+export function getStaticPaths() {
+  return enabledModules().map((m) => ({
+    params: { module: m.slug },
+    props: { id: m.id },
+  }));
+}
+
+const { id } = Astro.props as { id: ModuleId };
+const Page = MODULE_PAGES[id];
+---
+
+<Page locale="en" />

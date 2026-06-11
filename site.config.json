@@ -1,0 +1,26 @@
+{
+  "$comment": "站长唯一需要碰的文件。modules 里每个模块可设 enabled（是否构建该页面）与 nav（是否出现在导航栏）。改完提交即可，约 1-2 分钟自动重新部署。",
+  "site": {
+    "owner": "NickkkLian",
+    "url": "https://personal-hub.pages.dev",
+    "title": { "en": "Nick Lian", "zh": "Nick Lian" },
+    "tagline": {
+      "en": "A personal gallery of projects, writing, music and more.",
+      "zh": "一座陈列项目、文字与音乐的个人画廊。"
+    },
+    "email": "",
+    "socials": [{ "label": "GitHub", "url": "https://github.com/NickkkLian" }]
+  },
+  "modules": {
+    "projects": { "enabled": true, "nav": true },
+    "writing": { "enabled": true, "nav": true },
+    "music-wall": { "enabled": true, "nav": true },
+    "my-music": { "enabled": false, "nav": false },
+    "knowledge": { "enabled": false, "nav": false },
+    "life": { "enabled": false, "nav": false },
+    "menu": { "enabled": false, "nav": false },
+    "mystery": { "enabled": false, "nav": false },
+    "social": { "enabled": false, "nav": false },
+    "about": { "enabled": true, "nav": true }
+  }
+}

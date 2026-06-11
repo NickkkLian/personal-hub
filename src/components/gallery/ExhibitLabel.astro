@@ -1,0 +1,39 @@
+---
+/**
+ * 凸版式展品编号标签（标志性细节，BLUEPRINT 附录 A 艺术层 6）：
+ * NO. 047 · MUSIC / 标题 / 2026 · 媒介 —— 等宽字、压印字距。
+ * 编号全站连续、跨模块累加（数据层 P1 起由规范化脚本分配）。
+ */
+interface Props {
+  no: string | number;
+  module: string;
+  title?: string;
+  year?: string | number;
+  medium?: string;
+}
+const { no, module: moduleName, title, year, medium } = Astro.props;
+const padded = typeof no === "number" ? String(no).padStart(3, "0") : no;
+const tail = [year, medium].filter(Boolean).join(" · ");
+---
+
+<div class="exhibit-label">
+  <span class="meta-mono">NO. {padded} · {moduleName}</span>
+  {title && <span class="label-title font-display">{title}</span>}
+  {tail && <span class="meta-mono label-tail">{tail}</span>}
+</div>
+
+<style>
+  .exhibit-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+  }
+  .label-title {
+    font-size: 0.92rem;
+    font-weight: 540;
+    color: var(--text);
+  }
+  .label-tail {
+    letter-spacing: 0.1em;
+  }
+</style>

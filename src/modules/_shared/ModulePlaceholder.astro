@@ -1,0 +1,80 @@
+---
+/**
+ * 模块占位页（P0）：编辑式巨型标题排版基线 + 布展中卡片。
+ * P2+ 各模块用自己的差异化布局（书架/专辑墙/档案柜…）替换此占位，
+ * 但巨型标题、房间色、展品编号体系的版式基准从这里延续。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import BrassPlaque from "../../components/gallery/BrassPlaque.astro";
+import { t, type Locale } from "../../i18n";
+import { MODULE_REGISTRY, type ModuleId } from "../../config/site";
+
+interface Props {
+  locale: Locale;
+  id: ModuleId;
+}
+const { locale, id } = Astro.props;
+const meta = MODULE_REGISTRY[id];
+const title = t(locale, `module.${id}.title`);
+const intro = t(locale, `module.${id}.intro`);
+const ghost = t(locale, `module.${id}.ghost`);
+---
+
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={intro}
+  path={`/${meta.slug}`}
+  room={meta.room}
+  ghost={ghost}
+>
+  <article style={`--room: var(${meta.room})`}>
+    <!-- 模块开篇：超大错位标题（YSL 式类型学） -->
+    <header class="module-head enter-rise is-in">
+      <p class="meta-mono room-tag">
+        {t(locale, "home.roomLabel")}
+        {meta.roomNo} — {ghost}
+      </p>
+      <h1 class="module-title">{title}</h1>
+      <p class="module-intro">{intro}</p>
+    </header>
+
+    <hr class="hairline my-10" />
+
+    <!-- 布展中：发丝浮框 featured 装裱示例 -->
+    <div class="max-w-md enter-rise">
+      <ExhibitFrame variant="float">
+        <div class="flex flex-col gap-4 p-7">
+          <BrassPlaque text={t(locale, "placeholder.label")} class="self-start" />
+          <h2 class="text-xl">{t(locale, "placeholder.title")}</h2>
+          <p class="text-sm leading-relaxed text-muted">{t(locale, "placeholder.body")}</p>
+        </div>
+      </ExhibitFrame>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .module-head {
+    padding-top: clamp(2rem, 8vh, 5rem);
+  }
+  .room-tag {
+    color: var(--room);
+    margin-bottom: 1.2rem;
+  }
+  .module-title {
+    font-size: clamp(3.2rem, 10vw, 7.5rem);
+    line-height: 0.96;
+    font-weight: 590;
+    /* 错位断行：标题向左探出一格，形成编辑式不对称 */
+    margin-left: -0.04em;
+    max-width: 12ch;
+  }
+  .module-intro {
+    margin-top: 1.6rem;
+    max-width: 36rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+</style>

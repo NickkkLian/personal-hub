@@ -1,0 +1,30 @@
+---
+/**
+ * 黄铜铭牌：全站唯一"金属"材质（BLUEPRINT 附录 A 光影与材质系统）。
+ * 用于沉浸场景的署名、状态印章（如 WORK IN PROGRESS）。
+ */
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className } = Astro.props;
+---
+
+<span class:list={["brass-plaque", className]}>{text}</span>
+
+<style>
+  .brass-plaque {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--paint-ink) 78%, var(--brass));
+    background: linear-gradient(155deg, var(--brass-hi) 0%, var(--brass) 42%, color-mix(in oklab, var(--brass) 72%, black) 100%);
+    border-radius: 2px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      var(--shadow-plaque);
+  }
+</style>

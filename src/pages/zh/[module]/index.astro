@@ -1,0 +1,19 @@
+---
+/**
+ * 模块路由（中文 /zh/）：与英文路由共用同一份开关逻辑。
+ */
+import { enabledModules, type ModuleId } from "../../../config/site";
+import { MODULE_PAGES } from "../../../modules/registry";
+
+export function getStaticPaths() {
+  return enabledModules().map((m) => ({
+    params: { module: m.slug },
+    props: { id: m.id },
+  }));
+}
+
+const { id } = Astro.props as { id: ModuleId };
+const Page = MODULE_PAGES[id];
+---
+
+<Page locale="zh" />

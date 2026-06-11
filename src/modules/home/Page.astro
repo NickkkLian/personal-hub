@@ -1,0 +1,164 @@
+---
+/**
+ * Home（P0 版门厅）：Hero + 模块星图/门厅入口卡。
+ * P2 将加入 Canvas 流场动态背景（惰性加载）与生成式封面；
+ * 入口卡网格与房间编号体系在此定版。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import Logo from "../../components/Logo.astro";
+import { t, localizePath, pickLang, type Locale } from "../../i18n";
+import { siteConfig, enabledModules } from "../../config/site";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const name = siteConfig.site.title[locale];
+const tagline = pickLang(siteConfig.site.tagline, locale);
+const rooms = enabledModules();
+---
+
+<BaseLayout
+  locale={locale}
+  title={name}
+  description={tagline.value}
+  path="/"
+  ghost={t(locale, "home.ghost")}
+>
+  <!-- Hero：姓名 + 一句话身份，首屏文字逐词浮现 -->
+  <section class="hero">
+    <div class="enter-rise is-in">
+      <Logo variant="stamp" size={44} />
+    </div>
+    <p class="meta-mono mt-8 tracking-[0.22em]">{t(locale, "home.heroKicker")}</p>
+    <h1 class="hero-name" data-words>{name}</h1>
+    <p class="hero-tagline font-display" data-words>{tagline.value}</p>
+  </section>
+
+  <!-- 门厅：开启的模块 = 可步入的展厅 -->
+  <section class="mt-24" aria-labelledby="hall-title">
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <h2 id="hall-title" class="text-3xl sm:text-4xl">{t(locale, "home.hallTitle")}</h2>
+      <p class="meta-mono">{t(locale, "home.hallSubtitle")}</p>
+    </div>
+    <hr class="hairline mt-5 mb-10" />
+
+    <ul class="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        rooms.map((m, i) => (
+          <li class="enter-rise" style={`transition-delay:${Math.min(i * 70, 350)}ms`}>
+            <a href={localizePath(locale, `/${m.slug}`)} class="room-card" style={`--room: var(${m.room})`}>
+              <ExhibitFrame interactive class="h-full">
+                <div class="flex h-full flex-col">
+                  {/* 画区：房间色颜料色场（P2 替换为生成式印象派封面） */}
+                  <div class="room-art" aria-hidden="true" />
+                  <div class="flex grow flex-col gap-2 p-5">
+                    <span class="meta-mono room-no">
+                      {t(locale, "home.roomLabel").toUpperCase()} {m.roomNo} · {m.id.toUpperCase().replace("-", " ")}
+                    </span>
+                    <span class="font-display text-2xl font-medium">{t(locale, `nav.${m.id}`)}</span>
+                    <span class="text-sm leading-relaxed text-muted">{t(locale, `module.${m.id}.intro`)}</span>
+                    <span class="meta-mono mt-auto pt-3 enter-cue">{t(locale, "home.enter")} →</span>
+                  </div>
+                </div>
+              </ExhibitFrame>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-top: clamp(3rem, 14vh, 9rem);
+    padding-bottom: clamp(2rem, 8vh, 5rem);
+  }
+  .hero-name {
+    margin-top: 0.6rem;
+    font-size: clamp(3.4rem, 11vw, 8.5rem);
+    line-height: 0.95;
+    font-weight: 600;
+    margin-left: -0.045em;
+  }
+  .hero-tagline {
+    margin-top: 1.6rem;
+    max-width: 34rem;
+    font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+    font-style: italic;
+    font-weight: 420;
+    color: var(--muted);
+    text-wrap: balance;
+  }
+
+  /* 首屏文字逐词浮现 */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-words] :global(.w) {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.5em);
+      animation: word-rise var(--dur-enter) var(--ease-gallery) forwards;
+      animation-delay: var(--d, 0ms);
+    }
+  }
+  @keyframes word-rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .room-card {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+  .room-art {
+    height: 110px;
+    border-radius: var(--radius-frame) var(--radius-frame) 0 0;
+    background:
+      radial-gradient(75% 95% at 18% 8%, color-mix(in oklab, var(--room) 52%, var(--surface)) 0%, transparent 68%),
+      radial-gradient(65% 85% at 85% 88%, color-mix(in oklab, var(--room) 30%, var(--surface)) 0%, transparent 62%),
+      var(--surface-2);
+  }
+  .room-no {
+    color: var(--room);
+  }
+  .enter-cue {
+    color: var(--muted);
+    transition: color var(--dur-micro) var(--ease-gallery);
+  }
+  .room-card:hover .enter-cue {
+    color: var(--room);
+  }
+</style>
+
+<script>
+  // 逐词浮现：把 [data-words] 文本拆为 span，按词错峰入场
+  function splitWords() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.querySelectorAll<HTMLElement>("[data-words]:not([data-split])").forEach((el) => {
+      el.setAttribute("data-split", "");
+      const words = (el.textContent ?? "").split(/(\s+)/);
+      el.textContent = "";
+      let i = 0;
+      for (const w of words) {
+        if (/^\s+$/.test(w)) {
+          el.append(w);
+          continue;
+        }
+        const span = document.createElement("span");
+        span.className = "w";
+        span.style.setProperty("--d", `${120 + i * 90}ms`);
+        span.textContent = w;
+        el.append(span);
+        i++;
+      }
+    });
+  }
+  splitWords();
+  document.addEventListener("astro:after-swap", splitWords);
+</script>

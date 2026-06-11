@@ -1,0 +1,134 @@
+---
+import { t, localizePath, type Locale } from "../i18n";
+import { navModules } from "../config/site";
+import Logo from "./Logo.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import LangSwitch from "./LangSwitch.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const items = navModules();
+const current = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+function isActive(href: string): boolean {
+  const clean = href.replace(/\/$/, "") || "/";
+  return current === clean;
+}
+---
+
+<header class="fixed inset-x-0 top-0 z-50 border-b border-hair bg-bg/80 backdrop-blur-md">
+  <nav aria-label={t(locale, "a11y.mainNav")} class="mx-auto flex h-14 max-w-6xl items-center gap-4 px-5 sm:px-8">
+    <a href={localizePath(locale, "/")} class="shrink-0" aria-label={t(locale, "nav.home")}>
+      <Logo size={28} withWordmark wordmark="Nick Lian" />
+    </a>
+
+    <div class="grow"></div>
+
+    <!-- 桌面导航 -->
+    <ul class="hidden items-center gap-1 md:flex">
+      {
+        items.map((m) => {
+          const href = localizePath(locale, `/${m.slug}`);
+          return (
+            <li>
+              <a
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                class="nav-link meta-mono"
+                style={`--room: var(${m.room})`}
+              >
+                {t(locale, `nav.${m.id}`)}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <div class="hidden h-4 w-px bg-hair md:block"></div>
+    <ThemeToggle locale={locale} />
+    <LangSwitch locale={locale} />
+
+    <!-- 移动端菜单按钮 -->
+    <button
+      type="button"
+      class="grid h-9 w-9 place-items-center rounded-sm border border-hair md:hidden"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label={t(locale, "nav.menuOpen")}
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1 4h14M1 8h14M1 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- 移动端抽屉 -->
+  <div id="mobile-nav" hidden class="border-t border-hair bg-bg/95 px-5 py-4 backdrop-blur-md md:hidden">
+    <ul class="flex flex-col gap-1">
+      {
+        items.map((m) => {
+          const href = localizePath(locale, `/${m.slug}`);
+          return (
+            <li>
+              <a
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                class="nav-link meta-mono block py-2"
+                style={`--room: var(${m.room})`}
+              >
+                {t(locale, `nav.${m.id}`)}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</header>
+
+<style>
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    padding: 0.45rem 0.65rem;
+    color: var(--muted);
+    transition: color var(--dur-micro) var(--ease-gallery);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: 0.2rem;
+    height: 1px;
+    background: var(--room, var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-move) var(--ease-gallery);
+  }
+  .nav-link:hover,
+  .nav-link[aria-current="page"] {
+    color: var(--text);
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+</style>
+
+<script>
+  // 事件委托：在 View Transitions 换页后依然有效
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as Element).closest("[data-nav-toggle]");
+    if (!btn) return;
+    const panel = document.getElementById("mobile-nav");
+    if (!panel) return;
+    const open = panel.hidden;
+    panel.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  });
+</script>

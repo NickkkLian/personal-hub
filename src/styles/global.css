@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* 把语义令牌映射进 Tailwind v4 主题，可直接用 bg-bg / text-text / border-hair 等工具类 */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-brass: var(--brass);
+  --color-floor: var(--floor);
+  --color-hair: var(--line-hair);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+/* 主题切换时颜色平滑过渡（reduced-motion 时由下方规则关闭） */
+html {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100dvh;
+  /* 墙面 → 地坪的纵深色阶（背景纵深系统第④层） */
+  background:
+    linear-gradient(to bottom, transparent 0%, transparent 82%, var(--floor) 100%),
+    radial-gradient(120% 70% at 18% -8%, var(--wall-pool) 0%, transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* 标题排版基线 */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+:lang(zh) h1,
+:lang(zh) h2,
+:lang(zh) h3 {
+  letter-spacing: 0.01em;
+}
+
+/* 等宽元数据（展品编号 / 批注）基线样式 */
+.meta-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* 发丝分隔线 */
+.hairline {
+  border: 0;
+  border-top: 1px solid var(--line-hair);
+}
+
+/* 跳转正文链接（键盘可达性） */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line-hair);
+  border-radius: var(--radius-frame);
+  transition: top var(--dur-micro) var(--ease-gallery);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* 入场动画原语：被 IntersectionObserver / 页面加载触发 */
+@media (prefers-reduced-motion: no-preference) {
+  .enter-rise {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity var(--dur-enter) var(--ease-gallery),
+      transform var(--dur-enter) var(--ease-gallery);
+  }
+  .enter-rise.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================================
+   prefers-reduced-motion：全站动画退化为优雅静态构图
+   （漂移/微尘/视差/转场全部停用，纵深由色阶与光影静态成立）
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

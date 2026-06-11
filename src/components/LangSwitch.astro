@@ -1,0 +1,29 @@
+---
+import { t, switchLocalePath, altLocale, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const target = switchLocalePath(Astro.url.pathname);
+const label = altLocale(locale) === "zh" ? "中" : "EN";
+---
+
+<a
+  href={target}
+  data-lang-switch
+  class="meta-mono grid h-9 min-w-9 place-items-center rounded-sm border border-hair px-2 text-muted transition-colors hover:text-text"
+  aria-label={t(locale, "a11y.langSwitch")}
+>
+  {label}
+</a>
+
+<script>
+  // 记忆语言选择（BLUEPRINT 7：切换器记忆选择）
+  document.addEventListener("click", (e) => {
+    const link = (e.target as Element).closest("[data-lang-switch]");
+    if (!link) return;
+    const goingToZh = (link as HTMLAnchorElement).pathname.startsWith("/zh");
+    localStorage.setItem("hub-lang", goingToZh ? "zh" : "en");
+  });
+</script>

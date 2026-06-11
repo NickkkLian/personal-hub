@@ -1,0 +1,106 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
+import "@fontsource/space-mono";
+import "@fontsource/space-mono/700.css";
+import "@fontsource-variable/noto-sans-sc";
+import "@fontsource-variable/noto-serif-sc";
+import "../styles/global.css";
+import { t, type Locale } from "../i18n";
+import { siteConfig } from "../config/site";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Backdrop from "../components/gallery/Backdrop.astro";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** 不带语言前缀的页面路径（用于 hreflang 双语互链），如 "/writing" */
+  path: string;
+  /** 模块房间色变量名，如 "--room-writing" */
+  room?: string;
+  /** 背景幽灵字 */
+  ghost?: string;
+}
+const { locale, title, description, path, room, ghost } = Astro.props;
+
+const siteUrl = (Astro.site ?? new URL(siteConfig.site.url)).href.replace(/\/$/, "");
+const cleanPath = path === "/" ? "" : path;
+const enHref = `${siteUrl}${cleanPath || "/"}`;
+const zhHref = `${siteUrl}/zh${cleanPath}`;
+const canonical = locale === "zh" ? zhHref : enHref;
+const fullTitle = path === "/" ? title : `${title} · ${t(locale, "home.heroKicker")} — ${siteConfig.site.title[locale]}`;
+---
+
+<!doctype html>
+<html lang={locale === "zh" ? "zh-CN" : "en"} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="zh-CN" href={zhHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- 主题无闪烁：首帧前按 localStorage → 系统偏好 设定，View Transitions 换页后重设 -->
+    <script is:inline>
+      (() => {
+        const apply = () => {
+          const saved = localStorage.getItem("hub-theme");
+          const theme =
+            saved === "dark" || saved === "light"
+              ? saved
+              : matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+        };
+        apply();
+        document.addEventListener("astro:after-swap", apply);
+      })();
+    </script>
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#main" class="skip-link meta-mono">{t(locale, "a11y.skipToContent")}</a>
+    <Backdrop room={room} ghost={ghost} />
+    <Nav locale={locale} />
+    <main id="main" class="relative mx-auto w-full max-w-6xl px-5 pt-24 pb-20 sm:px-8">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <!-- 入场动画触发器：滚动入视口时点亮 .enter-rise -->
+    <script>
+      function wireEnterRise() {
+        const els = document.querySelectorAll(".enter-rise:not(.is-in)");
+        if (!("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("is-in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add("is-in");
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+      wireEnterRise();
+      document.addEventListener("astro:after-swap", wireEnterRise);
+    </script>
+  </body>
+</html>
