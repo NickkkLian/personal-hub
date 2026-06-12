@@ -1,0 +1,16 @@
+{
+  "$comment": "原创音乐数据（站长直接编辑本文件，BLUEPRINT 4.1）。每条需 public: true 才会上站；links 填各流媒体平台外链；音频试听文件 P3 接入。以下为占位示例，换成真实作品即可。",
+  "items": [
+    {
+      "id": "track-demo-1",
+      "title": "Night Flight 夜航",
+      "summary": { "en": "Original demo — synthwave sketch.", "zh": "原创 demo——合成器小品。" },
+      "date": "2026-03-01",
+      "tags": ["demo", "synthwave"],
+      "cover": null,
+      "links": [],
+      "public": true,
+      "extra": { "year": 2026 }
+    }
+  ]
+}

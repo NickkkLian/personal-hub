@@ -1,0 +1,37 @@
+{
+  "dbId": "knowledge",
+  "title": "Knowledge Atlas",
+  "generatedAt": "2026-06-12T00:00:00.000Z",
+  "sections": [
+    {
+      "type": "finance",
+      "label": "Finance",
+      "items": [
+        {
+          "id": "mock-k1",
+          "name": "Depreciation",
+          "summary": "Spreading an asset's cost over its useful life.",
+          "category": "Finance",
+          "content": "Depreciation allocates the cost of a tangible asset over its useful life. Non-cash expense: reduces reported profit without touching cash flow. Straight-line vs declining balance change the timing, not the total.",
+          "tags": ["accounting"],
+          "updatedAt": "2026-06-01"
+        }
+      ]
+    },
+    {
+      "type": "machine-learning",
+      "label": "Machine Learning",
+      "items": [
+        {
+          "id": "mock-k2",
+          "name": "Walk-forward validation",
+          "summary": "Time-series cross-validation that never looks into the future.",
+          "category": "Machine Learning",
+          "content": "Walk-forward validation trains on a rolling historical window and tests on the next period, mimicking live deployment. Prevents lookahead leakage that ordinary k-fold introduces on time series.",
+          "tags": ["validation", "time series"],
+          "updatedAt": "2026-06-05"
+        }
+      ]
+    }
+  ]
+}

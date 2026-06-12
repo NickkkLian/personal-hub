@@ -1,0 +1,52 @@
+{
+  "dbId": "life",
+  "title": "生活地图",
+  "generatedAt": "2026-06-12T00:00:00.000Z",
+  "sections": [
+    {
+      "type": "加拿大",
+      "label": "加拿大",
+      "items": [
+        {
+          "id": "mock-l1",
+          "name": "温哥华",
+          "summary": "加拿大",
+          "category": "resided",
+          "content": "海与山之间的城市，雨季漫长但夏天值得所有等待。",
+          "tags": [],
+          "updatedAt": "",
+          "lat": 49.2827,
+          "lng": -123.1207
+        }
+      ]
+    },
+    {
+      "type": "日本",
+      "label": "日本",
+      "items": [
+        {
+          "id": "mock-l2",
+          "name": "京都",
+          "summary": "日本",
+          "category": "visited",
+          "content": "在鸭川边坐了一下午，什么都没做，是旅行里最好的一段。",
+          "tags": [],
+          "updatedAt": "",
+          "lat": 35.0116,
+          "lng": 135.7681
+        },
+        {
+          "id": "mock-l3",
+          "name": "大阪",
+          "summary": "日本",
+          "category": "visited",
+          "content": "",
+          "tags": [],
+          "updatedAt": "",
+          "lat": 34.6937,
+          "lng": 135.5023
+        }
+      ]
+    }
+  ]
+}

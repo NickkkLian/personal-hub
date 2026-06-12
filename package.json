@@ -11,7 +11,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "sync": "node scripts/sync-data.mjs",
+    "sync:mock": "HUB_DATA_MODE=mock node scripts/sync-data.mjs",
+    "sync:live": "HUB_DATA_MODE=live node scripts/sync-data.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",

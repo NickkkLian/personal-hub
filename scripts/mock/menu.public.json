@@ -1,0 +1,37 @@
+{
+  "dbId": "menu",
+  "title": "私房菜单",
+  "generatedAt": "2026-06-12T00:00:00.000Z",
+  "sections": [
+    {
+      "type": "recipes",
+      "label": "食谱",
+      "items": [
+        {
+          "id": "mock-m1",
+          "name": "葱油拌面",
+          "summary": "十分钟的深夜安慰。",
+          "category": "食谱",
+          "content": "配料：小葱、生抽、老抽、糖、碱水面\n\n小火把葱段熬到焦黄出香\n生抽老抽加糖调汁，倒入葱油烧热\n面煮好过一遍冷水，拌匀即可",
+          "tags": ["家常", "快手"],
+          "updatedAt": "2026-05-31"
+        }
+      ]
+    },
+    {
+      "type": "cocktails",
+      "label": "调酒",
+      "items": [
+        {
+          "id": "mock-m2",
+          "name": "Negroni Sbagliato",
+          "summary": "把金酒换成气泡酒的「错误」Negroni。",
+          "category": "调酒",
+          "content": "配料：金巴利、甜味美思、普罗塞克\n\n等份金巴利与甜味美思入杯加冰\n顶上补满普罗塞克，橙皮装饰",
+          "tags": ["低度"],
+          "updatedAt": "2026-06-01"
+        }
+      ]
+    }
+  ]
+}

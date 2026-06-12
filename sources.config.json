@@ -1,0 +1,57 @@
+{
+  "$comment": "数据源注册表（BLUEPRINT 4.5）。新增数据库 = 加一行；换数据形式 = 换 adapter。file 指 Database-Public 仓库内的公开导出文件；mock 指无真实数据时的本地模拟文件。",
+  "publicRepo": "NickkkLian/Database-Public",
+  "sources": [
+    {
+      "module": "projects",
+      "adapter": "github-api",
+      "user": "NickkkLian",
+      "overrides": "content/projects-overrides.json",
+      "mock": "scripts/mock/projects.json"
+    },
+    {
+      "module": "writing",
+      "adapter": "public-json",
+      "file": "writing.public.json",
+      "mock": "scripts/mock/writing.public.json"
+    },
+    {
+      "module": "writing",
+      "adapter": "public-json",
+      "file": "thoughts.public.json",
+      "mock": "scripts/mock/thoughts.public.json"
+    },
+    {
+      "module": "music-wall",
+      "adapter": "public-json",
+      "file": "album-journal.public.json",
+      "mock": "scripts/mock/album-journal.public.json"
+    },
+    { "module": "my-music", "adapter": "local-json", "file": "content/my-music.json" },
+    {
+      "module": "knowledge",
+      "adapter": "public-json",
+      "file": "knowledge.public.json",
+      "mock": "scripts/mock/knowledge.public.json"
+    },
+    {
+      "module": "life",
+      "adapter": "public-json",
+      "file": "life.public.json",
+      "mock": "scripts/mock/life.public.json"
+    },
+    {
+      "module": "menu",
+      "adapter": "public-json",
+      "file": "menu.public.json",
+      "mock": "scripts/mock/menu.public.json"
+    },
+    {
+      "module": "mystery",
+      "adapter": "public-json",
+      "file": "mystery-tricks.public.json",
+      "mock": "scripts/mock/mystery-tricks.public.json"
+    },
+    { "module": "social", "adapter": "local-json", "file": "content/channels.json" }
+  ]
+}

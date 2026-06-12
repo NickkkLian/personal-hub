@@ -1,0 +1,46 @@
+{
+  "dbId": "album-journal",
+  "title": "Album Journal",
+  "generatedAt": "2026-06-12T00:00:00.000Z",
+  "sections": [
+    {
+      "type": "t0",
+      "label": "T0 — Essential",
+      "items": [
+        {
+          "id": "mock-a1",
+          "name": "In Rainbows",
+          "summary": "Radiohead · 2007",
+          "category": "T0",
+          "content": "01. 15 Step ★\n02. Bodysnatchers\n03. Nude ★\n04. Weird Fishes/Arpeggi ★\n05. All I Need\n06. Faust Arp\n07. Reckoner ★\n08. House of Cards\n09. Jigsaw Falling into Place\n10. Videotape",
+          "tags": ["art rock"],
+          "updatedAt": "2026-05-16"
+        },
+        {
+          "id": "mock-a2",
+          "name": "茫茫",
+          "summary": "万能青年旅店 · 2020",
+          "category": "T0",
+          "content": "01. 泥河 ★\n02. 山雀 ★\n03. 采石 ★",
+          "tags": ["摇滚"],
+          "updatedAt": "2026-05-18"
+        }
+      ]
+    },
+    {
+      "type": "t2",
+      "label": "T2 — Great",
+      "items": [
+        {
+          "id": "mock-a3",
+          "name": "Blonde",
+          "summary": "Frank Ocean · 2016",
+          "category": "T2",
+          "content": "01. Nikes\n02. Ivy ★\n03. Pink + White ★\n04. Solo\n05. Self Control ★",
+          "tags": ["r&b"],
+          "updatedAt": "2026-05-22"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$comment": "Projects 模块的人工覆盖（站长可编辑）：featured 置顶清单、hide 隐藏清单、descriptions 双语简介覆盖（键为仓库名）。",
+  "featured": ["Earnings-Call-Sentiment-Analyser", "Ghost-Job-Detection-And-Trading-Signal"],
+  "hide": ["Database-Public"],
+  "descriptions": {
+    "Earnings-Call-Sentiment-Analyser": {
+      "en": "Decompose earnings calls into management framing vs. analyst pushback — LLM-extracted sentiment with residual-return correlation.",
+      "zh": "把财报电话会拆解为管理层叙事与分析师质询——LLM 情绪提取与残差收益相关性分析。"
+    },
+    "Ghost-Job-Detection-And-Trading-Signal": {
+      "en": "Ghost-job intensity as a trading signal — XGBoost, SHAP, GMM, walk-forward backtest.",
+      "zh": "幽灵职位强度交易信号——XGBoost、SHAP、GMM 与 walk-forward 回测。"
+    }
+  }
+}

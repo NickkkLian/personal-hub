@@ -33,7 +33,7 @@
 ## 阶段状态
 
 - [x] P0 脚手架（双语路由 / 令牌 / 主题 / 模块开关 / logo / 组件库雏形）
-- [ ] P1 数据层（sync-data.mjs + adapters + schema 校验 + mock↔真实切换）
+- [x] P1 数据层（sync-data.mjs + adapters + schema 校验 + mock↔真实 auto 切换；GitHub Actions 接入在 P5）
 - [ ] P2 核心模块（Home 完整版 / Projects / Writing 书架 / About+表单）
 - [ ] P3 音乐（专辑墙 + Spotify now-playing Function）
 - [ ] P4 SEO/RSS/Umami/性能调优
@@ -42,6 +42,18 @@
 ## 常用命令
 
 - `npm run dev` 本地预览 · `npm run build` 构建 · `npm run check` 类型检查 · `npm run format` 格式化
+- `npm run sync` 数据同步（auto：真实源缺失自动落 mock）· `sync:mock` / `sync:live` 强制模式
+
+## 当前交接状态（每次推进后更新此节）
+
+- **Development-Log 补录待推送**：`~/Desktop/hub-apps/develop.updated.json` 已合成（+31 条、零改动现有条目）。
+  阻塞：push-apps-v2 令牌无 Database 权限 → 站长在 GitHub 编辑该令牌加勾 `Database` 后运行
+  `GH_TOKEN=<令牌> node ~/Desktop/hub-apps/patches/push-devlog.mjs`
+- **Database-Public 仓库**：待站长创建（public，名字一字不差）+ 在各应用里做首轮「发布公开」；
+  此后 `npm run sync` 自动从 mock 切到真实数据，无需改任何代码
+- **应用升级工作区**：`~/Desktop/hub-apps/`（独立 git 仓库，10 个应用已推送至各自 GitHub repo）
+- **下一阶段 P2**（Home 完整版 / Projects / Writing 书架 / About+表单），等站长验收 P1 后开工；
+  P2 需站长提供：双语一句话身份介绍、置顶项目清单确认（现用占位）、注册 Web3Forms
 
 ## 工作方式（站长要求）
 

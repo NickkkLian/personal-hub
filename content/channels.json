@@ -1,0 +1,16 @@
+{
+  "$comment": "自媒体矩阵数据（站长直接编辑本文件，BLUEPRINT 4.1）。每条需 public: true 才会上站；extra.platform 决定电视墙的平台色。以下为占位示例。",
+  "items": [
+    {
+      "id": "channel-demo-1",
+      "title": "Bilibili 频道",
+      "summary": { "en": "Video essays (coming soon).", "zh": "视频内容（即将开播）。" },
+      "date": null,
+      "tags": [],
+      "cover": null,
+      "links": [{ "label": "Bilibili", "url": "https://www.bilibili.com" }],
+      "public": true,
+      "extra": { "platform": "bilibili" }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "gh-Earnings-Call-Sentiment-Analyser",
+    "title": "Earnings-Call-Sentiment-Analyser",
+    "summary": "Decompose earnings calls into management framing vs. analyst pushback.",
+    "date": "2026-05-10",
+    "tags": ["nlp", "finance"],
+    "cover": null,
+    "links": [{ "label": "GitHub", "url": "https://github.com/NickkkLian/Earnings-Call-Sentiment-Analyser" }],
+    "public": true,
+    "extra": {
+      "stars": 0,
+      "forks": 0,
+      "language": "JavaScript",
+      "topics": ["nlp", "finance"],
+      "featured": true
+    }
+  },
+  {
+    "id": "gh-SQL-Viz-for-Edu",
+    "title": "SQL-Viz-for-Edu",
+    "summary": "Interactive data explorer that shows the SQL query behind every action.",
+    "date": "2026-04-20",
+    "tags": ["education", "sql"],
+    "cover": null,
+    "links": [{ "label": "GitHub", "url": "https://github.com/NickkkLian/SQL-Viz-for-Edu" }],
+    "public": true,
+    "extra": { "stars": 0, "forks": 0, "language": "HTML", "topics": [], "featured": false }
+  }
+]
