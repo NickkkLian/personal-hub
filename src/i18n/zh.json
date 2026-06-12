@@ -79,6 +79,39 @@
     "body": "这间展厅的作品正在路上，欢迎稍后再来。",
     "label": "WORK IN PROGRESS"
   },
+  "common": {
+    "works": "件作品",
+    "close": "关闭",
+    "mockNote": "预览数据——你发布真实作品后会自动替换上墙。"
+  },
+  "projects": {
+    "featured": "置顶实验",
+    "all": "全部",
+    "annotation": "实验档案 — 精选仓库",
+    "stars": "星标",
+    "forks": "分叉",
+    "filterHint": "按语言或主题筛选"
+  },
+  "writing": {
+    "shelfHint": "抽出一本书脊翻开它",
+    "new": "NEW",
+    "back": "放回书架",
+    "open": "翻开"
+  },
+  "aboutPage": {
+    "portrait": "策展人肖像",
+    "timeline": "时间线",
+    "contact": "给我写信",
+    "formName": "你的名字",
+    "formEmail": "你的邮箱",
+    "formMessage": "想说的话",
+    "formSend": "寄出",
+    "formSending": "寄出中…",
+    "formOk": "已寄出——谢谢，我会认真读。",
+    "formErr": "发送失败，请直接发邮件给我。",
+    "formOffline": "联系表单尚未接通，请先用下方邮箱联系我。",
+    "emailLabel": "邮箱"
+  },
   "footer": {
     "rights": "保留所有权利。",
     "colophon": "以一座安静画廊的方式构建——静态、迅速、开放。"

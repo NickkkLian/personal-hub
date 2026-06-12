@@ -1,11 +1,336 @@
 ---
-import ModulePlaceholder from "../_shared/ModulePlaceholder.astro";
-import type { Locale } from "../../i18n";
+/**
+ * Writing（P2）：书架——条目即书脊（按年份分层、宽窄高矮由 id 决定），
+ * hover 抽出一截，点击翻开为详情卡（发丝浮框 + 生成式封面）；新作贴 NEW 书腰。
+ * 移动端书架本身即横向滚动，天然降级；键盘可达（书脊=按钮，详情=原生 dialog）。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Cover from "../../components/gallery/Cover.astro";
+import BrassPlaque from "../../components/gallery/BrassPlaque.astro";
+import { t, pickLang, type Locale } from "../../i18n";
+import { MODULE_REGISTRY } from "../../config/site";
+import { entries, exhibitNo, isNew } from "../../lib/data";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
+const meta = MODULE_REGISTRY.writing;
+const all = entries("writing");
+
+// 按年份分层（无日期归入最早层底部）
+const groups = new Map<string, typeof all>();
+for (const e of all) {
+  const y = e.date?.slice(0, 4) ?? "—";
+  if (!groups.has(y)) groups.set(y, []);
+  groups.get(y)!.push(e);
+}
+const years = [...groups.keys()].sort((a, b) => b.localeCompare(a));
+
+// 书脊体态：由 id 哈希决定宽窄高矮与色阶（确定性）
+function spineStyle(id: string): string {
+  let h = 0;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const w = 38 + (h % 18);
+  const ht = 170 + ((h >> 4) % 56);
+  const mix = 28 + ((h >> 8) % 38);
+  return `--sw:${w}px;--sh:${ht}px;--mix:${mix}%`;
+}
+
+const title = t(locale, "module.writing.title");
 ---
 
-<ModulePlaceholder locale={locale} id="writing" />
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={t(locale, "module.writing.intro")}
+  path={`/${meta.slug}`}
+  room={meta.room}
+  ghost={t(locale, "module.writing.ghost")}
+>
+  <article style={`--room: var(${meta.room})`}>
+    <header class="module-head enter-rise is-in">
+      <p class="meta-mono room-tag">
+        {t(locale, "home.roomLabel")}
+        {meta.roomNo} — BIBLIOTHÈQUE
+      </p>
+      <h1 class="module-title">{title}</h1>
+      <p class="module-intro">{t(locale, "module.writing.intro")}</p>
+      <p class="meta-mono mt-4">{t(locale, "writing.shelfHint")} ↓</p>
+    </header>
+
+    <hr class="hairline my-10" />
+
+    {
+      years.map((y) => (
+        <section class="shelf-group enter-rise is-in" aria-label={y}>
+          <h2 class="meta-mono mb-3">
+            {y} · {groups.get(y)!.length} {t(locale, "common.works")}
+          </h2>
+          <div class="shelf">
+            <ul class="spines" role="list">
+              {groups.get(y)!.map((e) => {
+                const tt = pickLang(e.title, locale);
+                return (
+                  <li>
+                    <button
+                      class="spine"
+                      style={spineStyle(e.id)}
+                      data-open={`tpl-${e.id}`}
+                      aria-haspopup="dialog"
+                      title={tt.value}
+                    >
+                      {isNew(e) && <span class="belly meta-mono">{t(locale, "writing.new")}</span>}
+                      <span class="spine-title">{tt.value}</span>
+                      <span class="spine-no meta-mono">{String(e.extra.no ?? 0).padStart(3, "0")}</span>
+                    </button>
+                    <template id={`tpl-${e.id}`}>
+                      <div class="book-card">
+                        <div class="book-cover">
+                          <Cover id={e.id} module="writing" cover={e.cover} w={420} h={240} />
+                        </div>
+                        <div class="book-body">
+                          <p class="meta-mono" style="color: var(--room)">
+                            {exhibitNo(e)} · WRITING{e.extra.sectionLabel ? ` · ${e.extra.sectionLabel}` : ""}
+                          </p>
+                          <h3 class="font-display text-2xl">{tt.value}</h3>
+                          {pickLang(e.summary, locale).value && (
+                            <p class="text-muted">{pickLang(e.summary, locale).value}</p>
+                          )}
+                          {tt.fellBack && (
+                            <p class="meta-mono">
+                              {t(locale, tt.lang === "zh" ? "langTag.originalZh" : "langTag.originalEn")}
+                            </p>
+                          )}
+                          {e.extra.content && (
+                            <p class="book-content">{String(e.extra.content).slice(0, 600)}</p>
+                          )}
+                          <p class="meta-mono book-date">{e.date ?? ""}</p>
+                        </div>
+                      </div>
+                    </template>
+                  </li>
+                );
+              })}
+            </ul>
+            <div class="board" aria-hidden="true" />
+          </div>
+        </section>
+      ))
+    }
+
+    <dialog id="book-dialog" aria-label={title}>
+      <div id="book-slot"></div>
+      <form method="dialog">
+        <button class="book-close meta-mono">✕ {t(locale, "writing.back")}</button>
+      </form>
+    </dialog>
+  </article>
+</BaseLayout>
+
+<style>
+  .module-head {
+    padding-top: clamp(2rem, 8vh, 5rem);
+  }
+  .room-tag {
+    color: var(--room);
+    margin-bottom: 1.2rem;
+  }
+  .module-title {
+    font-size: clamp(3.2rem, 10vw, 7.5rem);
+    line-height: 0.96;
+    font-weight: 590;
+    margin-left: -0.04em;
+  }
+  .module-intro {
+    margin-top: 1.6rem;
+    max-width: 36rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+
+  .shelf-group {
+    margin-bottom: 3rem;
+  }
+  .shelf {
+    position: relative;
+  }
+  .spines {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 1.5rem 0.5rem 0;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+  /* 木质搁板：可见顶面与前缘断面（真实进深） */
+  .board {
+    height: 14px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--paint-umber) 55%, var(--surface)) 0%,
+      color-mix(in oklab, var(--paint-umber) 75%, var(--paint-ink)) 100%
+    );
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.12) inset,
+      var(--shadow-exhibit);
+  }
+
+  .spine {
+    position: relative;
+    width: var(--sw, 44px);
+    height: var(--sh, 200px);
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    border: 0.5px solid color-mix(in oklab, var(--text) 14%, transparent);
+    border-radius: 3px 3px 1px 1px;
+    background: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--room) calc(var(--mix) + 14%), var(--surface)) 0%,
+      color-mix(in oklab, var(--room) var(--mix), var(--surface)) 45%,
+      color-mix(in oklab, var(--room) calc(var(--mix) + 22%), var(--paint-ink)) 100%
+    );
+    box-shadow: var(--shadow-exhibit);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0 0.45rem;
+    transition:
+      transform var(--dur-move) var(--ease-gallery),
+      box-shadow var(--dur-move) var(--ease-gallery);
+  }
+  .spine:hover,
+  .spine:focus-visible {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-lift);
+  }
+  .spine-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 540;
+    color: var(--text);
+    max-height: calc(var(--sh) - 4.2rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .spine-no {
+    font-size: 0.55rem;
+    opacity: 0.55;
+  }
+  .belly {
+    position: absolute;
+    top: 2.1rem;
+    left: -1px;
+    right: -1px;
+    padding: 0.12rem 0;
+    text-align: center;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    color: #fff;
+    background: linear-gradient(155deg, var(--brass-hi), var(--brass));
+  }
+
+  /* 翻开的书：详情卡 */
+  #book-dialog {
+    margin: auto;
+    width: min(92vw, 760px);
+    border: 1px solid var(--line-frame);
+    border-radius: var(--radius-frame);
+    padding: 10px;
+    background: var(--bg);
+    box-shadow: var(--shadow-lift);
+  }
+  #book-dialog::backdrop {
+    background: color-mix(in oklab, var(--paint-ink) 45%, transparent);
+    backdrop-filter: blur(3px);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #book-dialog[open] {
+      animation: book-open var(--dur-enter) var(--ease-gallery);
+    }
+  }
+  @keyframes book-open {
+    from {
+      opacity: 0;
+      transform: perspective(900px) rotateY(-14deg) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  :global(.book-card) {
+    display: grid;
+    gap: 0;
+    background: var(--surface);
+    border: 0.5px solid color-mix(in oklab, var(--text) 8%, transparent);
+  }
+  @media (min-width: 640px) {
+    :global(.book-card) {
+      grid-template-columns: 2fr 3fr;
+    }
+  }
+  :global(.book-cover) {
+    min-height: 200px;
+    overflow: hidden;
+  }
+  :global(.book-body) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.5rem;
+  }
+  :global(.book-content) {
+    white-space: pre-wrap;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--text);
+    max-height: 16rem;
+    overflow-y: auto;
+  }
+  :global(.book-date) {
+    margin-top: auto;
+  }
+  .book-close {
+    margin-top: 0.6rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line-hair);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .book-close:hover {
+    color: var(--text);
+  }
+</style>
+
+<script>
+  function wireShelf() {
+    const dialog = document.getElementById("book-dialog") as HTMLDialogElement | null;
+    const slot = document.getElementById("book-slot");
+    if (!dialog || !slot || dialog.dataset.wired) return;
+    dialog.dataset.wired = "1";
+    document.addEventListener("click", (ev) => {
+      const btn = (ev.target as Element).closest<HTMLElement>("[data-open]");
+      if (btn) {
+        const tpl = document.getElementById(btn.dataset.open!) as HTMLTemplateElement | null;
+        if (!tpl) return;
+        slot.replaceChildren(tpl.content.cloneNode(true));
+        dialog.showModal();
+        return;
+      }
+      // 点击背景关闭
+      if (ev.target === dialog) dialog.close();
+    });
+  }
+  wireShelf();
+  document.addEventListener("astro:after-swap", wireShelf);
+</script>

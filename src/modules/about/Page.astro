@@ -1,11 +1,293 @@
 ---
-import ModulePlaceholder from "../_shared/ModulePlaceholder.astro";
-import type { Locale } from "../../i18n";
+/**
+ * About（P2）：极简编辑页——策展人肖像（生成画占位）+ 双语简介 +
+ * 滚动逐点亮起的时间线 + Web3Forms 联系表单（未配 key 时退化为邮箱卡片）。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import BrassPlaque from "../../components/gallery/BrassPlaque.astro";
+import { t, pickLang, type Locale } from "../../i18n";
+import { MODULE_REGISTRY, siteConfig } from "../../config/site";
+import { coverSvg } from "../../lib/cover";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
+const meta = MODULE_REGISTRY.about;
+const title = t(locale, "module.about.title");
+const bio = pickLang(siteConfig.about.bio, locale);
+const formKey = siteConfig.site.web3formsKey;
+const email = siteConfig.site.email;
 ---
 
-<ModulePlaceholder locale={locale} id="about" />
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={t(locale, "module.about.intro")}
+  path={`/${meta.slug}`}
+  room={meta.room}
+  ghost={t(locale, "module.about.ghost")}
+>
+  <article style={`--room: var(${meta.room})`} class="about-grid">
+    <header class="module-head enter-rise is-in">
+      <p class="meta-mono room-tag">
+        {t(locale, "home.roomLabel")}
+        {meta.roomNo} — PORTRAIT
+      </p>
+      <h1 class="module-title">{title}</h1>
+    </header>
+
+    <div class="mt-10 grid gap-10 md:grid-cols-[2fr_3fr]">
+      <!-- 肖像：发丝浮框装裱（featured 级），生成画占位（站长可换真照片） -->
+      <div class="enter-rise is-in">
+        <ExhibitFrame variant="float">
+          <figure class="portrait">
+            <div class="portrait-art" set:html={coverSvg("portrait-of-nickkk", "about", 420, 480)} />
+            <figcaption class="flex items-center justify-between p-4">
+              <BrassPlaque text={t(locale, "aboutPage.portrait")} />
+              <span class="meta-mono">EST. 2026</span>
+            </figcaption>
+          </figure>
+        </ExhibitFrame>
+      </div>
+
+      <div class="flex flex-col gap-10">
+        <!-- 双语简介 -->
+        <section class="enter-rise is-in">
+          <p class="bio font-display">{siteConfig.site.tagline[locale]}</p>
+          <p class="mt-4 leading-relaxed text-muted">{bio.value}</p>
+        </section>
+
+        <!-- 时间线：滚动逐点亮起 -->
+        <section aria-label={t(locale, "aboutPage.timeline")}>
+          <h2 class="meta-mono mb-4">{t(locale, "aboutPage.timeline")}</h2>
+          <ol class="timeline">
+            {
+              siteConfig.about.timeline.map((item) => (
+                <li class="enter-rise">
+                  <span class="dot" aria-hidden="true" />
+                  <span class="meta-mono year">{item.year}</span>
+                  <span class="text-sm leading-relaxed">{item[locale]}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <!-- 联系 -->
+        <section aria-label={t(locale, "aboutPage.contact")}>
+          <h2 class="meta-mono mb-4">{t(locale, "aboutPage.contact")}</h2>
+          {
+            formKey ? (
+              <form id="contact-form" class="contact" novalidate>
+                <input type="hidden" name="access_key" value={formKey} />
+                <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <label class="field">
+                    <span class="meta-mono">{t(locale, "aboutPage.formName")}</span>
+                    <input name="name" type="text" required maxlength="80" />
+                  </label>
+                  <label class="field">
+                    <span class="meta-mono">{t(locale, "aboutPage.formEmail")}</span>
+                    <input name="email" type="email" required maxlength="120" />
+                  </label>
+                </div>
+                <label class="field">
+                  <span class="meta-mono">{t(locale, "aboutPage.formMessage")}</span>
+                  <textarea name="message" rows="5" required maxlength="4000" />
+                </label>
+                <div class="flex items-center gap-4">
+                  <button
+                    type="submit"
+                    class="send meta-mono"
+                    data-sending={t(locale, "aboutPage.formSending")}
+                  >
+                    {t(locale, "aboutPage.formSend")} →
+                  </button>
+                  <span
+                    id="form-status"
+                    class="meta-mono"
+                    role="status"
+                    data-ok={t(locale, "aboutPage.formOk")}
+                    data-err={t(locale, "aboutPage.formErr")}
+                  />
+                </div>
+              </form>
+            ) : (
+              <ExhibitFrame>
+                <div class="flex flex-col gap-3 p-6">
+                  <p class="text-sm text-muted">{t(locale, "aboutPage.formOffline")}</p>
+                  <p>
+                    <span class="meta-mono">{t(locale, "aboutPage.emailLabel")} · </span>
+                    <a href={`mailto:${email}`} class="underline underline-offset-4">
+                      {email}
+                    </a>
+                  </p>
+                  <ul class="flex gap-4">
+                    {siteConfig.site.socials.map((s) => (
+                      <li>
+                        <a
+                          href={s.url}
+                          target="_blank"
+                          rel="me noopener"
+                          class="meta-mono text-muted hover:text-text"
+                        >
+                          {s.label} ↗
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ExhibitFrame>
+            )
+          }
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .module-head {
+    padding-top: clamp(2rem, 8vh, 5rem);
+  }
+  .room-tag {
+    color: var(--room);
+    margin-bottom: 1.2rem;
+  }
+  .module-title {
+    font-size: clamp(3.2rem, 10vw, 7.5rem);
+    line-height: 0.96;
+    font-weight: 590;
+    margin-left: -0.04em;
+  }
+  .portrait-art :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .bio {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-style: italic;
+    font-weight: 460;
+  }
+
+  .timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding-left: 1.4rem;
+    border-left: 1px solid var(--line-hair);
+  }
+  .timeline li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 0.8rem;
+    align-items: baseline;
+  }
+  .dot {
+    position: absolute;
+    left: -1.4rem;
+    top: 0.35rem;
+    width: 9px;
+    height: 9px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--line-hair);
+    transition: background var(--dur-move) var(--ease-gallery);
+  }
+  .timeline li.is-in .dot {
+    background: var(--brass);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brass) 25%, transparent);
+  }
+  .year {
+    color: var(--room);
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .hp {
+    display: none;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .field input,
+  .field textarea {
+    background: var(--surface);
+    border: 1px solid var(--line-hair);
+    border-radius: 2px;
+    padding: 0.6rem 0.8rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+  }
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .send {
+    align-self: flex-start;
+    padding: 0.6rem 1.3rem;
+    border: 1px solid var(--brass);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: all var(--dur-micro) var(--ease-gallery);
+  }
+  .send:hover {
+    background: color-mix(in oklab, var(--brass) 14%, transparent);
+  }
+  .send[disabled] {
+    opacity: 0.6;
+    cursor: wait;
+  }
+</style>
+
+<script>
+  // Web3Forms 提交（仅当表单存在）：fetch POST，三态提示
+  function wireForm() {
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    if (!form || form.dataset.wired) return;
+    form.dataset.wired = "1";
+    const status = document.getElementById("form-status")!;
+    const btn = form.querySelector<HTMLButtonElement>(".send")!;
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = btn.dataset.sending ?? "…";
+      status.textContent = "";
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const j = await res.json();
+        if (!res.ok || !j.success) throw new Error(j.message ?? res.status);
+        status.textContent = status.dataset.ok ?? "OK";
+        form.reset();
+      } catch {
+        status.textContent = status.dataset.err ?? "Error";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+  }
+  wireForm();
+  document.addEventListener("astro:after-swap", wireForm);
+</script>

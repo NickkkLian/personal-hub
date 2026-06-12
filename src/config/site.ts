@@ -49,6 +49,11 @@ export interface SiteConfig {
     tagline: { en: string; zh: string };
     email: string;
     socials: { label: string; url: string }[];
+    web3formsKey: string;
+  };
+  about: {
+    bio: { en: string; zh: string };
+    timeline: { year: string; en: string; zh: string }[];
   };
   modules: Record<ModuleId, { enabled: boolean; nav?: boolean }>;
 }

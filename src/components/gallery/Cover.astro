@@ -1,0 +1,42 @@
+---
+/**
+ * 展品封面：有真实封面用真图（Astro Image P4 接管优化），
+ * 无封面则挂生成式印象派色场画（确定性，构建时内联 SVG）。
+ */
+import { coverSvg } from "../../lib/cover";
+
+interface Props {
+  id: string;
+  module: string;
+  cover?: string | null;
+  alt?: string;
+  class?: string;
+  w?: number;
+  h?: number;
+}
+const { id, module: mod, cover, alt = "", class: className, w = 320, h = 220 } = Astro.props;
+---
+
+{
+  cover ? (
+    <img src={cover} alt={alt} loading="lazy" decoding="async" class:list={["cover-img", className]} />
+  ) : (
+    <div class:list={["cover-art", className]} set:html={coverSvg(id, mod, w, h)} />
+  )
+}
+
+<style>
+  .cover-img,
+  .cover-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+  }
+  .cover-art :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

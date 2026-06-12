@@ -1,11 +1,263 @@
 ---
-import ModulePlaceholder from "../_shared/ModulePlaceholder.astro";
-import type { Locale } from "../../i18n";
+/**
+ * Projects（P2）：实验档案网格——黑白基调 + 石墨房间色点缀、等宽批注、
+ * featured 发丝浮框大卡、语言色条、筛选 chips（FLIP 重排）、≤3° 微倾斜。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import Cover from "../../components/gallery/Cover.astro";
+import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
+import { t, pickLang, type Locale } from "../../i18n";
+import { MODULE_REGISTRY } from "../../config/site";
+import { entries, exhibitNo } from "../../lib/data";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
+const meta = MODULE_REGISTRY.projects;
+const all = entries("projects");
+const featured = all.find((e) => e.extra.featured);
+const rest = all.filter((e) => e !== featured);
+
+// 语言色（GitHub 习惯色压进低饱和颜料体系）
+const LANG_COLORS: Record<string, string> = {
+  JavaScript: "#c9a227",
+  TypeScript: "#5c6e84",
+  Python: "#7c8b6f",
+  HTML: "#c08d7c",
+  CSS: "#8b7e94",
+  Astro: "#b08d57",
+};
+const langs = [...new Set(all.map((e) => e.extra.language).filter(Boolean))] as string[];
+
+const title = t(locale, "module.projects.title");
 ---
 
-<ModulePlaceholder locale={locale} id="projects" />
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={t(locale, "module.projects.intro")}
+  path={`/${meta.slug}`}
+  room={meta.room}
+  ghost={t(locale, "module.projects.ghost")}
+>
+  <article style={`--room: var(${meta.room})`}>
+    <header class="module-head enter-rise is-in">
+      <p class="meta-mono room-tag">
+        {t(locale, "home.roomLabel")}
+        {meta.roomNo} — {t(locale, "projects.annotation")}
+      </p>
+      <h1 class="module-title">{title}</h1>
+      <p class="module-intro">{t(locale, "module.projects.intro")}</p>
+    </header>
+
+    <hr class="hairline my-10" />
+
+    {
+      featured && (
+        <section class="enter-rise is-in mb-12" aria-label={t(locale, "projects.featured")}>
+          <ExhibitFrame variant="float" interactive>
+            <a href={featured.links[0]?.url} target="_blank" rel="noopener" class="featured-card">
+              <div class="featured-art">
+                <Cover id={featured.id} module="projects" cover={featured.cover} w={560} h={300} />
+              </div>
+              <div class="flex flex-col gap-3 p-6 sm:p-8">
+                <span class="meta-mono" style="color: var(--brass)">
+                  ★ {t(locale, "projects.featured")} · {exhibitNo(featured)}
+                </span>
+                <h2 class="font-display text-3xl">{pickLang(featured.title, locale).value}</h2>
+                <p class="leading-relaxed text-muted">{pickLang(featured.summary, locale).value}</p>
+                <p class="meta-mono mt-auto pt-2">
+                  {featured.extra.language}
+                  {featured.extra.stars ? ` · ★ ${featured.extra.stars}` : ""} · GITHUB →
+                </p>
+              </div>
+            </a>
+          </ExhibitFrame>
+        </section>
+      )
+    }
+
+    <div
+      class="mb-8 flex flex-wrap items-center gap-2"
+      role="group"
+      aria-label={t(locale, "projects.filterHint")}
+    >
+      <button class="chip meta-mono is-on" data-filter="*">{t(locale, "projects.all")}</button>
+      {
+        langs.map((l) => (
+          <button class="chip meta-mono" data-filter={l} style={`--chip: ${LANG_COLORS[l] ?? "var(--room)"}`}>
+            {l}
+          </button>
+        ))
+      }
+    </div>
+
+    <ul id="proj-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        rest.map((e, i) => (
+          <li
+            class="proj-item enter-rise"
+            data-lang={e.extra.language ?? ""}
+            style={`transition-delay:${Math.min(i * 50, 300)}ms`}
+          >
+            <a href={e.links[0]?.url} target="_blank" rel="noopener" class="proj-link" data-tilt>
+              <ExhibitFrame interactive class="h-full">
+                <div class="flex h-full flex-col">
+                  <div
+                    class="lang-bar"
+                    style={`background:${LANG_COLORS[e.extra.language ?? ""] ?? "var(--line-hair)"}`}
+                  />
+                  <div class="flex grow flex-col gap-2 p-5">
+                    <ExhibitLabel no={e.extra.no ?? 0} module="PROJECTS" />
+                    <h3 class="font-display text-xl font-medium">{pickLang(e.title, locale).value}</h3>
+                    <p class="grow text-sm leading-relaxed text-muted">{pickLang(e.summary, locale).value}</p>
+                    <p class="meta-mono pt-2">
+                      {e.extra.language ?? "—"}
+                      {e.extra.stars ? ` · ★ ${e.extra.stars}` : ""}
+                      {e.extra.topics?.length ? ` · ${e.extra.topics.slice(0, 2).join(" / ")}` : ""}
+                    </p>
+                  </div>
+                </div>
+              </ExhibitFrame>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>
+
+<style>
+  .module-head {
+    padding-top: clamp(2rem, 8vh, 5rem);
+  }
+  .room-tag {
+    color: var(--room);
+    margin-bottom: 1.2rem;
+  }
+  .module-title {
+    font-size: clamp(3.2rem, 10vw, 7.5rem);
+    line-height: 0.96;
+    font-weight: 590;
+    margin-left: -0.04em;
+    max-width: 12ch;
+  }
+  .module-intro {
+    margin-top: 1.6rem;
+    max-width: 36rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+
+  .featured-card {
+    display: grid;
+    color: inherit;
+    text-decoration: none;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .featured-card {
+      grid-template-columns: 5fr 4fr;
+    }
+  }
+  .featured-art {
+    min-height: 220px;
+    overflow: hidden;
+  }
+
+  .chip {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line-hair);
+    border-radius: 999px;
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      color var(--dur-micro) var(--ease-gallery),
+      border-color var(--dur-micro) var(--ease-gallery);
+  }
+  .chip:hover {
+    color: var(--text);
+  }
+  .chip.is-on {
+    color: var(--text);
+    border-color: var(--chip, var(--room));
+    box-shadow: inset 0 -2px 0 var(--chip, var(--room));
+  }
+
+  .proj-link {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+  .lang-bar {
+    height: 3px;
+    border-radius: var(--radius-frame) var(--radius-frame) 0 0;
+  }
+  .proj-item.is-hidden {
+    display: none;
+  }
+
+  /* 微立体：指针驱动 ≤3° 倾斜（reduced-motion 时全局规则压平过渡） */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-tilt] {
+      transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: transform var(--dur-move) var(--ease-gallery);
+      will-change: transform;
+    }
+  }
+</style>
+
+<script>
+  function wireProjects() {
+    const grid = document.getElementById("proj-grid");
+    if (!grid || grid.dataset.wired) return;
+    grid.dataset.wired = "1";
+    const items = [...grid.querySelectorAll<HTMLElement>(".proj-item")];
+
+    // 筛选 + FLIP 重排
+    document.querySelectorAll<HTMLButtonElement>(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach((c) => c.classList.remove("is-on"));
+        chip.classList.add("is-on");
+        const f = chip.dataset.filter;
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const first = new Map(items.map((el) => [el, el.getBoundingClientRect()]));
+        items.forEach((el) => el.classList.toggle("is-hidden", f !== "*" && el.dataset.lang !== f));
+        if (reduce) return;
+        items.forEach((el) => {
+          if (el.classList.contains("is-hidden")) return;
+          const a = first.get(el)!;
+          const b = el.getBoundingClientRect();
+          const dx = a.left - b.left;
+          const dy = a.top - b.top;
+          if (!dx && !dy) return;
+          el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: "none" }], {
+            duration: 320,
+            easing: "cubic-bezier(0.22, 0.61, 0.21, 1)",
+          });
+        });
+      });
+    });
+
+    // 画框微倾斜（≤3° 实际 2.5°）
+    document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((link) => {
+      link.addEventListener("pointermove", (ev) => {
+        const r = link.getBoundingClientRect();
+        const px = (ev.clientX - r.left) / r.width - 0.5;
+        const py = (ev.clientY - r.top) / r.height - 0.5;
+        link.style.setProperty("--ry", `${(px * 5).toFixed(2)}deg`);
+        link.style.setProperty("--rx", `${(-py * 5).toFixed(2)}deg`);
+      });
+      link.addEventListener("pointerleave", () => {
+        link.style.setProperty("--rx", "0deg");
+        link.style.setProperty("--ry", "0deg");
+      });
+    });
+  }
+  wireProjects();
+  document.addEventListener("astro:after-swap", wireProjects);
+</script>

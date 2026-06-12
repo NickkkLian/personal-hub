@@ -1,14 +1,15 @@
 ---
 /**
- * Home（P0 版门厅）：Hero + 模块星图/门厅入口卡。
- * P2 将加入 Canvas 流场动态背景（惰性加载）与生成式封面；
- * 入口卡网格与房间编号体系在此定版。
+ * Home（P2 完整版）：Hero（颜料流场 Canvas，惰性加载）+ 门厅入口卡（生成式封面 + 真实馆藏数）。
+ * Canvas 仅在 reduced-motion 关闭且首屏可见时启动，标签页隐藏自动暂停——守住性能与体面。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import Cover from "../../components/gallery/Cover.astro";
 import Logo from "../../components/Logo.astro";
 import { t, localizePath, pickLang, type Locale } from "../../i18n";
 import { siteConfig, enabledModules } from "../../config/site";
+import { entries } from "../../lib/data";
 
 interface Props {
   locale: Locale;
@@ -16,18 +17,24 @@ interface Props {
 const { locale } = Astro.props;
 const name = siteConfig.site.title[locale];
 const tagline = pickLang(siteConfig.site.tagline, locale);
-const rooms = enabledModules();
+const rooms = enabledModules().map((m) => {
+  const list = entries(m.id);
+  return { ...m, count: list.length, coverEntry: list[0] ?? null };
+});
 ---
 
 <BaseLayout locale={locale} title={name} description={tagline.value} path="/" ghost={t(locale, "home.ghost")}>
-  <!-- Hero：姓名 + 一句话身份，首屏文字逐词浮现 -->
+  <!-- Hero：姓名 + 一句话身份 + 颜料流场（Canvas 第②层颜料雾的"活"版本） -->
   <section class="hero">
-    <div class="enter-rise is-in">
-      <Logo variant="stamp" size={44} />
+    <canvas id="flow" class="hero-flow" aria-hidden="true"></canvas>
+    <div class="relative">
+      <div class="enter-rise is-in">
+        <Logo variant="stamp" size={44} />
+      </div>
+      <p class="meta-mono mt-8 tracking-[0.22em]">{t(locale, "home.heroKicker")}</p>
+      <h1 class="hero-name" data-words>{name}</h1>
+      <p class="hero-tagline font-display" data-words>{tagline.value}</p>
     </div>
-    <p class="meta-mono mt-8 tracking-[0.22em]">{t(locale, "home.heroKicker")}</p>
-    <h1 class="hero-name" data-words>{name}</h1>
-    <p class="hero-tagline font-display" data-words>{tagline.value}</p>
   </section>
 
   <!-- 门厅：开启的模块 = 可步入的展厅 -->
@@ -45,12 +52,22 @@ const rooms = enabledModules();
             <a href={localizePath(locale, `/${m.slug}`)} class="room-card" style={`--room: var(${m.room})`}>
               <ExhibitFrame interactive class="h-full">
                 <div class="flex h-full flex-col">
-                  {/* 画区：房间色颜料色场（P2 替换为生成式印象派封面） */}
-                  <div class="room-art" aria-hidden="true" />
+                  <div class="room-art" aria-hidden="true">
+                    {m.coverEntry ? (
+                      <Cover id={m.coverEntry.id} module={m.id} cover={m.coverEntry.cover} w={400} h={150} />
+                    ) : (
+                      <div class="room-art-blank" />
+                    )}
+                  </div>
                   <div class="flex grow flex-col gap-2 p-5">
                     <span class="meta-mono room-no">
                       {t(locale, "home.roomLabel").toUpperCase()} {m.roomNo} ·{" "}
                       {m.id.toUpperCase().replace("-", " ")}
+                      {m.count > 0 && (
+                        <span class="count-tag">
+                          {m.count} {t(locale, "common.works")}
+                        </span>
+                      )}
                     </span>
                     <span class="font-display text-2xl font-medium">{t(locale, `nav.${m.id}`)}</span>
                     <span class="text-sm leading-relaxed text-muted">
@@ -70,8 +87,17 @@ const rooms = enabledModules();
 
 <style>
   .hero {
+    position: relative;
     padding-top: clamp(3rem, 14vh, 9rem);
     padding-bottom: clamp(2rem, 8vh, 5rem);
+  }
+  .hero-flow {
+    position: absolute;
+    inset: -6rem -20vw -2rem;
+    width: calc(100% + 40vw);
+    height: calc(100% + 8rem);
+    pointer-events: none;
+    opacity: 0.5;
   }
   .hero-name {
     margin-top: 0.6rem;
@@ -90,7 +116,6 @@ const rooms = enabledModules();
     text-wrap: balance;
   }
 
-  /* 首屏文字逐词浮现 */
   @media (prefers-reduced-motion: no-preference) {
     [data-words] :global(.w) {
       display: inline-block;
@@ -114,23 +139,32 @@ const rooms = enabledModules();
     text-decoration: none;
   }
   .room-art {
-    height: 110px;
+    height: 130px;
     border-radius: var(--radius-frame) var(--radius-frame) 0 0;
+    overflow: hidden;
+  }
+  .room-art-blank {
+    height: 100%;
     background:
       radial-gradient(
         75% 95% at 18% 8%,
         color-mix(in oklab, var(--room) 52%, var(--surface)) 0%,
         transparent 68%
       ),
-      radial-gradient(
-        65% 85% at 85% 88%,
-        color-mix(in oklab, var(--room) 30%, var(--surface)) 0%,
-        transparent 62%
-      ),
       var(--surface-2);
   }
   .room-no {
     color: var(--room);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .count-tag {
+    color: var(--muted);
+    border: 1px solid var(--line-hair);
+    border-radius: 2px;
+    padding: 0.05rem 0.35rem;
   }
   .enter-cue {
     color: var(--muted);
@@ -142,7 +176,7 @@ const rooms = enabledModules();
 </style>
 
 <script>
-  // 逐词浮现：把 [data-words] 文本拆为 span，按词错峰入场
+  // 逐词浮现
   function splitWords() {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     document.querySelectorAll<HTMLElement>("[data-words]:not([data-split])").forEach((el) => {
@@ -166,4 +200,59 @@ const rooms = enabledModules();
   }
   splitWords();
   document.addEventListener("astro:after-swap", splitWords);
+
+  // 颜料流场：极轻量 Canvas（≤36 粒颜料随噪声场漂移），惰性启动、隐藏即停
+  function startFlow() {
+    const canvas = document.getElementById("flow") as HTMLCanvasElement | null;
+    if (!canvas || canvas.dataset.on) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    canvas.dataset.on = "1";
+    const ctx = canvas.getContext("2d")!;
+    const paints = ["#7c8b6f", "#7e93a8", "#c9a227", "#c08d7c", "#b08d57"];
+    let w = 0,
+      h = 0,
+      raf = 0;
+    const resize = () => {
+      const r = canvas.getBoundingClientRect();
+      w = canvas.width = Math.floor(r.width / 2);
+      h = canvas.height = Math.floor(r.height / 2);
+    };
+    resize();
+    addEventListener("resize", resize, { passive: true });
+    const N = innerWidth < 640 ? 18 : 36;
+    const ps = Array.from({ length: N }, () => ({
+      x: Math.random() * 9999,
+      y: Math.random() * 9999,
+      c: paints[Math.floor(Math.random() * paints.length)],
+      r: 0.8 + Math.random() * 1.8,
+    }));
+    const field = (x: number, y: number, t: number) =>
+      Math.sin(x * 0.006 + t) + Math.cos(y * 0.005 - t * 0.7);
+    let t = 0;
+    const tick = () => {
+      t += 0.004;
+      ctx.clearRect(0, 0, w, h);
+      for (const p of ps) {
+        const a = field(p.x, p.y, t) * Math.PI;
+        p.x = (p.x + Math.cos(a) * 0.45 + w) % w;
+        p.y = (p.y + Math.sin(a) * 0.45 + h) % h;
+        ctx.globalAlpha = 0.55;
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 7);
+        ctx.fill();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    const visible = () => {
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(tick);
+    };
+    document.addEventListener("visibilitychange", visible);
+    visible();
+  }
+  // 惰性：空闲时再起跑，绝不挡首屏
+  if ("requestIdleCallback" in window) requestIdleCallback(() => startFlow(), { timeout: 2000 });
+  else setTimeout(startFlow, 600);
+  document.addEventListener("astro:after-swap", () => setTimeout(startFlow, 200));
 </script>

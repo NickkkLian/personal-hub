@@ -1,15 +1,28 @@
 {
-  "$comment": "站长唯一需要碰的文件。modules 里每个模块可设 enabled（是否构建该页面）与 nav（是否出现在导航栏）。改完提交即可，约 1-2 分钟自动重新部署。",
+  "$comment": "站长唯一需要碰的文件。modules 每模块可设 enabled/nav；web3formsKey 填 Web3Forms 的 Access Key 后联系表单生效；about.timeline 是关于页时间线（占位内容请替换）。改完提交即可自动重新部署。",
   "site": {
     "owner": "NickkkLian",
     "url": "https://personal-hub.pages.dev",
     "title": { "en": "Nick Lian", "zh": "Nick Lian" },
-    "tagline": {
-      "en": "A personal gallery of projects, writing, music and more.",
-      "zh": "一座陈列项目、文字与音乐的个人画廊。"
+    "tagline": { "en": "HELLO WORLD", "zh": "HELLO WORLD" },
+    "email": "nicklian0315@gmail.com",
+    "socials": [{ "label": "GitHub", "url": "https://github.com/NickkkLian" }],
+    "web3formsKey": ""
+  },
+  "about": {
+    "bio": {
+      "en": "I build small, sharp tools for my own life — trackers, atlases, archives — and this gallery is where their public faces hang. (Placeholder bio: edit me in site.config.json)",
+      "zh": "我为自己的生活打造一些小而锋利的工具——追踪器、图谱、档案柜——这座画廊陈列它们的公开面孔。（占位简介：请在 site.config.json 中修改）"
     },
-    "email": "",
-    "socials": [{ "label": "GitHub", "url": "https://github.com/NickkkLian" }]
+    "timeline": [
+      {
+        "year": "2026",
+        "en": "Built the Personal Hub gallery and ten companion databases.",
+        "zh": "建成 Personal Hub 画廊与十个伴生数据库。"
+      },
+      { "year": "2025", "en": "Placeholder milestone — edit me.", "zh": "占位里程碑——请修改。" },
+      { "year": "2024", "en": "Placeholder milestone — edit me.", "zh": "占位里程碑——请修改。" }
+    ]
   },
   "modules": {
     "projects": { "enabled": true, "nav": true },

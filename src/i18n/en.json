@@ -79,6 +79,39 @@
     "body": "The works for this gallery are on their way. Please come back soon.",
     "label": "WORK IN PROGRESS"
   },
+  "common": {
+    "works": "works",
+    "close": "Close",
+    "mockNote": "Preview data — real works will hang here automatically once published."
+  },
+  "projects": {
+    "featured": "FEATURED EXPERIMENT",
+    "all": "All",
+    "annotation": "EXPERIMENT ARCHIVE — SELECTED REPOSITORIES",
+    "stars": "stars",
+    "forks": "forks",
+    "filterHint": "Filter by language or topic"
+  },
+  "writing": {
+    "shelfHint": "Pull a spine to open it",
+    "new": "NEW",
+    "back": "Back to the shelf",
+    "open": "Open"
+  },
+  "aboutPage": {
+    "portrait": "PORTRAIT OF THE CURATOR",
+    "timeline": "Timeline",
+    "contact": "Write to me",
+    "formName": "Your name",
+    "formEmail": "Your email",
+    "formMessage": "Message",
+    "formSend": "Send",
+    "formSending": "Sending…",
+    "formOk": "Sent — thank you. I read everything.",
+    "formErr": "Could not send. Please email me instead.",
+    "formOffline": "The contact form is not wired up yet. Reach me by email below.",
+    "emailLabel": "Email"
+  },
   "footer": {
     "rights": "All rights reserved.",
     "colophon": "Built as a quiet gallery — static, fast, and open."
