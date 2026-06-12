@@ -11,7 +11,9 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="relative border-t border-hair">
-  <div class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-8">
+  <div
+    class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-8"
+  >
     <div class="flex flex-col gap-3">
       <Logo size={26} />
       <p class="meta-mono">EST. 2026 · GALERIE VIVANTE</p>
@@ -35,7 +37,8 @@ const year = new Date().getFullYear();
         }
       </ul>
       <p class="text-xs text-muted">
-        © {year} {siteConfig.site.title[locale]} · {t(locale, "footer.rights")}
+        © {year}
+        {siteConfig.site.title[locale]} · {t(locale, "footer.rights")}
       </p>
     </div>
   </div>

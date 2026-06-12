@@ -19,13 +19,7 @@ const tagline = pickLang(siteConfig.site.tagline, locale);
 const rooms = enabledModules();
 ---
 
-<BaseLayout
-  locale={locale}
-  title={name}
-  description={tagline.value}
-  path="/"
-  ghost={t(locale, "home.ghost")}
->
+<BaseLayout locale={locale} title={name} description={tagline.value} path="/" ghost={t(locale, "home.ghost")}>
   <!-- Hero：姓名 + 一句话身份，首屏文字逐词浮现 -->
   <section class="hero">
     <div class="enter-rise is-in">
@@ -55,10 +49,13 @@ const rooms = enabledModules();
                   <div class="room-art" aria-hidden="true" />
                   <div class="flex grow flex-col gap-2 p-5">
                     <span class="meta-mono room-no">
-                      {t(locale, "home.roomLabel").toUpperCase()} {m.roomNo} · {m.id.toUpperCase().replace("-", " ")}
+                      {t(locale, "home.roomLabel").toUpperCase()} {m.roomNo} ·{" "}
+                      {m.id.toUpperCase().replace("-", " ")}
                     </span>
                     <span class="font-display text-2xl font-medium">{t(locale, `nav.${m.id}`)}</span>
-                    <span class="text-sm leading-relaxed text-muted">{t(locale, `module.${m.id}.intro`)}</span>
+                    <span class="text-sm leading-relaxed text-muted">
+                      {t(locale, `module.${m.id}.intro`)}
+                    </span>
                     <span class="meta-mono mt-auto pt-3 enter-cue">{t(locale, "home.enter")} →</span>
                   </div>
                 </div>
@@ -120,8 +117,16 @@ const rooms = enabledModules();
     height: 110px;
     border-radius: var(--radius-frame) var(--radius-frame) 0 0;
     background:
-      radial-gradient(75% 95% at 18% 8%, color-mix(in oklab, var(--room) 52%, var(--surface)) 0%, transparent 68%),
-      radial-gradient(65% 85% at 85% 88%, color-mix(in oklab, var(--room) 30%, var(--surface)) 0%, transparent 62%),
+      radial-gradient(
+        75% 95% at 18% 8%,
+        color-mix(in oklab, var(--room) 52%, var(--surface)) 0%,
+        transparent 68%
+      ),
+      radial-gradient(
+        65% 85% at 85% 88%,
+        color-mix(in oklab, var(--room) 30%, var(--surface)) 0%,
+        transparent 62%
+      ),
       var(--surface-2);
   }
   .room-no {

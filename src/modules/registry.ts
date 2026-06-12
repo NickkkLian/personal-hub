@@ -14,7 +14,7 @@ import AboutPage from "./about/Page.astro";
  * 模块 → 页面组件映射。
  * P2+ 各模块换上差异化布局时只改各自的 Page.astro，路由层零改动。
  */
-export const MODULE_PAGES: Record<Exclude<ModuleId, never>, (props: Record<string, unknown>) => unknown> = {
+export const MODULE_PAGES = {
   projects: ProjectsPage,
   writing: WritingPage,
   "music-wall": MusicWallPage,
@@ -25,4 +25,4 @@ export const MODULE_PAGES: Record<Exclude<ModuleId, never>, (props: Record<strin
   mystery: MysteryPage,
   social: SocialPage,
   about: AboutPage,
-};
+} satisfies Record<ModuleId, unknown>;

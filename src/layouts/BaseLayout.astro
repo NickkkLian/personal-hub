@@ -31,7 +31,8 @@ const cleanPath = path === "/" ? "" : path;
 const enHref = `${siteUrl}${cleanPath || "/"}`;
 const zhHref = `${siteUrl}/zh${cleanPath}`;
 const canonical = locale === "zh" ? zhHref : enHref;
-const fullTitle = path === "/" ? title : `${title} · ${t(locale, "home.heroKicker")} — ${siteConfig.site.title[locale]}`;
+const fullTitle =
+  path === "/" ? title : `${title} · ${t(locale, "home.heroKicker")} — ${siteConfig.site.title[locale]}`;
 ---
 
 <!doctype html>

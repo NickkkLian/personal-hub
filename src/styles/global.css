@@ -32,8 +32,7 @@ body {
   /* 墙面 → 地坪的纵深色阶（背景纵深系统第④层） */
   background:
     linear-gradient(to bottom, transparent 0%, transparent 82%, var(--floor) 100%),
-    radial-gradient(120% 70% at 18% -8%, var(--wall-pool) 0%, transparent 60%),
-    var(--bg);
+    radial-gradient(120% 70% at 18% -8%, var(--wall-pool) 0%, transparent 60%), var(--bg);
   background-attachment: fixed;
 }
 

@@ -19,7 +19,10 @@ function isActive(href: string): boolean {
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-hair bg-bg/80 backdrop-blur-md">
-  <nav aria-label={t(locale, "a11y.mainNav")} class="mx-auto flex h-14 max-w-6xl items-center gap-4 px-5 sm:px-8">
+  <nav
+    aria-label={t(locale, "a11y.mainNav")}
+    class="mx-auto flex h-14 max-w-6xl items-center gap-4 px-5 sm:px-8"
+  >
     <a href={localizePath(locale, "/")} class="shrink-0" aria-label={t(locale, "nav.home")}>
       <Logo size={28} withWordmark wordmark="Nick Lian" />
     </a>
@@ -61,7 +64,8 @@ function isActive(href: string): boolean {
       aria-label={t(locale, "nav.menuOpen")}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M1 4h14M1 8h14M1 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M1 4h14M1 8h14M1 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        ></path>
       </svg>
     </button>
   </nav>

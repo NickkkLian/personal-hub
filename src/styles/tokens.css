@@ -50,8 +50,7 @@
 
   /* ---------- 光影（统一左上定向光 → 投影落右下） ---------- */
   --shadow-exhibit:
-    0 1px 1px rgba(28, 26, 23, 0.05), 2px 3px 6px rgba(28, 26, 23, 0.06),
-    6px 10px 24px rgba(28, 26, 23, 0.08);
+    0 1px 1px rgba(28, 26, 23, 0.05), 2px 3px 6px rgba(28, 26, 23, 0.06), 6px 10px 24px rgba(28, 26, 23, 0.08);
   --shadow-lift:
     0 1px 2px rgba(28, 26, 23, 0.07), 4px 6px 12px rgba(28, 26, 23, 0.09),
     10px 18px 36px rgba(28, 26, 23, 0.12);
@@ -104,11 +103,9 @@
   --wall-pool: rgba(255, 244, 222, 0.05);
 
   --shadow-exhibit:
-    0 1px 1px rgba(0, 0, 0, 0.3), 2px 3px 6px rgba(0, 0, 0, 0.35),
-    6px 10px 24px rgba(0, 0, 0, 0.4);
+    0 1px 1px rgba(0, 0, 0, 0.3), 2px 3px 6px rgba(0, 0, 0, 0.35), 6px 10px 24px rgba(0, 0, 0, 0.4);
   --shadow-lift:
-    0 1px 2px rgba(0, 0, 0, 0.35), 4px 6px 12px rgba(0, 0, 0, 0.4),
-    10px 18px 36px rgba(0, 0, 0, 0.5);
+    0 1px 2px rgba(0, 0, 0, 0.35), 4px 6px 12px rgba(0, 0, 0, 0.4), 10px 18px 36px rgba(0, 0, 0, 0.5);
   --shadow-plaque: 1px 1.5px 3px rgba(0, 0, 0, 0.6);
 
   --canvas-grain-opacity: 0.07;

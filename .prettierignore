@@ -1,0 +1,7 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+BLUEPRINT.md
+public/covers/
+src/data/
