@@ -52,6 +52,7 @@ export interface SiteConfig {
     web3formsKey: string;
     umamiWebsiteId: string;
   };
+  fonts?: { display?: string; mono?: string };
   about: {
     bio: { en: string; zh: string };
     timeline: { year: string; en: string; zh: string }[];
@@ -60,6 +61,28 @@ export interface SiteConfig {
 }
 
 export const siteConfig = config as unknown as SiteConfig;
+
+/** 字体键 → CSS 家族名（admin 可改 site.config.fonts；BaseLayout 据此覆盖 --font-*） */
+export const FONT_FAMILIES: { display: Record<string, string>; mono: Record<string, string> } = {
+  display: {
+    fraunces: '"Fraunces Variable"',
+    playfair: '"Playfair Display Variable"',
+    cormorant: '"Cormorant Variable"',
+  },
+  mono: {
+    "space-mono": '"Space Mono"',
+    "ibm-plex-mono": '"IBM Plex Mono"',
+  },
+};
+
+/** 解析当前选定字体的 CSS 栈（含中文与兜底） */
+export function fontStacks() {
+  const d = siteConfig.fonts?.display ?? "fraunces";
+  const m = siteConfig.fonts?.mono ?? "space-mono";
+  const display = `${FONT_FAMILIES.display[d] ?? FONT_FAMILIES.display.fraunces}, "Noto Serif SC", serif`;
+  const mono = `${FONT_FAMILIES.mono[m] ?? FONT_FAMILIES.mono["space-mono"]}, monospace`;
+  return { display, mono };
+}
 
 /** 所有启用的模块（决定路由、首页门厅、sitemap） */
 export function enabledModules(): ModuleMeta[] {

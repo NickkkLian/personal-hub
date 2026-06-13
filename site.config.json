@@ -21,6 +21,11 @@
     "web3formsKey": "",
     "umamiWebsiteId": ""
   },
+  "fonts": {
+    "$comment": "标题字 display ∈ fraunces|playfair|cormorant；等宽字 mono ∈ space-mono|ibm-plex-mono。正文固定 Inter。改完重新部署即生效。",
+    "display": "fraunces",
+    "mono": "space-mono"
+  },
   "about": {
     "bio": {
       "en": "I build small, sharp tools for my own life — trackers, atlases, archives — and this gallery is where their public faces hang. (Placeholder bio: edit me in site.config.json)",

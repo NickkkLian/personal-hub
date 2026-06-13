@@ -3,9 +3,14 @@ import { ClientRouter } from "astro:transitions";
 import "@fontsource-variable/fraunces";
 import "@fontsource-variable/inter";
 import "@fontsource/space-mono";
+// 可选字体（admin 可在 site.config.fonts 切换）：@font-face 声明常驻，
+// woff2 仅在被实际选用时下载，故不增加默认页面字体负担。
+import "@fontsource-variable/playfair-display";
+import "@fontsource-variable/cormorant";
+import "@fontsource/ibm-plex-mono";
 import "../styles/global.css";
 import { t, type Locale } from "../i18n";
-import { siteConfig } from "../config/site";
+import { siteConfig, fontStacks } from "../config/site";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import Backdrop from "../components/gallery/Backdrop.astro";
@@ -33,6 +38,7 @@ const fullTitle =
   path === "/" ? title : `${title} · ${t(locale, "home.heroKicker")} — ${siteConfig.site.title[locale]}`;
 const ogImage = `${siteUrl}/og.png`;
 const umamiId = siteConfig.site.umamiWebsiteId;
+const fonts = fontStacks();
 const jsonLd = [
   {
     "@context": "https://schema.org",
@@ -53,7 +59,11 @@ const jsonLd = [
 ---
 
 <!doctype html>
-<html lang={locale === "zh" ? "zh-CN" : "en"} data-theme="light">
+<html
+  lang={locale === "zh" ? "zh-CN" : "en"}
+  data-theme="light"
+  style={`--font-display: ${fonts.display}; --font-mono: ${fonts.mono}`}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -122,7 +122,8 @@
   },
   "footer": {
     "rights": "保留所有权利。",
-    "colophon": "以一座安静画廊的方式构建——静态、迅速、开放。"
+    "colophon": "以一座安静画廊的方式构建——静态、迅速、开放。",
+    "est": "EST. 2026 · GALERIE VIVANTE"
   },
   "a11y": {
     "skipToContent": "跳转到正文",

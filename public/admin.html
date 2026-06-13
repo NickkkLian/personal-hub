@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Personal Hub · 文本后台</title>
+    <style>
+      :root {
+        --bg: #f3eee5;
+        --surface: #faf7f0;
+        --surface-2: #ece5d8;
+        --text: #1c1a17;
+        --muted: #6f6a60;
+        --brass: #b08d57;
+        --line: rgba(28, 26, 23, 0.16);
+        --ok: #5f7a52;
+        --err: #a23b2e;
+        --mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+        --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          "PingFang SC",
+          "Microsoft YaHei",
+          sans-serif;
+        line-height: 1.5;
+      }
+      header.top {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding: 0.8rem 1.2rem;
+        background: color-mix(in oklab, var(--bg) 88%, transparent);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      .ring {
+        width: 30px;
+        height: 30px;
+        border: 2px solid var(--brass);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-family: var(--serif);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .grow {
+        flex: 1;
+      }
+      .mono {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 1.5rem 1.2rem 6rem;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 1.2rem 1.3rem;
+        margin-bottom: 1.2rem;
+      }
+      h2.sec {
+        font-family: var(--serif);
+        font-size: 1.3rem;
+        margin: 0 0 0.2rem;
+      }
+      label {
+        display: block;
+        font-size: 0.92rem;
+        margin: 0.7rem 0 0.2rem;
+      }
+      input[type="text"],
+      textarea,
+      select {
+        width: 100%;
+        font: inherit;
+        font-size: 0.92rem;
+        padding: 0.5rem 0.6rem;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        color: var(--text);
+      }
+      textarea {
+        resize: vertical;
+        min-height: 2.4rem;
+        font-family: var(--mono);
+        font-size: 0.85rem;
+      }
+      .bi {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+      @media (max-width: 620px) {
+        .bi {
+          grid-template-columns: 1fr;
+        }
+      }
+      .pathlabel {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        color: var(--brass);
+        text-transform: uppercase;
+      }
+      .field {
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed var(--line);
+      }
+      .field:last-child {
+        border-bottom: 0;
+      }
+      details {
+        margin-bottom: 0.6rem;
+      }
+      summary {
+        cursor: pointer;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0.4rem 0;
+      }
+      .chk {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-right: 1.2rem;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        color: var(--text);
+      }
+      button.primary {
+        background: var(--brass);
+        border-color: var(--brass);
+        color: #fff;
+        font-weight: 600;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .status {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+      }
+      .status.ok {
+        color: var(--ok);
+      }
+      .status.err {
+        color: var(--err);
+      }
+      .setup input {
+        max-width: 230px;
+      }
+      .hint {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin: 0.3rem 0 0;
+      }
+      .savebar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem 1.2rem;
+        background: color-mix(in oklab, var(--bg) 92%, transparent);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--line);
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <span class="brand"><span class="ring">NL</span> 文本后台</span>
+      <span class="grow"></span>
+      <span id="topstatus" class="status"></span>
+    </header>
+
+    <main>
+      <!-- 连接设置 -->
+      <section class="card setup">
+        <h2 class="sec">连接</h2>
+        <p class="hint">
+          填入 GitHub 网站仓库与一个有 <b>Contents 读写</b> 权限的 fine-grained
+          令牌（只授权该仓库）。令牌只存本机浏览器，不会上传。
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: end">
+          <div>
+            <label class="mono">Owner</label><input id="cfg-owner" type="text" placeholder="NickkkLian" />
+          </div>
+          <div>
+            <label class="mono">Repo</label><input id="cfg-repo" type="text" placeholder="personal-hub" />
+          </div>
+          <div>
+            <label class="mono">Branch</label><input id="cfg-branch" type="text" placeholder="main" />
+          </div>
+          <div>
+            <label class="mono">Token</label
+            ><input id="cfg-token" type="password" placeholder="github_pat_…" />
+          </div>
+          <button id="btn-load" class="primary">载入文本</button>
+        </div>
+        <p id="setup-status" class="status" style="margin-top: 0.6rem"></p>
+      </section>
+
+      <div id="editor" class="hidden">
+        <!-- 字体 -->
+        <section class="card">
+          <h2 class="sec">字体</h2>
+          <p class="hint">标题字与等宽字可在以下预置中切换（正文固定 Inter）。</p>
+          <div class="bi">
+            <div>
+              <label class="mono">标题字 display</label>
+              <select id="font-display">
+                <option value="fraunces">Fraunces（默认 · 高对比衬线）</option>
+                <option value="playfair">Playfair Display（Didone 时装感）</option>
+                <option value="cormorant">Cormorant（纤细古典衬线）</option>
+              </select>
+            </div>
+            <div>
+              <label class="mono">等宽字 mono</label>
+              <select id="font-mono">
+                <option value="space-mono">Space Mono（默认）</option>
+                <option value="ibm-plex-mono">IBM Plex Mono</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- 站点信息 + 关于（site.config.json） -->
+        <section class="card">
+          <h2 class="sec">站点信息 · 关于 · 模块开关</h2>
+          <p class="hint">站点标题、一句话题注、关于页简介与时间线、联系密钥、模块开关。</p>
+          <div id="config-fields"></div>
+        </section>
+
+        <!-- 界面文案（i18n，含幽灵字/批注） -->
+        <section class="card">
+          <h2 class="sec">界面文案 · 幽灵字 · 批注（双语）</h2>
+          <p class="hint">
+            导航、各展厅标题/背景幽灵字/简介、首页刊头、占位与页脚等所有可见文字。左英文、右中文。
+          </p>
+          <div id="i18n-fields"></div>
+        </section>
+      </div>
+    </main>
+
+    <div id="savebar" class="savebar hidden">
+      <button id="btn-save" class="primary">保存并发布</button>
+      <span id="save-status" class="status"></span>
+      <span class="grow"></span>
+      <span class="mono">改动会提交回仓库，约 1–2 分钟后网站自动更新</span>
+    </div>
+
+    <script>
+      const $ = (s) => document.querySelector(s);
+      const LS = "hub-admin-cfg";
+      const FILES = {
+        config: "site.config.json",
+        en: "src/i18n/en.json",
+        zh: "src/i18n/zh.json",
+      };
+      let loaded = {}; // { config:{json,sha}, en:{...}, zh:{...} }
+
+      // ---- 持久化连接设置 ----
+      (function restore() {
+        try {
+          const c = JSON.parse(localStorage.getItem(LS) || "{}");
+          $("#cfg-owner").value = c.owner || "NickkkLian";
+          $("#cfg-repo").value = c.repo || "personal-hub";
+          $("#cfg-branch").value = c.branch || "main";
+          $("#cfg-token").value = c.token || "";
+        } catch {}
+      })();
+      function cfg() {
+        return {
+          owner: $("#cfg-owner").value.trim(),
+          repo: $("#cfg-repo").value.trim(),
+          branch: $("#cfg-branch").value.trim() || "main",
+          token: $("#cfg-token").value.trim(),
+        };
+      }
+      function persist() {
+        localStorage.setItem(LS, JSON.stringify(cfg()));
+      }
+
+      // ---- GitHub API ----
+      async function ghGet(path) {
+        const c = cfg();
+        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}?ref=${c.branch}`;
+        const r = await fetch(url, {
+          headers: { Authorization: `Bearer ${c.token}`, Accept: "application/vnd.github+json" },
+        });
+        if (!r.ok) throw new Error(`读取 ${path} 失败 HTTP ${r.status}`);
+        const j = await r.json();
+        const text = decodeURIComponent(escape(atob(j.content.replace(/\n/g, ""))));
+        return { json: JSON.parse(text), sha: j.sha };
+      }
+      async function ghPut(path, jsonObj, sha, message) {
+        const c = cfg();
+        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}`;
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(jsonObj, null, 2) + "\n")));
+        const body = { message, content, branch: c.branch, ...(sha ? { sha } : {}) };
+        const r = await fetch(url, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${c.token}`,
+            Accept: "application/vnd.github+json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        if (!r.ok) {
+          const e = await r.json().catch(() => ({}));
+          throw new Error(`写入 ${path} 失败 HTTP ${r.status} ${e.message || ""}`);
+        }
+        return (await r.json()).content.sha;
+      }
+
+      // ---- 路径工具 ----
+      function getAt(obj, path) {
+        return path.split(".").reduce((o, k) => (o == null ? o : o[k]), obj);
+      }
+      function setAt(obj, path, val) {
+        const ks = path.split(".");
+        let o = obj;
+        for (let i = 0; i < ks.length - 1; i++) o = o[ks[i]];
+        o[ks[ks.length - 1]] = val;
+      }
+      function leaves(obj, prefix = "") {
+        let out = [];
+        for (const [k, v] of Object.entries(obj)) {
+          if (k.startsWith("$")) continue;
+          const p = prefix ? `${prefix}.${k}` : k;
+          if (v && typeof v === "object" && !Array.isArray(v)) out = out.concat(leaves(v, p));
+          else out.push({ path: p, value: v });
+        }
+        return out;
+      }
+
+      const esc = (s) =>
+        String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+      // ---- 载入 ----
+      $("#btn-load").addEventListener("click", async () => {
+        const c = cfg();
+        if (!c.owner || !c.repo || !c.token) {
+          setStatus("#setup-status", "请填写 owner / repo / token", "err");
+          return;
+        }
+        persist();
+        setStatus("#setup-status", "载入中…", "");
+        try {
+          loaded.config = await ghGet(FILES.config);
+          loaded.en = await ghGet(FILES.en);
+          loaded.zh = await ghGet(FILES.zh);
+          buildFonts();
+          buildConfig();
+          buildI18n();
+          $("#editor").classList.remove("hidden");
+          $("#savebar").classList.remove("hidden");
+          setStatus("#setup-status", "已载入 ✓", "ok");
+        } catch (e) {
+          setStatus("#setup-status", e.message, "err");
+        }
+      });
+
+      function setStatus(sel, msg, kind) {
+        const el = $(sel);
+        el.textContent = msg;
+        el.className = "status " + (kind || "");
+      }
+
+      // ---- 字体 ----
+      function buildFonts() {
+        const f = loaded.config.json.fonts || {};
+        $("#font-display").value = f.display || "fraunces";
+        $("#font-mono").value = f.mono || "space-mono";
+      }
+
+      // ---- site.config 表单（递归，跳过 modules 之外的开关用 checkbox） ----
+      function buildConfig() {
+        const root = loaded.config.json;
+        const host = $("#config-fields");
+        host.innerHTML = "";
+        // 站点信息（site.*，排除 fonts，已单列）
+        host.appendChild(renderConfigGroup("site", root.site, "站点"));
+        host.appendChild(renderConfigGroup("about", root.about, "关于页"));
+        host.appendChild(renderModules(root.modules));
+      }
+      function renderConfigGroup(prefix, obj, label) {
+        const d = document.createElement("details");
+        d.open = true;
+        d.innerHTML = `<summary>${label}</summary>`;
+        for (const { path, value } of leaves(obj, prefix)) {
+          if (typeof value === "boolean") {
+            d.appendChild(fieldCheckbox(path, value));
+          } else {
+            d.appendChild(fieldText(path, value));
+          }
+        }
+        return d;
+      }
+      function renderModules(modules) {
+        const d = document.createElement("details");
+        d.innerHTML = `<summary>模块开关（enabled = 是否构建 · nav = 是否进导航）</summary>`;
+        for (const id of Object.keys(modules)) {
+          const row = document.createElement("div");
+          row.className = "field";
+          row.innerHTML = `<span class="pathlabel">${id}</span><div style="margin-top:.3rem">
+            <label class="chk"><input type="checkbox" data-cfg="modules.${id}.enabled" ${modules[id].enabled ? "checked" : ""}/> enabled</label>
+            <label class="chk"><input type="checkbox" data-cfg="modules.${id}.nav" ${modules[id].nav ? "checked" : ""}/> nav</label>
+          </div>`;
+          d.appendChild(row);
+        }
+        return d;
+      }
+      function fieldText(path, value) {
+        const wrap = document.createElement("div");
+        wrap.className = "field";
+        const multiline = String(value).length > 60;
+        wrap.innerHTML =
+          `<span class="pathlabel">${path}</span>` +
+          (multiline
+            ? `<textarea data-cfg="${path}" rows="2">${esc(value)}</textarea>`
+            : `<input type="text" data-cfg="${path}" value="${esc(value)}"/>`);
+        return wrap;
+      }
+      function fieldCheckbox(path, value) {
+        const wrap = document.createElement("div");
+        wrap.className = "field";
+        wrap.innerHTML = `<label class="chk"><input type="checkbox" data-cfg="${path}" ${value ? "checked" : ""}/> <span class="pathlabel">${path}</span></label>`;
+        return wrap;
+      }
+
+      // ---- i18n 双语表单（按 en 结构，配对 zh） ----
+      function buildI18n() {
+        const en = loaded.en.json,
+          zh = loaded.zh.json;
+        const host = $("#i18n-fields");
+        host.innerHTML = "";
+        // 按顶层分组
+        for (const top of Object.keys(en)) {
+          if (top.startsWith("$")) continue;
+          const d = document.createElement("details");
+          d.innerHTML = `<summary>${top}</summary>`;
+          for (const { path, value } of leaves(en[top], top)) {
+            const zhVal = getAt(zh, path);
+            const row = document.createElement("div");
+            row.className = "field";
+            const long = String(value).length > 40 || String(zhVal || "").length > 40;
+            const ctl = (lang, v) =>
+              long
+                ? `<textarea data-i18n="${lang}" data-path="${path}" rows="2">${esc(v ?? "")}</textarea>`
+                : `<input type="text" data-i18n="${lang}" data-path="${path}" value="${esc(v ?? "")}"/>`;
+            row.innerHTML = `<span class="pathlabel">${path}</span>
+              <div class="bi"><div>${ctl("en", value)}</div><div>${ctl("zh", zhVal)}</div></div>`;
+            d.appendChild(row);
+          }
+          host.appendChild(d);
+        }
+      }
+
+      // ---- 收集 + 保存 ----
+      function collect() {
+        const config = JSON.parse(JSON.stringify(loaded.config.json));
+        const en = JSON.parse(JSON.stringify(loaded.en.json));
+        const zh = JSON.parse(JSON.stringify(loaded.zh.json));
+        // fonts
+        config.fonts = config.fonts || {};
+        config.fonts.display = $("#font-display").value;
+        config.fonts.mono = $("#font-mono").value;
+        // config fields
+        document.querySelectorAll("[data-cfg]").forEach((el) => {
+          const p = el.dataset.cfg;
+          if (el.type === "checkbox") setAt(config, p, el.checked);
+          else setAt(config, p, el.value);
+        });
+        // i18n fields
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const target = el.dataset.i18n === "en" ? en : zh;
+          setAt(target, el.dataset.path, el.value);
+        });
+        return { config, en, zh };
+      }
+
+      $("#btn-save").addEventListener("click", async () => {
+        const btn = $("#btn-save");
+        btn.disabled = true;
+        setStatus("#save-status", "保存中…", "");
+        try {
+          const next = collect();
+          const stamp = new Date().toISOString().slice(0, 16).replace("T", " ");
+          const jobs = [
+            ["config", FILES.config, next.config],
+            ["en", FILES.en, next.en],
+            ["zh", FILES.zh, next.zh],
+          ];
+          let n = 0;
+          for (const [key, path, obj] of jobs) {
+            if (JSON.stringify(obj) === JSON.stringify(loaded[key].json)) continue; // 未改动则跳过
+            const sha = await ghPut(path, obj, loaded[key].sha, `admin: edit text/fonts ${stamp}`);
+            loaded[key] = { json: obj, sha };
+            n++;
+          }
+          setStatus("#save-status", n ? `已保存 ${n} 个文件 ✓` : "无改动", "ok");
+        } catch (e) {
+          setStatus("#save-status", e.message, "err");
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>

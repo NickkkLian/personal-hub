@@ -35,3 +35,10 @@
 - [ ] 决定 v1 上线时各模块开关状态（当前：home/projects/writing/my-music/about 开，其余关）
 - [ ] 双语 × 双主题 × 三断点走查（Claude Code 自测后给你预览清单）
 - [ ] Lighthouse 门槛验收报告（Perf ≥ 90 / A11y ≥ 95 / SEO = 100）
+
+## 五、文本后台 admin.html（上线后可用）⏱ 随时
+
+- 网站仓库上线后，浏览器打开 `你的网址/admin.html`
+- 填 owner / repo / branch（main）/ 一个对**网站仓库** Contents 读写的 fine-grained 令牌（只存本机浏览器）
+- 点「载入文本」→ 改任意界面文字、背景幽灵字、批注、标题/简介、时间线、字体 → 「保存并发布」→ 约 1–2 分钟网站更新
+- 改模块开关也在这里（等同改 site.config.json）

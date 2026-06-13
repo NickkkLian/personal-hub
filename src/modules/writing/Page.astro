@@ -43,7 +43,7 @@ const title = t(locale, "module.writing.title");
     <header class="module-head enter-rise is-in">
       <p class="meta-mono room-tag">
         {t(locale, "home.roomLabel")}
-        {meta.roomNo} — BIBLIOTHÈQUE
+        {meta.roomNo} — {t(locale, "module.writing.ghost")}
       </p>
       <h1 class="module-title">{title}</h1>
       <p class="module-intro">{t(locale, "module.writing.intro")}</p>
@@ -52,7 +52,7 @@ const title = t(locale, "module.writing.title");
     <ImmersiveFrame
       seed="immersive-writing"
       module="writing"
-      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · BIBLIOTHÈQUE`}
+      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · ${t(locale, "module.writing.ghost")}`}
       caption={t(locale, "module.writing.intro")}
     />
 

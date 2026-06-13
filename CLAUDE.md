@@ -57,6 +57,8 @@
 
 ## 当前交接状态（每次推进后更新此节）
 
+- 对齐站长参考图：流场笔触封面 / 双层背景(雾+色场圆) / 圆形 NL logo / 幽灵字精简 / 编辑式拼版首页(全画幅卡+古典石柱 ColumnPiece) / Writing 改详情卡网格(去书架) / 字体可切换(site.config.fonts)
+- **文本后台 `public/admin.html`**：PAT+GitHub API 编辑 i18n(en/zh，含幽灵字/批注)+ site.config(标题/简介/时间线/字体/模块开关)，写回网站仓库；上线(网站仓库存在)后即可用
 - Development-Log 补录与顺序修复 ✅ 均已推送；Database-Public ✅ 已创建（尚无数据文件）
 - **站长待办统一收口在 `LAUNCH-CHECKLIST.md`**（上线前一次性做）；搁置功能在 `BACKLOG.md`
 - v1.8 变更：专辑墙搁置（music-wall 关闭）→ BACKLOG；My Music 录音室已上线（mock）

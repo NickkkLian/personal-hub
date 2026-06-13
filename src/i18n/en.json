@@ -122,7 +122,8 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "colophon": "Built as a quiet gallery — static, fast, and open."
+    "colophon": "Built as a quiet gallery — static, fast, and open.",
+    "est": "EST. 2026 · GALERIE VIVANTE"
   },
   "a11y": {
     "skipToContent": "Skip to content",
