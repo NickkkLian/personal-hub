@@ -4,6 +4,7 @@
  */
 import { enabledModules, type ModuleId } from "../../../config/site";
 import { MODULE_PAGES } from "../../../modules/registry";
+import CjkFonts from "../../../components/CjkFonts.astro";
 
 export function getStaticPaths() {
   return enabledModules().map((m) => ({
@@ -17,3 +18,4 @@ const Page = MODULE_PAGES[id];
 ---
 
 <Page locale="zh" />
+<CjkFonts />

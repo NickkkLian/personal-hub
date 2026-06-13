@@ -1,12 +1,40 @@
 {
-  "$comment": "原创音乐数据（站长直接编辑本文件，BLUEPRINT 4.1）。每条需 public: true 才会上站；links 填各流媒体平台外链；音频试听文件 P3 接入。以下为占位示例，换成真实作品即可。",
+  "$comment": "原创音乐数据（站长直接编辑本文件）。以下为占位作品——换成真实作品即可。links 支持网易云/Spotify 等任意平台外链（label 会显示在按钮上）；extra.audio 填试听音频 URL 后内嵌播放器自动启用；extra.demo=true 的条目用内置合成音色演示播放器（真实数据请删掉此字段）。每条需 public: true。",
   "items": [
     {
       "id": "track-demo-1",
       "title": "Night Flight 夜航",
-      "summary": { "en": "Original demo — synthwave sketch.", "zh": "原创 demo——合成器小品。" },
+      "summary": {
+        "en": "Synthwave sketch — neon over a sleeping city.",
+        "zh": "合成器小品——掠过沉睡城市的霓虹。"
+      },
       "date": "2026-03-01",
-      "tags": ["demo", "synthwave"],
+      "tags": ["synthwave", "demo"],
+      "cover": null,
+      "links": [],
+      "public": true,
+      "extra": { "year": 2026, "demo": true }
+    },
+    {
+      "id": "track-demo-2",
+      "title": "纸船 Paper Boat",
+      "summary": {
+        "en": "Indie folk sketch about letting small things go.",
+        "zh": "独立民谣小样——关于放走那些小事。"
+      },
+      "date": "2026-04-12",
+      "tags": ["folk", "demo"],
+      "cover": null,
+      "links": [],
+      "public": true,
+      "extra": { "year": 2026 }
+    },
+    {
+      "id": "track-demo-3",
+      "title": "雾港 Mist Harbour",
+      "summary": { "en": "Ambient piece recorded on a rainy night.", "zh": "雨夜录下的氛围小品。" },
+      "date": "2026-05-20",
+      "tags": ["ambient", "demo"],
       "cover": null,
       "links": [],
       "public": true,

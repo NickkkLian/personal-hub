@@ -60,7 +60,7 @@ const ghost = t(locale, `module.${id}.ghost`);
     padding-top: clamp(2rem, 8vh, 5rem);
   }
   .room-tag {
-    color: var(--room);
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
     margin-bottom: 1.2rem;
   }
   .module-title {

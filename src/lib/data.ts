@@ -3,8 +3,12 @@
  * 用 fs 读取（而非 import）以容忍文件由 predev/prebuild 钩子即时生成。
  */
 import { readFileSync } from "node:fs";
+import path from "node:path";
 import type { LocalizedField } from "../i18n";
 import type { ModuleId } from "../config/site";
+
+// 构建打包后 import.meta.url 指向 chunk 而非源码目录——必须以项目根（process.cwd()）定位数据
+const DATA_DIR = path.resolve(process.cwd(), "src/data");
 
 export interface NormalizedEntry {
   id: string;
@@ -51,10 +55,14 @@ const cache = new Map<string, ModuleData>();
 export function moduleData(module: ModuleId | string): ModuleData {
   if (!cache.has(module)) {
     try {
-      const raw = readFileSync(new URL(`../data/${module}.normalized.json`, import.meta.url), "utf8");
+      const raw = readFileSync(path.join(DATA_DIR, `${module}.normalized.json`), "utf8");
       cache.set(module, JSON.parse(raw) as ModuleData);
-    } catch {
-      // 数据文件缺失（未跑 sync）时给空集，构建不崩
+    } catch (e) {
+      // 数据缺失时给空集且大声告警（绝不静默——曾因路径解析吞错导致整站空数据）
+      console.warn(
+        `⚠️ [data] ${module}.normalized.json 读取失败（先跑 npm run sync？）:`,
+        (e as Error).message,
+      );
       cache.set(module, { module, generatedAt: "", mode: "missing", count: 0, entries: [] });
     }
   }

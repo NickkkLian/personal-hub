@@ -50,6 +50,7 @@ export interface SiteConfig {
     email: string;
     socials: { label: string; url: string }[];
     web3formsKey: string;
+    umamiWebsiteId: string;
   };
   about: {
     bio: { en: string; zh: string };

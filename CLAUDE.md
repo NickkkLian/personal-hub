@@ -35,8 +35,8 @@
 - [x] P0 脚手架（双语路由 / 令牌 / 主题 / 模块开关 / logo / 组件库雏形）
 - [x] P1 数据层（sync-data.mjs + adapters + schema 校验 + mock↔真实 auto 切换；GitHub Actions 接入在 P5）
 - [x] P2 核心模块（Home 流场+门厅 / Projects 档案网格 / Writing 书架 / About+表单；表单等 web3formsKey 填入后生效）
-- [ ] P3 音乐（专辑墙 + Spotify now-playing Function）
-- [ ] P4 SEO/RSS/Umami/性能调优
+- [x] P3 My Music 录音室（黑胶卡+播放器+音波可视化；mock 数据，真实作品与平台链接待站长填 content/my-music.json）
+- [x] P4 SEO 全套/双语 RSS/Umami 槽位/性能（Lighthouse 移动端六页实测：Perf 90–98 / A11y 100 / SEO 100）
 - [ ] P5 部署上线（Cloudflare Pages + sync.yml）
 
 ## 常用命令
@@ -48,7 +48,10 @@
 
 - Development-Log 补录与顺序修复 ✅ 均已推送；Database-Public ✅ 已创建（尚无数据文件）
 - **站长待办统一收口在 `LAUNCH-CHECKLIST.md`**（上线前一次性做）；搁置功能在 `BACKLOG.md`
-- v1.8 变更：专辑墙搁置（music-wall 关闭），my-music 开启（占位页）；下一阶段 P3 = My Music 原创音乐完整版（录音室布局+播放器），P4 SEO/RSS/性能 可并行
+- v1.8 变更：专辑墙搁置（music-wall 关闭）→ BACKLOG；My Music 录音室已上线（mock）
+- 字体策略（性能关键，勿回退）：英文页零 CJK；中文页正文=系统字体（苹方/雅黑），网络字体仅思源宋 600 标题；CJK @font-face 独立 chunk 只挂中文路由；assetsInlineLimit=0
+- 数据读取以 process.cwd() 定位 src/data（import.meta.url 在打包后失效——曾致全站空数据，已修复并加告警）
+- 仅剩 P5 部署：Cloudflare Pages + deploy.yml/sync.yml + Secrets，需站长按 LAUNCH-CHECKLIST 配合
 
 ## 工作方式（站长要求）
 

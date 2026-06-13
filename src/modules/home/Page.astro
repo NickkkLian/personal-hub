@@ -154,7 +154,7 @@ const rooms = enabledModules().map((m) => {
       var(--surface-2);
   }
   .room-no {
-    color: var(--room);
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -171,7 +171,7 @@ const rooms = enabledModules().map((m) => {
     transition: color var(--dur-micro) var(--ease-gallery);
   }
   .room-card:hover .enter-cue {
-    color: var(--room);
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
   }
 </style>
 
@@ -206,6 +206,8 @@ const rooms = enabledModules().map((m) => {
     const canvas = document.getElementById("flow") as HTMLCanvasElement | null;
     if (!canvas || canvas.dataset.on) return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // 移动端减量（BLUEPRINT 5.1）：触屏设备不启动流场，省电省主线程
+    if (matchMedia("(hover: none)").matches) return;
     canvas.dataset.on = "1";
     const ctx = canvas.getContext("2d")!;
     const paints = ["#7c8b6f", "#7e93a8", "#c9a227", "#c08d7c", "#b08d57"];

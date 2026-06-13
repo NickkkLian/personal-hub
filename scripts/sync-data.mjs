@@ -52,6 +52,7 @@ const MODULE_ORDER = [
   "menu",
   "mystery",
   "social",
+  "about", // 无数据源，输出空集（home 门厅统一取数不告警）
 ];
 
 const log = (s) => console.log(s);

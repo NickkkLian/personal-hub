@@ -130,5 +130,13 @@
   "langTag": {
     "originalZh": "Original: Chinese",
     "originalEn": "Original: English"
+  },
+  "myMusic": {
+    "studioTag": "STUDIO RECORDINGS — ORIGINAL WORKS",
+    "play": "Play",
+    "pause": "Pause",
+    "demoTag": "SYNTH DEMO PREVIEW",
+    "comingSoon": "Streaming links coming soon",
+    "listenOn": "Listen on"
   }
 }

@@ -63,7 +63,7 @@ const title = t(locale, "module.projects.title");
                 <Cover id={featured.id} module="projects" cover={featured.cover} w={560} h={300} />
               </div>
               <div class="flex flex-col gap-3 p-6 sm:p-8">
-                <span class="meta-mono" style="color: var(--brass)">
+                <span class="meta-mono" style="color: color-mix(in oklab, var(--brass) 55%, var(--text))">
                   ★ {t(locale, "projects.featured")} · {exhibitNo(featured)}
                 </span>
                 <h2 class="font-display text-3xl">{pickLang(featured.title, locale).value}</h2>
@@ -134,7 +134,7 @@ const title = t(locale, "module.projects.title");
     padding-top: clamp(2rem, 8vh, 5rem);
   }
   .room-tag {
-    color: var(--room);
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
     margin-bottom: 1.2rem;
   }
   .module-title {

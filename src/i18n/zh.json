@@ -130,5 +130,13 @@
   "langTag": {
     "originalZh": "原文：中文",
     "originalEn": "原文：英文"
+  },
+  "myMusic": {
+    "studioTag": "录音室 — 原创作品",
+    "play": "播放",
+    "pause": "暂停",
+    "demoTag": "内置音色演示",
+    "comingSoon": "流媒体链接即将上线",
+    "listenOn": "去听"
   }
 }

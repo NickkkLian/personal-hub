@@ -27,5 +27,9 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // 字体绝不内联进 CSS（CJK 小子集内联会让渲染阻塞的 CSS 暴涨）
+      assetsInlineLimit: 0,
+    },
   },
 });

@@ -90,7 +90,10 @@ const title = t(locale, "module.writing.title");
                           <Cover id={e.id} module="writing" cover={e.cover} w={420} h={240} />
                         </div>
                         <div class="book-body">
-                          <p class="meta-mono" style="color: var(--room)">
+                          <p
+                            class="meta-mono"
+                            style="color: color-mix(in oklab, var(--room) 55%, var(--text))"
+                          >
                             {exhibitNo(e)} · WRITING{e.extra.sectionLabel ? ` · ${e.extra.sectionLabel}` : ""}
                           </p>
                           <h3 class="font-display text-2xl">{tt.value}</h3>
@@ -133,7 +136,7 @@ const title = t(locale, "module.writing.title");
     padding-top: clamp(2rem, 8vh, 5rem);
   }
   .room-tag {
-    color: var(--room);
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
     margin-bottom: 1.2rem;
   }
   .module-title {

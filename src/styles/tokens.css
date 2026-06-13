@@ -57,8 +57,8 @@
   --shadow-plaque: 1px 1.5px 3px rgba(28, 26, 23, 0.25);
 
   /* ---------- 字体 ---------- */
-  --font-display: "Fraunces Variable", "Noto Serif SC Variable", serif;
-  --font-body: "Inter Variable", "Noto Sans SC Variable", sans-serif;
+  --font-display: "Fraunces Variable", "Noto Serif SC", serif;
+  --font-body: "Inter Variable", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: "Space Mono", monospace;
 
   /* ---------- 动效（入场 ≤600ms，统一缓动） ---------- */
