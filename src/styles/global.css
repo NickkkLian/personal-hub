@@ -52,8 +52,15 @@ h2,
 h3 {
   font-family: var(--font-display);
   font-weight: 560;
+  /* Fraunces 高光学尺寸：大字下更高对比、更优雅（对位参考图标题） */
+  font-variation-settings: "opsz" 144;
   letter-spacing: -0.015em;
   text-wrap: balance;
+}
+/* 巨型模块标题 / Hero：更高对比 + 更紧 */
+.module-title,
+.hero-name {
+  font-variation-settings: "opsz" 144;
 }
 
 :lang(zh) h1,

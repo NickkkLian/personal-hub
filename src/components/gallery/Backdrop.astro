@@ -44,7 +44,7 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
       stroke-opacity="0.5"></path>
   </svg>
 
-  {/* ② 颜料雾 + 幽灵字 */}
+  {/* ② 颜料雾（重模糊氛围层） + 幽灵字 */}
   {
     ghost && (
       <div class="ghost font-display" data-par="ghost">
@@ -52,9 +52,13 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
       </div>
     )
   }
-  <div class="mist mist-a" data-par="mist-a"></div>
-  <div class="mist mist-b" data-par="mist-b"></div>
-  <div class="mist mist-c" data-par="mist-c"></div>
+  <div class="haze haze-a" data-par="haze-a"></div>
+  <div class="haze haze-b" data-par="haze-b"></div>
+
+  {/* ② 柔和色场圆（可见的墙上色光圆，参考图）——与颜料雾叠加 */}
+  <div class="field field-a" data-par="field-a"></div>
+  <div class="field field-b" data-par="field-b"></div>
+  <div class="field field-c" data-par="field-c"></div>
 
   {/* ⑤ 微尘层 */}
   <div class="dust" data-par="dust">
@@ -95,15 +99,18 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     filter: blur(3px);
   }
 
-  /* ② 幽灵字：超大低对比展厅水印，越界出血 */
+  /* ② 幽灵字：展厅墙字水印（参考图——精致高对比衬线，含蓄不出血） */
   .ghost {
     position: absolute;
-    top: 3rem;
-    right: -0.08em;
-    font-size: clamp(7rem, 26vw, 24rem);
-    font-weight: 600;
-    line-height: 0.82;
-    letter-spacing: -0.02em;
+    top: 4.5rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: clamp(4rem, 13vw, 11rem);
+    font-weight: 380;
+    font-variation-settings: "opsz" 144;
+    line-height: 0.9;
+    letter-spacing: 0.06em;
     color: var(--ghost-ink);
     white-space: nowrap;
     user-select: none;
@@ -118,50 +125,74 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     width: min(88vw, 940px);
     height: auto;
     transform: translateX(-50%);
-    opacity: 0.2;
+    opacity: 0.1;
   }
   :global([data-theme="dark"]) .arch {
-    opacity: 0.4;
+    opacity: 0.26;
   }
 
-  /* ② 颜料雾：参考图式大片柔和色场圆——多色相、低饱和、彼此叠压（墙上的色光） */
-  .mist {
+  /* ② 颜料雾：重模糊的展厅空气（弥散氛围，无明显边界） */
+  .haze {
     position: absolute;
     border-radius: 50%;
-    filter: blur(70px);
+    filter: blur(90px);
     will-change: transform;
   }
-  .mist-a {
-    width: 64vmax;
-    height: 64vmax;
-    top: -20vmax;
-    left: -14vmax;
-    background: radial-gradient(circle, var(--room-paint) 0%, transparent 62%);
+  .haze-a {
+    width: 70vmax;
+    height: 70vmax;
+    top: -24vmax;
+    left: -18vmax;
+    background: radial-gradient(circle, var(--room-paint) 0%, transparent 60%);
     opacity: 0.22;
   }
-  .mist-b {
-    width: 52vmax;
-    height: 52vmax;
-    bottom: -18vmax;
-    right: -12vmax;
-    background: radial-gradient(circle, var(--brass) 0%, transparent 62%);
+  .haze-b {
+    width: 56vmax;
+    height: 56vmax;
+    bottom: -20vmax;
+    right: -16vmax;
+    background: radial-gradient(circle, var(--brass) 0%, transparent 60%);
     opacity: 0.16;
   }
-  .mist-c {
-    width: 46vmax;
-    height: 46vmax;
-    top: 28vh;
-    right: 14vw;
-    background: radial-gradient(circle, var(--paint-rose) 0%, transparent 62%);
-    opacity: 0.12;
+
+  /* ② 柔和色场圆：轻模糊、看得见边界的圆（参考图墙上色光） */
+  .field {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(34px);
+    will-change: transform;
   }
-  :global([data-theme="dark"]) .mist-a {
-    opacity: 0.28;
+  .field-a {
+    width: 32vmax;
+    height: 32vmax;
+    top: 10vh;
+    right: 7vw;
+    background: radial-gradient(circle, var(--paint-rose) 0%, transparent 68%);
+    opacity: 0.42;
   }
-  :global([data-theme="dark"]) .mist-b {
-    opacity: 0.2;
+  .field-b {
+    width: 24vmax;
+    height: 24vmax;
+    top: 42vh;
+    left: 5vw;
+    background: radial-gradient(circle, var(--room-paint) 0%, transparent 68%);
+    opacity: 0.4;
   }
-  :global([data-theme="dark"]) .mist-c {
+  .field-c {
+    width: 28vmax;
+    height: 28vmax;
+    bottom: 6vh;
+    right: 24vw;
+    background: radial-gradient(circle, var(--brass-hi) 0%, transparent 68%);
+    opacity: 0.32;
+  }
+  :global([data-theme="dark"]) .haze-a {
+    opacity: 0.3;
+  }
+  :global([data-theme="dark"]) .haze-b {
+    opacity: 0.22;
+  }
+  :global([data-theme="dark"]) .field {
     opacity: 0.16;
   }
 
@@ -222,14 +253,20 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     .ghost {
       transform: translate3d(0, calc(var(--sy, 0) * -0.04px), 0);
     }
-    .mist-a {
+    .haze-a {
       animation: drift-a 46s var(--ease-gallery) infinite alternate;
     }
-    .mist-b {
+    .haze-b {
       animation: drift-b 58s var(--ease-gallery) infinite alternate;
     }
-    .mist-c {
-      animation: drift-a 64s var(--ease-gallery) infinite alternate-reverse;
+    .field-a {
+      animation: drift-b 52s var(--ease-gallery) infinite alternate-reverse;
+    }
+    .field-b {
+      animation: drift-a 60s var(--ease-gallery) infinite alternate;
+    }
+    .field-c {
+      animation: drift-a 68s var(--ease-gallery) infinite alternate-reverse;
     }
     .dust {
       transform: translate3d(0, calc(var(--sy, 0) * -0.09px), 0);

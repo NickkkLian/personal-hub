@@ -1,8 +1,7 @@
 ---
 /**
- * 站标：策展人黄铜印章 —— 圆角方框 + 衬线 N + 黄铜句点。
- * variant="stamp" 时播放盖章入场动画（仅首页 Hero 使用）。
- * 颜色全部走令牌，深浅主题自适应。
+ * 站标：圆形 NL 字标（参考图）——黄铜细圆环 + 衬线 NL 字母组合。
+ * variant="stamp" 时播放盖章入场动画（仅首页 Hero 使用）。颜色走令牌，深浅自适应。
  */
 interface Props {
   variant?: "static" | "stamp";
@@ -22,9 +21,18 @@ const { variant = "static", size = 34, withWordmark = false, wordmark = "Nick Li
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
   >
-    <rect x="5" y="5" width="54" height="54" rx="11" stroke="var(--brass)" stroke-width="2.5"></rect>
-    <path d="M17 46 V18 H23.5 L36 38.5 V18 H42 V46 H35.5 L23 25.5 V46 Z" fill="var(--text)"></path>
-    <circle class="logo-dot" cx="49.5" cy="42.5" r="4" fill="var(--brass)"></circle>
+    <circle class="logo-ring" cx="32" cy="32" r="29.5" stroke="var(--brass)" stroke-width="2"></circle>
+    <text
+      class="logo-mono"
+      x="32"
+      y="41.5"
+      text-anchor="middle"
+      font-family="var(--font-display)"
+      font-size="26"
+      font-weight="560"
+      letter-spacing="0.5"
+      fill="var(--text)">NL</text
+    >
   </svg>
   {withWordmark && <span class="logo-wordmark">{wordmark}</span>}
 </span>
@@ -36,6 +44,9 @@ const { variant = "static", size = 34, withWordmark = false, wordmark = "Nick Li
     gap: 0.65rem;
     line-height: 1;
   }
+  .logo-mono {
+    font-variation-settings: "opsz" 40;
+  }
   .logo-wordmark {
     font-family: var(--font-display);
     font-size: 1.05rem;
@@ -44,21 +55,20 @@ const { variant = "static", size = 34, withWordmark = false, wordmark = "Nick Li
     color: var(--text);
   }
 
-  /* 盖章动画：自上而下压落 + 微旋转回正，黄铜句点随后点上 */
+  /* 盖章动画：自上而下压落 + 微旋回正 */
   @media (prefers-reduced-motion: no-preference) {
     .logo-stamp svg {
       animation: stamp-press var(--dur-enter) var(--ease-gallery) both;
       transform-origin: 50% 50%;
     }
-    .logo-stamp .logo-dot {
-      animation: dot-land 240ms var(--ease-gallery) 480ms both;
-      transform-origin: 49.5px 42.5px;
+    .logo-stamp .logo-mono {
+      animation: mono-in 260ms var(--ease-gallery) 360ms both;
     }
   }
   @keyframes stamp-press {
     0% {
       opacity: 0;
-      transform: scale(1.45) rotate(-5deg);
+      transform: scale(1.4) rotate(-6deg);
     }
     62% {
       opacity: 1;
@@ -69,14 +79,12 @@ const { variant = "static", size = 34, withWordmark = false, wordmark = "Nick Li
       transform: scale(1) rotate(0deg);
     }
   }
-  @keyframes dot-land {
+  @keyframes mono-in {
     0% {
       opacity: 0;
-      transform: scale(2.4);
     }
     100% {
       opacity: 1;
-      transform: scale(1);
     }
   }
 </style>
