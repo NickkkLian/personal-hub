@@ -31,6 +31,16 @@ function isActive(href: string): boolean {
 
     <!-- 桌面导航 -->
     <ul class="hidden items-center gap-1 md:flex">
+      <li>
+        <a
+          href={localizePath(locale, "/")}
+          aria-current={isActive(localizePath(locale, "/")) ? "page" : undefined}
+          class="nav-link meta-mono"
+          style="--room: var(--brass)"
+        >
+          {t(locale, "nav.home")}
+        </a>
+      </li>
       {
         items.map((m) => {
           const href = localizePath(locale, `/${m.slug}`);
@@ -73,6 +83,16 @@ function isActive(href: string): boolean {
   <!-- 移动端抽屉 -->
   <div id="mobile-nav" hidden class="border-t border-hair bg-bg/95 px-5 py-4 backdrop-blur-md md:hidden">
     <ul class="flex flex-col gap-1">
+      <li>
+        <a
+          href={localizePath(locale, "/")}
+          aria-current={isActive(localizePath(locale, "/")) ? "page" : undefined}
+          class="nav-link meta-mono block py-2"
+          style="--room: var(--brass)"
+        >
+          {t(locale, "nav.home")}
+        </a>
+      </li>
       {
         items.map((m) => {
           const href = localizePath(locale, `/${m.slug}`);

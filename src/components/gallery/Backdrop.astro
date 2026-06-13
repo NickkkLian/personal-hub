@@ -54,6 +54,7 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
   }
   <div class="mist mist-a" data-par="mist-a"></div>
   <div class="mist mist-b" data-par="mist-b"></div>
+  <div class="mist mist-c" data-par="mist-c"></div>
 
   {/* ⑤ 微尘层 */}
   <div class="dust" data-par="dust">
@@ -123,31 +124,45 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     opacity: 0.4;
   }
 
-  /* ② 颜料雾：可感知的展厅空气色场 */
+  /* ② 颜料雾：参考图式大片柔和色场圆——多色相、低饱和、彼此叠压（墙上的色光） */
   .mist {
     position: absolute;
-    width: 58vmax;
-    height: 58vmax;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--room-paint) 0%, transparent 64%);
-    opacity: 0.2;
-    filter: blur(55px);
+    filter: blur(70px);
     will-change: transform;
   }
   .mist-a {
-    top: -18vmax;
-    left: -12vmax;
+    width: 64vmax;
+    height: 64vmax;
+    top: -20vmax;
+    left: -14vmax;
+    background: radial-gradient(circle, var(--room-paint) 0%, transparent 62%);
+    opacity: 0.22;
   }
   .mist-b {
-    bottom: -22vmax;
-    right: -16vmax;
-    opacity: 0.15;
+    width: 52vmax;
+    height: 52vmax;
+    bottom: -18vmax;
+    right: -12vmax;
+    background: radial-gradient(circle, var(--brass) 0%, transparent 62%);
+    opacity: 0.16;
   }
-  :global([data-theme="dark"]) .mist {
-    opacity: 0.26;
+  .mist-c {
+    width: 46vmax;
+    height: 46vmax;
+    top: 28vh;
+    right: 14vw;
+    background: radial-gradient(circle, var(--paint-rose) 0%, transparent 62%);
+    opacity: 0.12;
+  }
+  :global([data-theme="dark"]) .mist-a {
+    opacity: 0.28;
   }
   :global([data-theme="dark"]) .mist-b {
     opacity: 0.2;
+  }
+  :global([data-theme="dark"]) .mist-c {
+    opacity: 0.16;
   }
 
   /* ⑤ 微尘层 */
@@ -212,6 +227,9 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     }
     .mist-b {
       animation: drift-b 58s var(--ease-gallery) infinite alternate;
+    }
+    .mist-c {
+      animation: drift-a 64s var(--ease-gallery) infinite alternate-reverse;
     }
     .dust {
       transform: translate3d(0, calc(var(--sy, 0) * -0.09px), 0);
