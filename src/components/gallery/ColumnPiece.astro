@@ -1,62 +1,85 @@
 ---
 /**
- * 古典石柱（参考图右侧 · BLUEPRINT 古典馆藏层的 SVG 实现，无需下载素材）：
- * 凹槽柱身 + 爱奥尼柱头 + 柱础，单色 duotone 至所在房间色，受控剂量、置于角落/边缘。
- * 仅作前景视差配角，绝不承载主视觉。
+ * 古典石柱（BLUEPRINT 古典馆藏层的 SVG 实现）：精致凹槽柱身 + 爱奥尼柱头 + 阶式柱础，
+ * 石膏/大理石色但压低饱和、与画廊暖调统一；作为**背景元素**置于角落/边缘，绝不与主内容并列。
+ * 仅随滚动轻微前景视差。
  */
 interface Props {
-  /** 柱身主色变量名，默认黄铜中性 */
-  tone?: string;
-  /** 像素宽度（内联，避免被组件默认样式覆盖） */
   width?: number;
   class?: string;
 }
-const { tone = "--brass", width = 72, class: className } = Astro.props;
-const flutes = Array.from({ length: 9 }, (_, i) => 16 + i * 11);
+const { width = 96, class: className } = Astro.props;
+// 20 道凹槽（柱身 26→134）
+const flutes = Array.from({ length: 19 }, (_, i) => 30 + i * 5.6);
 ---
 
 <svg
   class:list={["column-piece", className]}
-  viewBox="0 0 120 720"
+  viewBox="0 0 160 900"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
   preserveAspectRatio="xMidYMin meet"
-  style={`--col: var(${tone}); width: ${width}px`}
+  style={`width: ${width}px`}
 >
   <defs>
-    <linearGradient id="col-shade" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="var(--col)" stop-opacity="0.55"></stop>
-      <stop offset="42%" stop-color="var(--col)" stop-opacity="0.9"></stop>
-      <stop offset="100%" stop-color="var(--col)" stop-opacity="0.4"></stop>
+    <!-- 石膏横向受光：左亮右暗（与全站左上光一致） -->
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e7e0d2"></stop>
+      <stop offset="34%" stop-color="#d6cdbc"></stop>
+      <stop offset="72%" stop-color="#b9af9c"></stop>
+      <stop offset="100%" stop-color="#a39884"></stop>
+    </linearGradient>
+    <linearGradient id="stone-cap" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ece5d8"></stop>
+      <stop offset="50%" stop-color="#d2c8b6"></stop>
+      <stop offset="100%" stop-color="#a89d89"></stop>
     </linearGradient>
   </defs>
 
-  {/* 柱头：涡卷 + 顶板 */}
-  <rect x="6" y="2" width="108" height="14" rx="1" fill="url(#col-shade)"></rect>
-  <rect x="12" y="16" width="96" height="10" fill="url(#col-shade)" opacity="0.92"></rect>
-  <circle cx="30" cy="30" r="11" stroke="var(--col)" stroke-width="2.5" fill="none" opacity="0.85"></circle>
-  <circle cx="90" cy="30" r="11" stroke="var(--col)" stroke-width="2.5" fill="none" opacity="0.85"></circle>
-  <rect x="16" y="40" width="88" height="8" fill="url(#col-shade)" opacity="0.85"></rect>
+  {/* 爱奥尼柱头：顶板 + 双涡卷 + 颈线 */}
+  <rect x="4" y="0" width="152" height="16" rx="1.5" fill="url(#stone-cap)"></rect>
+  <rect x="10" y="16" width="140" height="12" fill="url(#stone-cap)"></rect>
+  <path
+    d="M44 28 a18 18 0 1 0 0.1 0 M40 46 a8 8 0 1 1 0.1 0"
+    stroke="#8f846f"
+    stroke-width="2.4"
+    fill="none"
+    opacity="0.7"></path>
+  <path
+    d="M116 28 a18 18 0 1 0 0.1 0 M112 46 a8 8 0 1 1 0.1 0"
+    stroke="#8f846f"
+    stroke-width="2.4"
+    fill="none"
+    opacity="0.55"></path>
+  <rect x="22" y="50" width="116" height="6" fill="url(#stone-cap)"></rect>
+  <rect x="26" y="56" width="108" height="10" rx="1" fill="url(#stone)"></rect>
 
-  {/* 柱身 + 凹槽 */}
-  <rect x="20" y="48" width="80" height="640" fill="url(#col-shade)"></rect>
+  {/* 柱身（轻微 entasis：上下略收） */}
+  <path d="M30 66 q-4 400 0 786 h100 q4 -386 0 -786 Z" fill="url(#stone)"></path>
   {
     flutes.map((x) => (
-      <line x1={x} y1="52" x2={x} y2="684" stroke="var(--col)" stroke-width="1.4" opacity="0.35" />
+      <line x1={x} y1="72" x2={x} y2="846" stroke="#8f846f" stroke-width="1.1" opacity="0.28" />
     ))
   }
+  {/* 高光凹槽（左侧受光） */}
+  <line x1="36" y1="72" x2="36" y2="846" stroke="#f3eee5" stroke-width="1.4" opacity="0.5"></line>
+  <line x1="44" y1="72" x2="44" y2="846" stroke="#f3eee5" stroke-width="1.2" opacity="0.32"></line>
 
-  {/* 柱础 */}
-  <rect x="14" y="688" width="92" height="12" rx="1" fill="url(#col-shade)" opacity="0.9"></rect>
-  <rect x="6" y="700" width="108" height="16" rx="1" fill="url(#col-shade)"></rect>
+  {/* 柱础：环线 + 阶板 */}
+  <rect x="26" y="852" width="108" height="10" rx="1" fill="url(#stone)"></rect>
+  <rect x="18" y="862" width="124" height="14" rx="1.5" fill="url(#stone-cap)"></rect>
+  <rect x="6" y="876" width="148" height="20" rx="2" fill="url(#stone)"></rect>
 </svg>
 
 <style>
   .column-piece {
     display: block;
     height: auto;
-    /* 古典馆藏只随滚动轻微前景视差 */
-    filter: saturate(0.55);
+    /* 与画廊暖调统一：略降饱和 + 轻柔影 */
+    filter: saturate(0.8) drop-shadow(3px 6px 10px rgba(28, 26, 23, 0.12));
+  }
+  :global([data-theme="dark"]) .column-piece {
+    filter: saturate(0.7) brightness(0.82) drop-shadow(3px 6px 12px rgba(0, 0, 0, 0.4));
   }
 </style>

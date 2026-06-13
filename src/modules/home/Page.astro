@@ -37,9 +37,17 @@ const totalOpen = rooms.length;
 
   {/* 编辑式 Hero */}
   <section class="hero-grid">
+    {/* 古典石柱：背景元素，置于右侧边缘、内容之后 */}
+    <div class="hero-column" aria-hidden="true"><ColumnPiece width={132} /></div>
+
     <div class="hero-left">
       <p class="meta-mono entrance-no">{t(locale, "home.entranceNo")} · {t(locale, "home.entrance")}</p>
-      <h1 class="hero-name" data-words>{name}<span class="title-dot">.</span></h1>
+      <h1 class="hero-name">
+        <span class="hn-line" data-words>{name.split(" ")[0]}</span>
+        <span class="hn-line hn-2" data-words>
+          {name.split(" ").slice(1).join(" ") || ""}<span class="title-dot">.</span>
+        </span>
+      </h1>
       <p class="hero-tagline font-display">
         <span data-words>{tagline.value}</span>
         {taglineAlt && taglineAlt !== tagline.value && <span class="hero-tagline-alt">{taglineAlt}</span>}
@@ -53,7 +61,6 @@ const totalOpen = rooms.length;
     </div>
 
     <div class="hero-right enter-rise is-in">
-      <ColumnPiece class="hero-column" tone="--room-music-wall" width={84} />
       <figure class="featured">
         <ExhibitFrame variant="float">
           <div class="featured-art">
@@ -130,11 +137,31 @@ const totalOpen = rooms.length;
 
   /* 不对称 Hero */
   .hero-grid {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
     gap: clamp(2rem, 5vw, 4rem);
     padding-top: clamp(2rem, 7vh, 5rem);
     padding-bottom: clamp(2rem, 6vh, 4rem);
+  }
+  /* 古典石柱：背景配角，右侧边缘、内容之后、出血到顶 */
+  .hero-column {
+    position: absolute;
+    right: clamp(-2rem, 2vw, 3rem);
+    top: -3.5rem;
+    z-index: 0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .hero-left,
+  .hero-right {
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 700px) {
+    .hero-column {
+      display: none;
+    }
   }
   @media (min-width: 880px) {
     .hero-grid {
@@ -146,13 +173,21 @@ const totalOpen = rooms.length;
     color: color-mix(in oklab, var(--brass) 60%, var(--text));
     margin-bottom: 1.4rem;
   }
+  /* 巨型标题：Playfair Display（高对比 Didone，对位参考图），两行错开 */
   .hero-name {
-    font-size: clamp(3.6rem, 12vw, 9rem);
-    line-height: 0.92;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-family: "Playfair Display Variable", Georgia, serif;
+    font-variation-settings: normal;
+    font-size: clamp(3.8rem, 13vw, 9.5rem);
+    line-height: 0.9;
+    font-weight: 680;
+    letter-spacing: -0.005em;
     text-transform: uppercase;
-    margin-left: -0.03em;
+  }
+  .hn-line {
+    display: block;
+  }
+  .hn-2 {
+    margin-left: clamp(1.2rem, 6vw, 4.5rem); /* 第二行右移错开 */
   }
   .title-dot {
     color: var(--brass);
