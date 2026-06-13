@@ -1,13 +1,16 @@
 ---
 /**
- * Home（P2 完整版）：Hero（颜料流场 Canvas，惰性加载）+ 门厅入口卡（生成式封面 + 真实馆藏数）。
- * Canvas 仅在 reduced-motion 关闭且首屏可见时启动，标签页隐藏自动暂停——守住性能与体面。
+ * Home（编辑式门厅 · 对位参考图）：
+ * masthead（圆形 logo + GALERIE VIVANTE 刊头）→ 不对称 Hero（左：NO.001/巨型 NICK LIAN./双语题注/展厅数；
+ * 右：featured 浮框生成画 + 古典石柱）→ The Rooms 全画幅封面卡（文字只在图下）。
+ * 背景纵深由全局 Backdrop（颜料雾 + 色场圆 + 幽灵字）承担。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
 import Cover from "../../components/gallery/Cover.astro";
+import ColumnPiece from "../../components/gallery/ColumnPiece.astro";
 import Logo from "../../components/Logo.astro";
-import { t, localizePath, pickLang, type Locale } from "../../i18n";
+import { t, localizePath, pickLang, altLocale, type Locale } from "../../i18n";
 import { siteConfig, enabledModules } from "../../config/site";
 import { entries } from "../../lib/data";
 
@@ -17,76 +20,94 @@ interface Props {
 const { locale } = Astro.props;
 const name = siteConfig.site.title[locale];
 const tagline = pickLang(siteConfig.site.tagline, locale);
+const taglineAlt = siteConfig.site.tagline[altLocale(locale)];
 const rooms = enabledModules().map((m) => {
   const list = entries(m.id);
   return { ...m, count: list.length, coverEntry: list[0] ?? null };
 });
+const totalOpen = rooms.length;
 ---
 
 <BaseLayout locale={locale} title={name} description={tagline.value} path="/" ghost={t(locale, "home.ghost")}>
-  <!-- Hero：姓名 + 一句话身份 + 颜料流场（Canvas 第②层颜料雾的"活"版本） -->
-  <section class="hero">
-    <canvas id="flow" class="hero-flow" aria-hidden="true"></canvas>
-    <div class="relative">
-      <div class="enter-rise is-in">
-        <Logo variant="stamp" size={44} />
-      </div>
-      <p class="meta-mono mt-8 tracking-[0.22em]">{t(locale, "home.heroKicker")}</p>
-      <h1 class="hero-name" data-words>{name}</h1>
-      <p class="hero-tagline font-display" data-words>{tagline.value}</p>
+  {/* 刊头 */}
+  <header class="masthead enter-rise is-in">
+    <Logo variant="stamp" size={46} />
+    <span class="meta-mono masthead-kicker">{t(locale, "home.galerie")} · {t(locale, "home.est")}</span>
+  </header>
+
+  {/* 编辑式 Hero */}
+  <section class="hero-grid">
+    <div class="hero-left">
+      <p class="meta-mono entrance-no">{t(locale, "home.entranceNo")} · {t(locale, "home.entrance")}</p>
+      <h1 class="hero-name" data-words>{name}<span class="title-dot">.</span></h1>
+      <p class="hero-tagline font-display">
+        <span data-words>{tagline.value}</span>
+        {taglineAlt && taglineAlt !== tagline.value && <span class="hero-tagline-alt">{taglineAlt}</span>}
+      </p>
+      <p class="meta-mono rooms-line">
+        {t(locale, "home.visitRooms")}
+        <span class="rooms-rule"></span>
+        {totalOpen}
+        {t(locale, "home.open")}
+      </p>
+    </div>
+
+    <div class="hero-right enter-rise is-in">
+      <ColumnPiece class="hero-column" tone="--room-music-wall" width={84} />
+      <figure class="featured">
+        <ExhibitFrame variant="float">
+          <div class="featured-art">
+            <Cover id="entrance-featured-000" module="music-wall" w={460} h={560} />
+          </div>
+        </ExhibitFrame>
+        <figcaption class="meta-mono featured-cap">
+          NO. 000 · {t(locale, "home.featuredArt")}
+        </figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- 门厅：开启的模块 = 可步入的展厅 -->
-  <section class="mt-24" aria-labelledby="hall-title">
-    <div class="flex flex-wrap items-baseline justify-between gap-2">
-      <h2 id="hall-title" class="text-3xl sm:text-4xl">{t(locale, "home.hallTitle")}</h2>
+  {/* The Rooms：全画幅封面卡，文字只在图下 */}
+  <section class="rooms" aria-labelledby="hall-title">
+    <div class="rooms-head">
+      <h2 id="hall-title">{t(locale, "home.collection")}</h2>
       <p class="meta-mono">{t(locale, "home.hallSubtitle")}</p>
     </div>
-    <hr class="hairline mt-5 mb-10" />
+    <hr class="hairline mt-5 mb-9" />
 
-    <ul class="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="rooms-grid">
       {
         rooms.map((m, i) => (
-          <li class="enter-rise" style={`transition-delay:${Math.min(i * 70, 350)}ms`}>
+          <li class="enter-rise" style={`transition-delay:${Math.min(i * 60, 300)}ms`}>
             <a
               href={localizePath(locale, `/${m.slug}`)}
-              class="room-card"
+              class="rc"
               data-mod={m.id}
               style={`--room: var(${m.room})`}
             >
-              <ExhibitFrame interactive class="h-full">
-                <div class="flex h-full flex-col">
-                  <div class="room-art" aria-hidden="true">
-                    {m.coverEntry ? (
-                      <Cover id={m.coverEntry.id} module={m.id} cover={m.coverEntry.cover} w={400} h={150} />
-                    ) : (
-                      <div class="room-art-blank" />
-                    )}
-                    {/* hover 微缩预览：各模块标志动效（BLUEPRINT 5.2 Home） */}
-                    <span class="card-sweep" aria-hidden="true" />
-                    {m.id === "my-music" && <span class="motif-vinyl" aria-hidden="true" />}
-                    {m.id === "writing" && <span class="motif-spine" aria-hidden="true" />}
-                    {m.id === "about" && <span class="motif-dot" aria-hidden="true" />}
-                  </div>
-                  <div class="flex grow flex-col gap-2 p-5">
-                    <span class="meta-mono room-no">
-                      {t(locale, "home.roomLabel").toUpperCase()} {m.roomNo} ·{" "}
-                      {m.id.toUpperCase().replace("-", " ")}
-                      {m.count > 0 && (
-                        <span class="count-tag">
-                          {m.count} {t(locale, "common.works")}
-                        </span>
-                      )}
+              <div class="rc-art">
+                {m.coverEntry ? (
+                  <Cover id={m.coverEntry.id} module={m.id} cover={m.coverEntry.cover} w={420} h={340} />
+                ) : (
+                  <div class="rc-blank" />
+                )}
+                <span class="card-sweep" aria-hidden="true" />
+              </div>
+              <div class="rc-label">
+                <span class="meta-mono rc-no">
+                  {t(locale, "home.roomLabel").toUpperCase()} {m.roomNo} ·{" "}
+                  {m.id.toUpperCase().replace("-", " ")}
+                  {m.count > 0 && (
+                    <span class="rc-count">
+                      {" "}
+                      · {m.count} {t(locale, "common.works")}
                     </span>
-                    <span class="font-display text-2xl font-medium">{t(locale, `nav.${m.id}`)}</span>
-                    <span class="text-sm leading-relaxed text-muted">
-                      {t(locale, `module.${m.id}.intro`)}
-                    </span>
-                    <span class="meta-mono mt-auto pt-3 enter-cue">{t(locale, "home.enter")} →</span>
-                  </div>
-                </div>
-              </ExhibitFrame>
+                  )}
+                </span>
+                <span class="rc-title font-display">{t(locale, `nav.${m.id}`)}</span>
+                <span class="rc-intro">{t(locale, `module.${m.id}.intro`)}</span>
+                <span class="meta-mono rc-enter">{t(locale, "home.enter")} →</span>
+              </div>
             </a>
           </li>
         ))
@@ -96,74 +117,159 @@ const rooms = enabledModules().map((m) => {
 </BaseLayout>
 
 <style>
-  .hero {
-    position: relative;
-    padding-top: clamp(3rem, 14vh, 9rem);
-    padding-bottom: clamp(2rem, 8vh, 5rem);
+  .masthead {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: clamp(0.5rem, 3vh, 2rem);
+    flex-wrap: wrap;
   }
-  .hero-flow {
-    position: absolute;
-    inset: -6rem -20vw -2rem;
-    width: calc(100% + 40vw);
-    height: calc(100% + 8rem);
-    pointer-events: none;
-    opacity: 0.5;
+  .masthead-kicker {
+    letter-spacing: 0.16em;
+  }
+
+  /* 不对称 Hero */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-top: clamp(2rem, 7vh, 5rem);
+    padding-bottom: clamp(2rem, 6vh, 4rem);
+  }
+  @media (min-width: 880px) {
+    .hero-grid {
+      grid-template-columns: 1.45fr 1fr;
+      align-items: start;
+    }
+  }
+  .entrance-no {
+    color: color-mix(in oklab, var(--brass) 60%, var(--text));
+    margin-bottom: 1.4rem;
   }
   .hero-name {
-    margin-top: 0.6rem;
-    font-size: clamp(3.4rem, 11vw, 8.5rem);
-    line-height: 0.95;
+    font-size: clamp(3.6rem, 12vw, 9rem);
+    line-height: 0.92;
     font-weight: 600;
-    margin-left: -0.045em;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin-left: -0.03em;
+  }
+  .title-dot {
+    color: var(--brass);
   }
   .hero-tagline {
     margin-top: 1.6rem;
-    max-width: 34rem;
-    font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+    max-width: 30rem;
+    font-size: clamp(1.15rem, 2.3vw, 1.6rem);
     font-style: italic;
-    font-weight: 420;
+    font-weight: 440;
     color: var(--muted);
     text-wrap: balance;
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    [data-words] :global(.w) {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(0.5em);
-      animation: word-rise var(--dur-enter) var(--ease-gallery) forwards;
-      animation-delay: var(--d, 0ms);
-    }
-  }
-  @keyframes word-rise {
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  .room-card {
+  .hero-tagline-alt {
     display: block;
-    height: 100%;
+    margin-top: 0.3rem;
+  }
+  .rooms-line {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2rem;
+    color: var(--muted);
+  }
+  .rooms-rule {
+    flex: 0 0 auto;
+    width: clamp(2rem, 8vw, 6rem);
+    height: 1px;
+    background: var(--line-hair);
+  }
+
+  /* 右侧：石柱 + featured 浮框 */
+  .hero-right {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .hero-column {
+    position: absolute;
+    right: -0.5rem;
+    top: 2.2rem;
+    z-index: 0;
+    opacity: 0.8;
+  }
+  .featured {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 360px);
+    margin: 0;
+  }
+  .featured-art {
+    aspect-ratio: 23 / 28;
+    overflow: hidden;
+  }
+  .featured-cap {
+    margin-top: 0.7rem;
+    color: var(--muted);
+  }
+
+  /* The Rooms：全画幅封面卡 */
+  .rooms {
+    margin-top: clamp(2rem, 5vh, 4rem);
+  }
+  .rooms-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .rooms-head h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  .rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+  @media (min-width: 760px) {
+    .rooms-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .rc {
+    display: block;
     color: inherit;
     text-decoration: none;
   }
-  .room-art {
+  .rc-art {
     position: relative;
-    height: 130px;
-    border-radius: var(--radius-frame) var(--radius-frame) 0 0;
+    aspect-ratio: 5 / 4;
     overflow: hidden;
+    border: 0.5px solid color-mix(in oklab, var(--text) 10%, transparent);
+    border-radius: var(--radius-frame);
+    box-shadow: var(--shadow-exhibit);
+    transition:
+      transform var(--dur-move) var(--ease-gallery),
+      box-shadow var(--dur-move) var(--ease-gallery);
   }
-  .room-art :global(.cover-art),
-  .room-art :global(.cover-img) {
-    transition: transform 1.2s var(--ease-gallery);
+  .rc:hover .rc-art {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
   }
-  .room-card:hover .room-art :global(.cover-art),
-  .room-card:hover .room-art :global(.cover-img) {
-    transform: scale(1.05);
+  .rc-art :global(.cover-art),
+  .rc-art :global(.cover-img) {
+    transition: transform 1.4s var(--ease-gallery);
   }
-
-  /* 微缩预览：通用流光扫过（展厅射灯掠过画面） */
+  .rc:hover .rc-art :global(.cover-art),
+  .rc:hover .rc-art :global(.cover-img) {
+    transform: scale(1.06);
+  }
+  .rc-blank {
+    width: 100%;
+    height: 100%;
+    background: var(--surface-2);
+  }
   .card-sweep {
     position: absolute;
     inset: 0;
@@ -171,74 +277,15 @@ const rooms = enabledModules().map((m) => {
     background: linear-gradient(
       105deg,
       transparent 30%,
-      color-mix(in oklab, var(--brass-hi) 40%, transparent) 48%,
+      color-mix(in oklab, var(--brass-hi) 38%, transparent) 48%,
       transparent 66%
     );
     transform: translateX(-120%);
     opacity: 0;
   }
-  /* 微缩预览：my-music 黑胶探出旋转 */
-  .motif-vinyl {
-    position: absolute;
-    right: -22px;
-    top: 50%;
-    width: 88px;
-    height: 88px;
-    margin-top: -44px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #181512 32%, #2a2520 33%, #181512 52%, #2a2520 53%, #181512 100%);
-    box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.3);
-    transform: translateX(40px);
-    opacity: 0;
-    transition:
-      transform var(--dur-move) var(--ease-gallery),
-      opacity var(--dur-move) var(--ease-gallery);
-  }
-  /* 微缩预览：writing 书脊升起 */
-  .motif-spine {
-    position: absolute;
-    left: 22px;
-    bottom: 0;
-    width: 26px;
-    height: 54px;
-    border-radius: 2px 2px 0 0;
-    background: linear-gradient(
-      to right,
-      color-mix(in oklab, var(--room) 60%, var(--surface)),
-      color-mix(in oklab, var(--room) 75%, var(--paint-ink))
-    );
-    box-shadow: var(--shadow-exhibit);
-    transform: translateY(56px);
-    transition: transform var(--dur-move) var(--ease-gallery);
-  }
-  /* 微缩预览：about 黄铜点脉动 */
-  .motif-dot {
-    position: absolute;
-    left: 24px;
-    bottom: 22px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--surface-2);
-    border: 1px solid var(--line-hair);
-    transition: all var(--dur-move) var(--ease-gallery);
-  }
-
   @media (prefers-reduced-motion: no-preference) {
-    .room-card:hover .card-sweep {
+    .rc:hover .card-sweep {
       animation: sweep 0.9s var(--ease-gallery);
-    }
-    .room-card:hover .motif-vinyl {
-      transform: translateX(0) rotate(180deg);
-      opacity: 1;
-      animation: spin 3.2s linear 0.3s infinite;
-    }
-    .room-card:hover .motif-spine {
-      transform: translateY(0);
-    }
-    .room-card:hover .motif-dot {
-      background: var(--brass);
-      box-shadow: 0 0 0 4px color-mix(in oklab, var(--brass) 25%, transparent);
     }
   }
   @keyframes sweep {
@@ -254,45 +301,58 @@ const rooms = enabledModules().map((m) => {
       opacity: 0;
     }
   }
-  @keyframes spin {
-    to {
-      transform: translateX(0) rotate(540deg);
-    }
-  }
-  .room-art-blank {
-    height: 100%;
-    background:
-      radial-gradient(
-        75% 95% at 18% 8%,
-        color-mix(in oklab, var(--room) 52%, var(--surface)) 0%,
-        transparent 68%
-      ),
-      var(--surface-2);
-  }
-  .room-no {
-    color: color-mix(in oklab, var(--room) 55%, var(--text));
+
+  /* 文字只在图下方 */
+  .rc-label {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-top: 0.8rem;
   }
-  .count-tag {
-    color: var(--muted);
-    border: 1px solid var(--line-hair);
-    border-radius: 2px;
-    padding: 0.05rem 0.35rem;
+  .rc-no {
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
   }
-  .enter-cue {
+  .rc-count {
     color: var(--muted);
+  }
+  .rc-title {
+    font-size: 1.35rem;
+    font-weight: 540;
+  }
+  .rc-intro {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .rc-enter {
+    color: var(--muted);
+    margin-top: 0.2rem;
     transition: color var(--dur-micro) var(--ease-gallery);
   }
-  .room-card:hover .enter-cue {
+  .rc:hover .rc-enter {
     color: color-mix(in oklab, var(--room) 55%, var(--text));
+  }
+
+  /* 首屏文字逐词浮现 */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-words] :global(.w) {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.5em);
+      animation: word-rise var(--dur-enter) var(--ease-gallery) forwards;
+      animation-delay: var(--d, 0ms);
+    }
+  }
+  @keyframes word-rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 </style>
 
 <script>
-  // 逐词浮现
+  // 首屏文字逐词浮现
   function splitWords() {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     document.querySelectorAll<HTMLElement>("[data-words]:not([data-split])").forEach((el) => {
@@ -316,61 +376,4 @@ const rooms = enabledModules().map((m) => {
   }
   splitWords();
   document.addEventListener("astro:after-swap", splitWords);
-
-  // 颜料流场：极轻量 Canvas（≤36 粒颜料随噪声场漂移），惰性启动、隐藏即停
-  function startFlow() {
-    const canvas = document.getElementById("flow") as HTMLCanvasElement | null;
-    if (!canvas || canvas.dataset.on) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // 移动端减量（BLUEPRINT 5.1）：触屏设备不启动流场，省电省主线程
-    if (matchMedia("(hover: none)").matches) return;
-    canvas.dataset.on = "1";
-    const ctx = canvas.getContext("2d")!;
-    const paints = ["#7c8b6f", "#7e93a8", "#c9a227", "#c08d7c", "#b08d57"];
-    let w = 0,
-      h = 0,
-      raf = 0;
-    const resize = () => {
-      const r = canvas.getBoundingClientRect();
-      w = canvas.width = Math.floor(r.width / 2);
-      h = canvas.height = Math.floor(r.height / 2);
-    };
-    resize();
-    addEventListener("resize", resize, { passive: true });
-    const N = innerWidth < 640 ? 18 : 36;
-    const ps = Array.from({ length: N }, () => ({
-      x: Math.random() * 9999,
-      y: Math.random() * 9999,
-      c: paints[Math.floor(Math.random() * paints.length)],
-      r: 0.8 + Math.random() * 1.8,
-    }));
-    const field = (x: number, y: number, t: number) =>
-      Math.sin(x * 0.006 + t) + Math.cos(y * 0.005 - t * 0.7);
-    let t = 0;
-    const tick = () => {
-      t += 0.004;
-      ctx.clearRect(0, 0, w, h);
-      for (const p of ps) {
-        const a = field(p.x, p.y, t) * Math.PI;
-        p.x = (p.x + Math.cos(a) * 0.45 + w) % w;
-        p.y = (p.y + Math.sin(a) * 0.45 + h) % h;
-        ctx.globalAlpha = 0.55;
-        ctx.fillStyle = p.c;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 7);
-        ctx.fill();
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    const visible = () => {
-      cancelAnimationFrame(raf);
-      if (!document.hidden) raf = requestAnimationFrame(tick);
-    };
-    document.addEventListener("visibilitychange", visible);
-    visible();
-  }
-  // 惰性：空闲时再起跑，绝不挡首屏
-  if ("requestIdleCallback" in window) requestIdleCallback(() => startFlow(), { timeout: 2000 });
-  else setTimeout(startFlow, 600);
-  document.addEventListener("astro:after-swap", () => setTimeout(startFlow, 200));
 </script>

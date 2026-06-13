@@ -72,7 +72,15 @@
     "enter": "Enter",
     "hallTitle": "The Rooms",
     "hallSubtitle": "Each room holds one domain. More rooms open over time.",
-    "roomLabel": "Room"
+    "roomLabel": "Room",
+    "galerie": "GALERIE VIVANTE — PERSONAL HUB",
+    "est": "EST. 2026",
+    "entranceNo": "NO. 001",
+    "entrance": "ENTRANCE HALL",
+    "featuredArt": "FEATURED · ON THE WALL",
+    "collection": "Today in the collection",
+    "visitRooms": "Visit rooms",
+    "open": "open"
   },
   "placeholder": {
     "title": "This room is being installed",

@@ -72,7 +72,15 @@
     "enter": "进入",
     "hallTitle": "展厅",
     "hallSubtitle": "每间展厅陈列一个领域，更多展厅将陆续开放。",
-    "roomLabel": "展厅"
+    "roomLabel": "展厅",
+    "galerie": "GALERIE VIVANTE — 个人美术馆",
+    "est": "EST. 2026",
+    "entranceNo": "NO. 001",
+    "entrance": "门厅",
+    "featuredArt": "精选 · 上墙之作",
+    "collection": "今日馆藏",
+    "visitRooms": "参观展厅",
+    "open": "间开放"
   },
   "placeholder": {
     "title": "本展厅布展中",

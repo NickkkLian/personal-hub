@@ -1,0 +1,62 @@
+---
+/**
+ * 古典石柱（参考图右侧 · BLUEPRINT 古典馆藏层的 SVG 实现，无需下载素材）：
+ * 凹槽柱身 + 爱奥尼柱头 + 柱础，单色 duotone 至所在房间色，受控剂量、置于角落/边缘。
+ * 仅作前景视差配角，绝不承载主视觉。
+ */
+interface Props {
+  /** 柱身主色变量名，默认黄铜中性 */
+  tone?: string;
+  /** 像素宽度（内联，避免被组件默认样式覆盖） */
+  width?: number;
+  class?: string;
+}
+const { tone = "--brass", width = 72, class: className } = Astro.props;
+const flutes = Array.from({ length: 9 }, (_, i) => 16 + i * 11);
+---
+
+<svg
+  class:list={["column-piece", className]}
+  viewBox="0 0 120 720"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+  preserveAspectRatio="xMidYMin meet"
+  style={`--col: var(${tone}); width: ${width}px`}
+>
+  <defs>
+    <linearGradient id="col-shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="var(--col)" stop-opacity="0.55"></stop>
+      <stop offset="42%" stop-color="var(--col)" stop-opacity="0.9"></stop>
+      <stop offset="100%" stop-color="var(--col)" stop-opacity="0.4"></stop>
+    </linearGradient>
+  </defs>
+
+  {/* 柱头：涡卷 + 顶板 */}
+  <rect x="6" y="2" width="108" height="14" rx="1" fill="url(#col-shade)"></rect>
+  <rect x="12" y="16" width="96" height="10" fill="url(#col-shade)" opacity="0.92"></rect>
+  <circle cx="30" cy="30" r="11" stroke="var(--col)" stroke-width="2.5" fill="none" opacity="0.85"></circle>
+  <circle cx="90" cy="30" r="11" stroke="var(--col)" stroke-width="2.5" fill="none" opacity="0.85"></circle>
+  <rect x="16" y="40" width="88" height="8" fill="url(#col-shade)" opacity="0.85"></rect>
+
+  {/* 柱身 + 凹槽 */}
+  <rect x="20" y="48" width="80" height="640" fill="url(#col-shade)"></rect>
+  {
+    flutes.map((x) => (
+      <line x1={x} y1="52" x2={x} y2="684" stroke="var(--col)" stroke-width="1.4" opacity="0.35" />
+    ))
+  }
+
+  {/* 柱础 */}
+  <rect x="14" y="688" width="92" height="12" rx="1" fill="url(#col-shade)" opacity="0.9"></rect>
+  <rect x="6" y="700" width="108" height="16" rx="1" fill="url(#col-shade)"></rect>
+</svg>
+
+<style>
+  .column-piece {
+    display: block;
+    height: auto;
+    /* 古典馆藏只随滚动轻微前景视差 */
+    filter: saturate(0.55);
+  }
+</style>
