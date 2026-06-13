@@ -24,6 +24,16 @@
 - 所有动画尊重 `prefers-reduced-motion`；键盘可达、对比度 WCAG AA
 - 两语言 × 两主题 × 三断点全组合走查
 
+## 空间艺术层（方案 B+ 已补齐，2026-06-12）
+
+- 七层背景视差(`Backdrop.astro` + `--sy` rAF 节流)、建筑暗示层③、失焦前景⑦、超大幽灵字水印
+- 景深 DOF + hover 射灯(`ExhibitFrame`，DOF 仅签名级浮框触发避免网格全屏 blur 抖动)
+- 镜头转场(`global.css` `::view-transition-old/new` dolly 透视推移)
+- 沉浸时刻(`ImmersiveFrame.astro`，Projects/Writing/My Music 各一处全幅大圆角取景框)
+- 图形批注层(虚线引导线 + Fraunces 斜体雕刻题注延迟浮现)、Home 卡片 hover 微缩预览(唱片转/书脊起/黄铜点/流光)
+- 全部 reduced-motion 退化、移动端减量；Lighthouse 移动端仍 Perf 98 / A11y 100 / SEO 100
+- **唯一未做：古典馆藏层(4 处石膏像) → BACKLOG 第 4 项**（需下载处理博物馆 CC0 素材）
+
 ## 设计基准（方案 B+ Galerie Vivante，已定稿）
 
 - 详见 `.claude/skills/hub-design/SKILL.md` 与 BLUEPRINT 附录 A 方案 B+

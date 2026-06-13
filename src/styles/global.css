@@ -109,6 +109,36 @@ h3 {
 }
 
 /* ============================================================
+   镜头语言转场（BLUEPRINT 附录 A · 方案 B+ 469）
+   模块切换 = 镜头推移走进下一间展厅，而非翻页。
+   旧页透视后撤+淡出（镜头穿过门洞），新页从纵深推近+淡入。
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: dolly-out 360ms var(--ease-gallery) both;
+  }
+  ::view-transition-new(root) {
+    animation: dolly-in 460ms var(--ease-gallery) both;
+  }
+  @keyframes dolly-out {
+    to {
+      opacity: 0;
+      transform: perspective(1400px) translateZ(140px);
+    }
+  }
+  @keyframes dolly-in {
+    from {
+      opacity: 0;
+      transform: perspective(1400px) translateZ(-180px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ============================================================
    prefers-reduced-motion：全站动画退化为优雅静态构图
    （漂移/微尘/视差/转场全部停用，纵深由色阶与光影静态成立）
    ============================================================ */
@@ -120,5 +150,10 @@ h3 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* 转场退化为即时切换，无穿越动画 */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
   }
 }

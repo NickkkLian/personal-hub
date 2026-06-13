@@ -49,7 +49,12 @@ const rooms = enabledModules().map((m) => {
       {
         rooms.map((m, i) => (
           <li class="enter-rise" style={`transition-delay:${Math.min(i * 70, 350)}ms`}>
-            <a href={localizePath(locale, `/${m.slug}`)} class="room-card" style={`--room: var(${m.room})`}>
+            <a
+              href={localizePath(locale, `/${m.slug}`)}
+              class="room-card"
+              data-mod={m.id}
+              style={`--room: var(${m.room})`}
+            >
               <ExhibitFrame interactive class="h-full">
                 <div class="flex h-full flex-col">
                   <div class="room-art" aria-hidden="true">
@@ -58,6 +63,11 @@ const rooms = enabledModules().map((m) => {
                     ) : (
                       <div class="room-art-blank" />
                     )}
+                    {/* hover 微缩预览：各模块标志动效（BLUEPRINT 5.2 Home） */}
+                    <span class="card-sweep" aria-hidden="true" />
+                    {m.id === "my-music" && <span class="motif-vinyl" aria-hidden="true" />}
+                    {m.id === "writing" && <span class="motif-spine" aria-hidden="true" />}
+                    {m.id === "about" && <span class="motif-dot" aria-hidden="true" />}
                   </div>
                   <div class="flex grow flex-col gap-2 p-5">
                     <span class="meta-mono room-no">
@@ -139,9 +149,115 @@ const rooms = enabledModules().map((m) => {
     text-decoration: none;
   }
   .room-art {
+    position: relative;
     height: 130px;
     border-radius: var(--radius-frame) var(--radius-frame) 0 0;
     overflow: hidden;
+  }
+  .room-art :global(.cover-art),
+  .room-art :global(.cover-img) {
+    transition: transform 1.2s var(--ease-gallery);
+  }
+  .room-card:hover .room-art :global(.cover-art),
+  .room-card:hover .room-art :global(.cover-img) {
+    transform: scale(1.05);
+  }
+
+  /* 微缩预览：通用流光扫过（展厅射灯掠过画面） */
+  .card-sweep {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      color-mix(in oklab, var(--brass-hi) 40%, transparent) 48%,
+      transparent 66%
+    );
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  /* 微缩预览：my-music 黑胶探出旋转 */
+  .motif-vinyl {
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    width: 88px;
+    height: 88px;
+    margin-top: -44px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #181512 32%, #2a2520 33%, #181512 52%, #2a2520 53%, #181512 100%);
+    box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translateX(40px);
+    opacity: 0;
+    transition:
+      transform var(--dur-move) var(--ease-gallery),
+      opacity var(--dur-move) var(--ease-gallery);
+  }
+  /* 微缩预览：writing 书脊升起 */
+  .motif-spine {
+    position: absolute;
+    left: 22px;
+    bottom: 0;
+    width: 26px;
+    height: 54px;
+    border-radius: 2px 2px 0 0;
+    background: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--room) 60%, var(--surface)),
+      color-mix(in oklab, var(--room) 75%, var(--paint-ink))
+    );
+    box-shadow: var(--shadow-exhibit);
+    transform: translateY(56px);
+    transition: transform var(--dur-move) var(--ease-gallery);
+  }
+  /* 微缩预览：about 黄铜点脉动 */
+  .motif-dot {
+    position: absolute;
+    left: 24px;
+    bottom: 22px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--line-hair);
+    transition: all var(--dur-move) var(--ease-gallery);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .room-card:hover .card-sweep {
+      animation: sweep 0.9s var(--ease-gallery);
+    }
+    .room-card:hover .motif-vinyl {
+      transform: translateX(0) rotate(180deg);
+      opacity: 1;
+      animation: spin 3.2s linear 0.3s infinite;
+    }
+    .room-card:hover .motif-spine {
+      transform: translateY(0);
+    }
+    .room-card:hover .motif-dot {
+      background: var(--brass);
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--brass) 25%, transparent);
+    }
+  }
+  @keyframes sweep {
+    0% {
+      transform: translateX(-120%);
+      opacity: 0;
+    }
+    40% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+  }
+  @keyframes spin {
+    to {
+      transform: translateX(0) rotate(540deg);
+    }
   }
   .room-art-blank {
     height: 100%;

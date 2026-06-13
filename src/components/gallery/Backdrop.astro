@@ -1,15 +1,17 @@
 ---
 /**
- * 背景纵深系统（BLUEPRINT 附录 A · 方案 B+ 七平面的静态基建版）：
- * ① 光场层 + ④ 墙地分界 在 global.css 的 body 背景中
- * 本组件渲染：② 颜料雾 + 幽灵字 ⑤ 微尘层 以及画布纹理
- * 全部纯 CSS/SVG，零 JS、零图片请求；reduced-motion 时漂移与微尘静止。
- * 出血原则：幽灵字与色雾允许越出视口，页面四边开放。
+ * 背景纵深系统（BLUEPRINT 附录 A · 方案 B+ 七平面 ★）：
+ * ① 光场层（最远）= global.css body 的左上光池 + 顶亮下沉空气透视
+ * ② 颜料雾 + 幽灵字（超大 Fraunces 展厅水印，允许出血）
+ * ③ 建筑暗示层 = 远处下一间展厅门洞/拱廊的极淡剪影（≤5% 对比度）
+ * ④ 画布墙 + 墙地分界（grain + global.css floor 色阶）
+ * ⑤ 微尘层 = 光柱中 ≤6 颗缓慢漂浮颜料微粒
+ * ⑦ 失焦前景（最近）= 页面边缘重度虚化颜料色形（古典雕塑位预留 → BACKLOG）
+ * 七层滚动速率递增（最远最慢、最近最快），由 --sy 驱动 translate3d。
+ * reduced-motion：停漂移/微尘/视差，纵深由色阶与遮挡静态成立。
  */
 interface Props {
-  /** 模块房间色变量名，如 "--room-writing"；不传则用黄铜中性色 */
   room?: string;
-  /** 幽灵字（4–5% 对比度的超大水印，允许出血） */
   ghost?: string;
 }
 const { room, ghost } = Astro.props;
@@ -17,10 +19,33 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
 ---
 
 <div class="backdrop" aria-hidden="true" style={`--room-paint: ${roomVar}`}>
-  {ghost && <div class="ghost font-display">{ghost}</div>}
-  <div class="mist mist-a"></div>
-  <div class="mist mist-b"></div>
-  <div class="dust">
+  {/* ③ 建筑暗示层：下一间展厅的拱廊门洞剪影 */}
+  <svg
+    class="arch"
+    viewBox="0 0 400 600"
+    preserveAspectRatio="xMidYMax meet"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M70 600 V230 a130 130 0 0 1 260 0 V600 M120 600 V250 a80 80 0 0 1 160 0 V600"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"></path>
+  </svg>
+
+  {/* ② 颜料雾 + 幽灵字 */}
+  {
+    ghost && (
+      <div class="ghost font-display" data-par="ghost">
+        {ghost}
+      </div>
+    )
+  }
+  <div class="mist mist-a" data-par="mist-a"></div>
+  <div class="mist mist-b" data-par="mist-b"></div>
+
+  {/* ⑤ 微尘层 */}
+  <div class="dust" data-par="dust">
     <i style="left:12%;top:22%;animation-delay:0s"></i>
     <i style="left:78%;top:14%;animation-delay:-6s"></i>
     <i style="left:62%;top:58%;animation-delay:-12s"></i>
@@ -28,7 +53,8 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     <i style="left:88%;top:42%;animation-delay:-9s"></i>
     <i style="left:44%;top:36%;animation-delay:-15s"></i>
   </div>
-  <!-- 画布纹理：内联 feTurbulence 油画布噪点 -->
+
+  {/* ④ 画布纹理：内联 feTurbulence 油画布噪点 */}
   <svg class="grain" xmlns="http://www.w3.org/2000/svg">
     <filter id="canvas-grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"
@@ -37,6 +63,10 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     </filter>
     <rect width="100%" height="100%" filter="url(#canvas-grain)"></rect>
   </svg>
+
+  {/* ⑦ 失焦前景：页面边缘重度虚化颜料色形（最近、最快；古典雕塑位 → BACKLOG） */}
+  <div class="fg-blur fg-left" data-par="fg-left"></div>
+  <div class="fg-blur fg-right" data-par="fg-right"></div>
 </div>
 
 <style>
@@ -46,23 +76,41 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     z-index: -1;
     overflow: hidden;
     pointer-events: none;
+    /* 景深：聚焦展品时由 body.is-focusing 整体轻微虚化（C 任务） */
+    transition: filter var(--dur-move) var(--ease-gallery);
+  }
+  :global(body.is-focusing) .backdrop {
+    filter: blur(3px);
   }
 
-  /* ② 幽灵字：超大低对比水印，越界出血 */
+  /* ② 幽灵字：超大低对比展厅水印，越界出血 */
   .ghost {
     position: absolute;
-    top: 4rem;
+    top: 3rem;
     right: -0.08em;
-    font-size: clamp(7rem, 24vw, 22rem);
+    font-size: clamp(7rem, 26vw, 24rem);
     font-weight: 600;
-    line-height: 0.85;
+    line-height: 0.82;
     letter-spacing: -0.02em;
     color: var(--ghost-ink);
     white-space: nowrap;
     user-select: none;
+    will-change: transform;
   }
 
-  /* ② 颜料雾：房间色重度虚化色场，缓慢漂移 */
+  /* ③ 建筑暗示层：远厅拱廊，极淡 */
+  .arch {
+    position: absolute;
+    left: 50%;
+    bottom: -4%;
+    width: min(70vw, 720px);
+    height: auto;
+    transform: translateX(-50%);
+    color: var(--text);
+    opacity: 0.04;
+  }
+
+  /* ② 颜料雾 */
   .mist {
     position: absolute;
     width: 55vmax;
@@ -71,6 +119,7 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     background: radial-gradient(circle, var(--room-paint) 0%, transparent 62%);
     opacity: 0.07;
     filter: blur(60px);
+    will-change: transform;
   }
   .mist-a {
     top: -18vmax;
@@ -82,7 +131,12 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     opacity: 0.05;
   }
 
-  /* ⑤ 微尘层：同屏 ≤6 颗颜料微粒，光柱中缓慢漂浮 */
+  /* ⑤ 微尘层 */
+  .dust {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+  }
   .dust i {
     position: absolute;
     width: 3px;
@@ -90,6 +144,28 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     border-radius: 50%;
     background: var(--room-paint);
     opacity: 0.18;
+  }
+
+  /* ⑦ 失焦前景：重度虚化颜料色形，贴边出血 */
+  .fg-blur {
+    position: absolute;
+    width: 34vmax;
+    height: 34vmax;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.09;
+    will-change: transform;
+  }
+  .fg-left {
+    bottom: -16vmax;
+    left: -14vmax;
+    background: radial-gradient(circle, var(--room-paint) 0%, transparent 60%);
+  }
+  .fg-right {
+    top: -14vmax;
+    right: -12vmax;
+    background: radial-gradient(circle, var(--brass) 0%, transparent 60%);
+    opacity: 0.06;
   }
 
   .grain {
@@ -104,18 +180,34 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     mix-blend-mode: screen;
   }
 
+  /* ---- 七层视差：translate3d 由 --sy 驱动，速率递增 ---- */
   @media (prefers-reduced-motion: no-preference) {
+    .arch {
+      transform: translateX(-50%) translate3d(0, calc(var(--sy, 0) * -0.018px), 0);
+    }
+    .ghost {
+      transform: translate3d(0, calc(var(--sy, 0) * -0.04px), 0);
+    }
     .mist-a {
       animation: drift-a 46s var(--ease-gallery) infinite alternate;
     }
     .mist-b {
       animation: drift-b 58s var(--ease-gallery) infinite alternate;
     }
+    .dust {
+      transform: translate3d(0, calc(var(--sy, 0) * -0.09px), 0);
+    }
     .dust i {
       animation: float 24s linear infinite;
     }
+    .fg-left {
+      transform: translate3d(0, calc(var(--sy, 0) * -0.2px), 0);
+    }
+    .fg-right {
+      transform: translate3d(0, calc(var(--sy, 0) * -0.16px), 0);
+    }
   }
-  /* 移动端减量：隐藏微尘 */
+  /* 移动端减量：隐藏微尘与失焦前景的视差负担 */
   @media (max-width: 640px) {
     .dust {
       display: none;
@@ -149,3 +241,33 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     }
   }
 </style>
+
+<script>
+  // 视差驱动：rAF 节流写入 --sy（滚动位置），各层用 calc 差速位移。
+  // 被动监听、reduced-motion 时完全不挂载。
+  function wireParallax() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if ((document.documentElement as HTMLElement).dataset.parallax) return;
+    document.documentElement.dataset.parallax = "1";
+    let ticking = false;
+    const update = () => {
+      document.documentElement.style.setProperty("--sy", String(window.scrollY));
+      ticking = false;
+    };
+    addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+  wireParallax();
+  document.addEventListener("astro:after-swap", () => {
+    document.documentElement.style.setProperty("--sy", String(window.scrollY));
+  });
+</script>

@@ -1,0 +1,127 @@
+---
+/**
+ * 沉浸时刻（BLUEPRINT 附录 A · 方案 B+ 487）：
+ * 每个模块恰一处全幅沉浸场景，内容装在大圆角取景框中（--radius-viewport）。
+ * 全宽出血（100vw，挣脱居中容器）；内部一幅放大的印象派色场画作氛围带，
+ * 叠 Fraunces 斜体雕刻式题注（延迟浮现）。轻微纵深视差，reduced-motion 静止。
+ */
+import { coverSvg } from "../../lib/cover";
+
+interface Props {
+  /** 取景框氛围画的确定性种子 */
+  seed: string;
+  module: string;
+  /** Fraunces 斜体题注（站长短评气质） */
+  caption?: string;
+  /** 角标：展厅编号或媒介 */
+  tag?: string;
+  class?: string;
+}
+const { seed, module: mod, caption, tag, class: className } = Astro.props;
+---
+
+<section class:list={["immersive", className]} aria-hidden="true">
+  <div class="immersive-frame">
+    <div class="immersive-art" data-immersive set:html={coverSvg(seed, mod, 1200, 380)} />
+    <div class="immersive-veil"></div>
+    {
+      (caption || tag) && (
+        <div class="immersive-cap">
+          <span class="immersive-guide" aria-hidden="true" />
+          {tag && <span class="meta-mono immersive-tag">{tag}</span>}
+          {caption && <p class="immersive-caption font-display">{caption}</p>}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .immersive {
+    /* 全宽出血：挣脱 max-w-6xl 居中容器 */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-block: clamp(3rem, 7vh, 6rem);
+    padding-inline: clamp(1rem, 4vw, 4rem);
+  }
+  .immersive-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-viewport);
+    box-shadow: var(--shadow-lift);
+    aspect-ratio: 24 / 7;
+    max-height: 60vh;
+  }
+  .immersive-art {
+    position: absolute;
+    inset: -8% -4%;
+    width: 108%;
+    height: 116%;
+  }
+  .immersive-art :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .immersive-veil {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 90% at 18% -10%, var(--wall-pool) 0%, transparent 55%),
+      linear-gradient(to top, color-mix(in oklab, var(--paint-ink) 30%, transparent) 0%, transparent 55%);
+  }
+  .immersive-cap {
+    position: absolute;
+    left: clamp(1.2rem, 4vw, 3rem);
+    bottom: clamp(1.2rem, 4vw, 2.4rem);
+    right: clamp(1.2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 1rem;
+    color: #f3eee5;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+  }
+  /* 虚线引导线：策展批注登记线（图形批注层，非角部裁切标记） */
+  .immersive-guide {
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    bottom: 0.2rem;
+    width: 1px;
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--brass-hi) 70%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+  }
+  .immersive-tag {
+    color: var(--brass-hi);
+    letter-spacing: 0.18em;
+  }
+  .immersive-caption {
+    font-style: italic;
+    font-weight: 460;
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    line-height: 1.1;
+    max-width: 22ch;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* 内部纵深视差：氛围画随滚动缓慢反向位移 */
+    .immersive-art {
+      transform: translate3d(0, calc(var(--sy, 0) * 0.03px), 0);
+      will-change: transform;
+    }
+    .immersive-caption {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: cap-rise var(--dur-enter) var(--ease-gallery) 220ms forwards;
+    }
+  }
+  @keyframes cap-rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

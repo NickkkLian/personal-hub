@@ -6,6 +6,7 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Cover from "../../components/gallery/Cover.astro";
+import ImmersiveFrame from "../../components/gallery/ImmersiveFrame.astro";
 import BrassPlaque from "../../components/gallery/BrassPlaque.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
@@ -58,6 +59,13 @@ const title = t(locale, "module.writing.title");
       <p class="module-intro">{t(locale, "module.writing.intro")}</p>
       <p class="meta-mono mt-4">{t(locale, "writing.shelfHint")} ↓</p>
     </header>
+
+    <ImmersiveFrame
+      seed="immersive-writing"
+      module="writing"
+      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · BIBLIOTHÈQUE`}
+      caption={t(locale, "module.writing.intro")}
+    />
 
     <hr class="hairline my-10" />
 
