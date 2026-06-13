@@ -19,18 +19,29 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
 ---
 
 <div class="backdrop" aria-hidden="true" style={`--room-paint: ${roomVar}`}>
-  {/* ③ 建筑暗示层：下一间展厅的拱廊门洞剪影 */}
+  {/* ③ 建筑暗示层：下一间展厅的拱门门洞（有色填充，看得见的"通往下一厅"开口） */}
   <svg
     class="arch"
-    viewBox="0 0 400 600"
+    viewBox="0 0 600 620"
     preserveAspectRatio="xMidYMax meet"
     xmlns="http://www.w3.org/2000/svg"
   >
+    <defs>
+      <linearGradient id="arch-depth" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--paint-ink)" stop-opacity="0.9"></stop>
+        <stop offset="70%" stop-color="var(--paint-ink)" stop-opacity="0.35"></stop>
+        <stop offset="100%" stop-color="var(--paint-ink)" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+    {/* 门内更深的空气（看进下一间暗厅） */}
+    <path d="M150 620 V250 a150 150 0 0 1 300 0 V620 Z" fill="url(#arch-depth)"></path>
+    {/* 门框发丝边 */}
     <path
-      d="M70 600 V230 a130 130 0 0 1 260 0 V600 M120 600 V250 a80 80 0 0 1 160 0 V600"
+      d="M150 620 V250 a150 150 0 0 1 300 0 V620"
       fill="none"
-      stroke="currentColor"
-      stroke-width="2"></path>
+      stroke="var(--text)"
+      stroke-width="1.5"
+      stroke-opacity="0.5"></path>
   </svg>
 
   {/* ② 颜料雾 + 幽灵字 */}
@@ -73,7 +84,7 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
   .backdrop {
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 0; /* 在 body 背景色之上；内容层显式抬到 z-10（z-index:-1 会被压到背景色后导致整层不可见） */
     overflow: hidden;
     pointer-events: none;
     /* 景深：聚焦展品时由 body.is-focusing 整体轻微虚化（C 任务） */
@@ -98,16 +109,18 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     will-change: transform;
   }
 
-  /* ③ 建筑暗示层：远厅拱廊，极淡 */
+  /* ③ 建筑暗示层：远厅拱门门洞，看得见的纵深开口 */
   .arch {
     position: absolute;
     left: 50%;
-    bottom: -4%;
-    width: min(72vw, 760px);
+    bottom: -2%;
+    width: min(88vw, 940px);
     height: auto;
     transform: translateX(-50%);
-    color: var(--text);
-    opacity: 0.07;
+    opacity: 0.2;
+  }
+  :global([data-theme="dark"]) .arch {
+    opacity: 0.4;
   }
 
   /* ② 颜料雾：可感知的展厅空气色场 */
@@ -155,23 +168,23 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
   /* ⑦ 失焦前景：重度虚化颜料色形，贴边出血 */
   .fg-blur {
     position: absolute;
-    width: 36vmax;
-    height: 36vmax;
+    width: 38vmax;
+    height: 38vmax;
     border-radius: 50%;
-    filter: blur(65px);
-    opacity: 0.18;
+    filter: blur(60px);
+    opacity: 0.26;
     will-change: transform;
   }
   .fg-left {
-    bottom: -16vmax;
-    left: -14vmax;
+    bottom: -11vmax;
+    left: -9vmax;
     background: radial-gradient(circle, var(--room-paint) 0%, transparent 60%);
   }
   .fg-right {
-    top: -14vmax;
-    right: -12vmax;
+    top: -9vmax;
+    right: -8vmax;
     background: radial-gradient(circle, var(--brass) 0%, transparent 60%);
-    opacity: 0.13;
+    opacity: 0.2;
   }
 
   .grain {

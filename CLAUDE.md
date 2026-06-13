@@ -32,6 +32,7 @@
 - 沉浸时刻(`ImmersiveFrame.astro`，Projects/Writing/My Music 各一处全幅大圆角取景框)
 - 图形批注层(虚线引导线 + Fraunces 斜体雕刻题注延迟浮现)、Home 卡片 hover 微缩预览(唱片转/书脊起/黄铜点/流光)
 - 全部 reduced-motion 退化、移动端减量；Lighthouse 移动端仍 Perf 98 / A11y 100 / SEO 100
+- **z-index 铁律**：背景 `Backdrop` 必须 z-0 且内容层(main/footer)显式 z-10——曾用 z-index:-1 导致整个纵深层被压到 body 背景色后、肉眼只见颜料雾(已修)
 - **唯一未做：古典馆藏层(4 处石膏像) → BACKLOG 第 4 项**（需下载处理博物馆 CC0 素材）
 
 ## 设计基准（方案 B+ Galerie Vivante，已定稿）
