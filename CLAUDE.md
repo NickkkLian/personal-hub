@@ -46,9 +46,9 @@
 
 ## 当前交接状态（每次推进后更新此节）
 
-- Development-Log 补录 ✅ 已推送；Database-Public ✅ 已创建（尚无数据文件）
-- 待站长：①各应用里勾选公开并点「🌐 发布公开」→ sync 自动切真实数据；②注册 Web3Forms 把 key 填进 site.config.json 的 web3formsKey → 联系表单生效；③（建议）作废 push-apps-v2 令牌（已用完）
-- 下一阶段 P3 音乐（专辑墙 + Spotify now-playing Function），需站长 Spotify Developer 应用 + OAuth（届时给指引）
+- Development-Log 补录与顺序修复 ✅ 均已推送；Database-Public ✅ 已创建（尚无数据文件）
+- **站长待办统一收口在 `LAUNCH-CHECKLIST.md`**（上线前一次性做）；搁置功能在 `BACKLOG.md`
+- v1.8 变更：专辑墙搁置（music-wall 关闭），my-music 开启（占位页）；下一阶段 P3 = My Music 原创音乐完整版（录音室布局+播放器），P4 SEO/RSS/性能 可并行
 
 ## 工作方式（站长要求）
 

@@ -1,6 +1,7 @@
 # Personal Hub — 多领域个人网站开发蓝图
 
-> **状态：✅ v1.7 已冻结（2026-06-11），可直接交付开发。** 开发期间如需变更设计或架构，修改本文档并提升版本号，Claude Code 以本文档为唯一需求来源。
+> **状态：✅ v1.8（2026-06-12）。** 开发期间如需变更设计或架构，修改本文档并提升版本号，Claude Code 以本文档为唯一需求来源。
+> **v1.8 变更**：站长决定——专辑墙（Album Wall/music-wall）暂时搁置（连带 Spotify 元数据补全与 now-playing，详见仓库 `BACKLOG.md`）；音乐板块以原创音乐（my-music）为先，P3 范围相应调整。
 > **文档定位**：本文档是交给 Claude Code 执行的完整开发蓝图，同时可作为项目规划档案。
 > **使用方式**：见第 9 章「Claude Code 执行指南」。核心 Prompt 在第 8 章，可直接粘贴使用。
 > **作者数据现状**：10 个自建单文件 HTML 数据库（GitHub Pages 托管），数据以 JSON 形式通过 GitHub API 同步到 GitHub 仓库；另有 GitHub 开源项目、网易云 + Spotify 音乐、原创音乐作品，未来将扩展至 bilibili / 抖音 / 小红书 / YouTube / Instagram 等自媒体账号。
@@ -373,7 +374,7 @@ Skills 是放在 `.claude/skills/<name>/SKILL.md` 的可复用指令包（项目
 | P0 | 脚手架：Astro + Tailwind + i18n 路由 + 设计令牌 + 深浅主题 + site.config 模块开关骨架 | 双语空站可跑，开关生效 |
 | P1 | 数据层：sync 脚本 + schema 校验 + 隐私过滤 + mock→真实源切换 | Actions 跑通，产出规范化 JSON |
 | P2 | 核心模块：Home、Projects、Writing（书架）、About+表单 | 四模块完整含动效 |
-| P3 | 音乐：Album Wall（专辑墙）+ Spotify now-playing Function | 封面墙 + 正在播放 |
+| P3 | 音乐：My Music 原创音乐完整版（录音室布局 + 播放器）；~~Album Wall + Spotify~~ 已搁置 → BACKLOG | 原创音乐展厅可用 |
 | P4 | SEO/RSS/统计 + 性能调优 + 全组合走查 | 达到 5.3 质量门槛 |
 | P5 | 部署：Cloudflare Pages + 域名 + sync.yml 定时与 webhook | 正式上线、自动同步 |
 | P6+ | 渐进开启：Knowledge、Life、Menu、Mystery、My Music、Channels；admin.html 开关面板 | 按需逐个 |
