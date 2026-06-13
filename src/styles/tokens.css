@@ -42,11 +42,11 @@
   --muted: #6f6a60;
   --accent: var(--brass);
   --accent-2: var(--paint-sage);
-  --floor: #e2d9c8; /* 页面底部地坪色阶 */
+  --floor: #d6cab2; /* 页面底部地坪色阶（加深，让"地面"可感） */
   --line-hair: rgba(28, 26, 23, 0.14); /* 发丝线 */
   --line-frame: rgba(28, 26, 23, 0.82); /* 浮框墨色细框 */
-  --ghost-ink: rgba(28, 26, 23, 0.045); /* 幽灵字（4–5% 对比度） */
-  --wall-pool: rgba(255, 252, 244, 0.85); /* 左上光池 */
+  --ghost-ink: rgba(28, 26, 23, 0.06); /* 幽灵字水印 */
+  --wall-pool: rgba(255, 253, 247, 0.95); /* 左上光池 */
 
   /* ---------- 光影（统一左上定向光 → 投影落右下） ---------- */
   --shadow-exhibit:
@@ -96,11 +96,11 @@
   --muted: #9a948a;
   --accent: var(--brass);
   --accent-2: var(--paint-sage);
-  --floor: #100e0d;
+  --floor: #0c0a09;
   --line-hair: rgba(236, 231, 220, 0.16);
   --line-frame: rgba(236, 231, 220, 0.7);
-  --ghost-ink: rgba(236, 231, 220, 0.05);
-  --wall-pool: rgba(255, 244, 222, 0.05);
+  --ghost-ink: rgba(236, 231, 220, 0.07);
+  --wall-pool: rgba(255, 244, 222, 0.09);
 
   --shadow-exhibit:
     0 1px 1px rgba(0, 0, 0, 0.3), 2px 3px 6px rgba(0, 0, 0, 0.35), 6px 10px 24px rgba(0, 0, 0, 0.4);

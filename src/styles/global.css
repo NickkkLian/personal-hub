@@ -29,10 +29,10 @@ html {
 
 body {
   min-height: 100dvh;
-  /* 墙面 → 地坪的纵深色阶（背景纵深系统第④层） */
+  /* ① 光场层 + ④ 墙地分界：左上光池 + 顶亮空气透视 + 底部地坪色阶 */
   background:
-    linear-gradient(to bottom, transparent 0%, transparent 82%, var(--floor) 100%),
-    radial-gradient(120% 70% at 18% -8%, var(--wall-pool) 0%, transparent 60%), var(--bg);
+    linear-gradient(to bottom, transparent 0%, transparent 60%, var(--floor) 100%),
+    radial-gradient(135% 80% at 16% -12%, var(--wall-pool) 0%, transparent 58%), var(--bg);
   background-attachment: fixed;
 }
 
