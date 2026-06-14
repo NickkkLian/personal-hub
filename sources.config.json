@@ -52,6 +52,7 @@
       "file": "mystery-tricks.public.json",
       "mock": "scripts/mock/mystery-tricks.public.json"
     },
-    { "module": "social", "adapter": "local-json", "file": "content/channels.json" }
+    { "module": "social", "adapter": "local-json", "file": "content/channels.json" },
+    { "module": "special", "adapter": "local-json", "file": "content/special-collections.json" }
   ]
 }

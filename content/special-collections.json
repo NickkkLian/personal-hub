@@ -1,0 +1,61 @@
+{
+  "$comment": "特别馆藏（徽章墙）数据——站长可直接编辑本文件，或用 admin.html 的「特别馆藏」面板增删改。隐私铁律：证书原件（PDF/扫描件）绝不入库，这里只放『徽章图 + 信息』。每条需 public:true 才会上墙。字段：title/summary 双语；date 获得日期；tags 标签；links 验证链接（有官方在线验证页就填，会让整张徽章可点击跳转，新标签打开；没有就留空数组 → 静态徽章不可点）；extra.issuer 颁发机构；extra.badge 徽章图路径（放 public/badges/ 下，如 /badges/cfa.svg）；extra.year 年份。下方 4 条为占位示例（含我生成的占位印章图），请替换为真实徽章与验证链接。",
+  "items": [
+    {
+      "id": "cfa-level-1",
+      "title": { "en": "CFA Program — Level I", "zh": "CFA 一级" },
+      "summary": {
+        "en": "Chartered Financial Analyst Program, Level I — ethics, financial reporting and quantitative methods.",
+        "zh": "特许金融分析师项目一级——职业伦理、财务报表与量化方法。"
+      },
+      "date": "2025-08-20",
+      "tags": ["Finance"],
+      "cover": null,
+      "links": [{ "label": "Verify", "url": "https://www.cfainstitute.org/" }],
+      "public": true,
+      "extra": { "issuer": "CFA Institute", "badge": "/badges/cfa.svg", "year": 2025 }
+    },
+    {
+      "id": "mitx-cs",
+      "title": { "en": "MITx — Computer Science", "zh": "MITx 计算机科学" },
+      "summary": {
+        "en": "Verified certificate from an MITx course on edX.",
+        "zh": "edX 上 MITx 课程的认证证书。"
+      },
+      "date": "2024-12-10",
+      "tags": ["Computer Science", "Course"],
+      "cover": null,
+      "links": [{ "label": "Verify", "url": "https://credentials.edx.org/" }],
+      "public": true,
+      "extra": { "issuer": "MIT · edX", "badge": "/badges/mit.svg", "year": 2024 }
+    },
+    {
+      "id": "ielts",
+      "title": { "en": "IELTS Academic", "zh": "雅思 学术类" },
+      "summary": {
+        "en": "International English Language Testing System — Academic module.",
+        "zh": "国际英语语言测试系统——学术类。"
+      },
+      "date": "2024-05-18",
+      "tags": ["Language"],
+      "cover": null,
+      "links": [{ "label": "Verify", "url": "https://ielts.org/" }],
+      "public": true,
+      "extra": { "issuer": "British Council · IELTS", "badge": "/badges/ielts.svg", "year": 2024 }
+    },
+    {
+      "id": "ubc-bsc",
+      "title": { "en": "B.Sc. — University of British Columbia", "zh": "UBC 理学学士" },
+      "summary": {
+        "en": "Bachelor of Science degree from the University of British Columbia.",
+        "zh": "不列颠哥伦比亚大学理学学士学位。"
+      },
+      "date": "2024-06-01",
+      "tags": ["Degree"],
+      "cover": null,
+      "links": [],
+      "public": true,
+      "extra": { "issuer": "University of British Columbia", "badge": "/badges/ubc.svg", "year": 2024 }
+    }
+  ]
+}

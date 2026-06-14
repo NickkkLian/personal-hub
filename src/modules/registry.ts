@@ -8,6 +8,7 @@ import LifePage from "./life/Page.astro";
 import MenuPage from "./menu/Page.astro";
 import MysteryPage from "./mystery/Page.astro";
 import SocialPage from "./social/Page.astro";
+import SpecialPage from "./special/Page.astro";
 import AboutPage from "./about/Page.astro";
 
 /**
@@ -24,5 +25,6 @@ export const MODULE_PAGES = {
   menu: MenuPage,
   mystery: MysteryPage,
   social: SocialPage,
+  special: SpecialPage,
   about: AboutPage,
 } satisfies Record<ModuleId, unknown>;

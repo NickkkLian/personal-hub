@@ -10,6 +10,7 @@
     "menu": "Kitchen",
     "mystery": "Mystery",
     "social": "Channels",
+    "special": "Collections",
     "about": "About",
     "menuOpen": "Open menu",
     "menuClose": "Close menu"
@@ -59,6 +60,11 @@
       "title": "Channels",
       "ghost": "ÉMISSION",
       "intro": "Selected work across platforms."
+    },
+    "special": {
+      "title": "Special Collections",
+      "ghost": "TRÉSOR",
+      "intro": "Badges, certificates and credentials — earned, and verifiable."
     },
     "about": {
       "title": "About",
@@ -147,5 +153,12 @@
     "demoTag": "SYNTH DEMO PREVIEW",
     "comingSoon": "Streaming links coming soon",
     "listenOn": "Listen on"
+  },
+  "special": {
+    "cabinetTag": "CREDENTIALS & CERTIFICATIONS — VERIFIABLE RECORD",
+    "issuedBy": "Issued by",
+    "verify": "Verify",
+    "verified": "Verifiable credential",
+    "onRecord": "On record"
   }
 }

@@ -10,6 +10,7 @@ export type ModuleId =
   | "menu"
   | "mystery"
   | "social"
+  | "special"
   | "about";
 
 export interface ModuleMeta {
@@ -38,7 +39,8 @@ export const MODULE_REGISTRY: Record<ModuleId, ModuleMeta> = {
   menu: { id: "menu", slug: "menu", room: "--room-menu", roomNo: "VII", order: 7 },
   mystery: { id: "mystery", slug: "mystery", room: "--room-mystery", roomNo: "VIII", order: 8 },
   social: { id: "social", slug: "channels", room: "--room-social", roomNo: "IX", order: 9 },
-  about: { id: "about", slug: "about", room: "--room-about", roomNo: "X", order: 10 },
+  special: { id: "special", slug: "special", room: "--room-special", roomNo: "X", order: 10 },
+  about: { id: "about", slug: "about", room: "--room-about", roomNo: "XI", order: 11 },
 };
 
 export interface SiteConfig {

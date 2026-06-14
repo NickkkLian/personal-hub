@@ -61,6 +61,8 @@ const EXTRA_WHITELIST = new Set([
   "platform", // social
   "audio", // my-music 试听文件 URL
   "demo", // my-music 内置音色演示标记
+  "badge", // special 徽章图路径（public/badges/ 下，非证书原件）
+  "issuer", // special 颁发机构名
   "no", // 展品编号（规范化阶段分配）
   "sourceDb", // 来源数据库 dbId（writing 模块区分两个源）
   "origLang", // 原文语言标记

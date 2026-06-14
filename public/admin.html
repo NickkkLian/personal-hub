@@ -287,6 +287,19 @@
           </p>
           <div id="i18n-fields"></div>
         </section>
+
+        <!-- 特别馆藏（徽章墙 · content/special-collections.json） -->
+        <section class="card">
+          <h2 class="sec">特别馆藏（徽章墙）</h2>
+          <p class="hint">
+            陈列徽章 / 证书 / 资质。<b>只放徽章图与信息，证书原件（PDF/扫描件）请勿上传。</b>
+            徽章图先放到仓库的 <code>public/badges/</code> 目录，再在「徽章图路径」填
+            <code>/badges/文件名</code>。填了「验证链接」的徽章整张可点击跳转官方验证页；留空则为静态徽章。
+            每条需勾选「公开」才会上墙。
+          </p>
+          <div id="special-items"></div>
+          <button id="btn-add-badge" type="button" style="margin-top: 0.8rem">+ 添加徽章</button>
+        </section>
       </div>
     </main>
 
@@ -304,6 +317,7 @@
         config: "site.config.json",
         en: "src/i18n/en.json",
         zh: "src/i18n/zh.json",
+        special: "content/special-collections.json",
       };
       let loaded = {}; // { config:{json,sha}, en:{...}, zh:{...} }
 
@@ -399,9 +413,16 @@
           loaded.config = await ghGet(FILES.config);
           loaded.en = await ghGet(FILES.en);
           loaded.zh = await ghGet(FILES.zh);
+          // 特别馆藏数据文件可能尚不存在（首次）——容错为空集，保存时自动创建
+          try {
+            loaded.special = await ghGet(FILES.special);
+          } catch {
+            loaded.special = { json: { items: [] }, sha: null };
+          }
           buildFonts();
           buildConfig();
           buildI18n();
+          buildSpecial();
           $("#editor").classList.remove("hidden");
           $("#savebar").classList.remove("hidden");
           setStatus("#setup-status", "已载入 ✓", "ok");
@@ -506,6 +527,101 @@
         }
       }
 
+      // ---- 特别馆藏（徽章墙）编辑器 ----
+      function slugify(s) {
+        return (
+          String(s)
+            .toLowerCase()
+            .replace(/[^\p{L}\p{N}]+/gu, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 48) || "badge-" + Math.random().toString(36).slice(2, 7)
+        );
+      }
+      function buildSpecial() {
+        const host = $("#special-items");
+        host.innerHTML = "";
+        const items = (loaded.special.json && loaded.special.json.items) || [];
+        items.forEach((it) => host.appendChild(badgeRow(it)));
+      }
+      function badgeRow(it) {
+        it = it || {};
+        const ex = it.extra || {};
+        const verify = (Array.isArray(it.links) && it.links[0] && it.links[0].url) || "";
+        const title = it.title || {};
+        const summary = it.summary || {};
+        const tags = Array.isArray(it.tags) ? it.tags.join(", ") : "";
+        const d = document.createElement("details");
+        d.className = "badge-row";
+        d.open = true;
+        d.dataset.id = it.id || "";
+        const nameLabel = title.en || title.zh || "（新徽章）";
+        d.innerHTML = `
+          <summary>🎖 ${esc(nameLabel)}</summary>
+          <div class="bi">
+            <div><label class="mono">名称 EN</label><input data-f="title.en" type="text" value="${esc(title.en || "")}"/></div>
+            <div><label class="mono">名称 ZH</label><input data-f="title.zh" type="text" value="${esc(title.zh || "")}"/></div>
+          </div>
+          <div class="bi">
+            <div><label class="mono">简介 EN</label><textarea data-f="summary.en" rows="2">${esc(summary.en || "")}</textarea></div>
+            <div><label class="mono">简介 ZH</label><textarea data-f="summary.zh" rows="2">${esc(summary.zh || "")}</textarea></div>
+          </div>
+          <div class="bi">
+            <div><label class="mono">颁发机构 issuer</label><input data-f="issuer" type="text" value="${esc(ex.issuer || "")}"/></div>
+            <div><label class="mono">年份 year</label><input data-f="year" type="text" value="${esc(ex.year || "")}"/></div>
+          </div>
+          <div class="bi">
+            <div><label class="mono">获得日期 date（YYYY-MM-DD）</label><input data-f="date" type="text" value="${esc(it.date || "")}"/></div>
+            <div><label class="mono">标签 tags（逗号分隔）</label><input data-f="tags" type="text" value="${esc(tags)}"/></div>
+          </div>
+          <label class="mono">徽章图路径 badge（如 /badges/cfa.svg）</label>
+          <input data-f="badge" type="text" value="${esc(ex.badge || "")}"/>
+          <label class="mono">验证链接 verify URL（留空 = 静态徽章，不可点击）</label>
+          <input data-f="verify" type="text" placeholder="https://…" value="${esc(verify)}"/>
+          <div style="margin-top:.6rem;display:flex;align-items:center;gap:1rem">
+            <label class="chk"><input data-f="public" type="checkbox" ${it.public === false ? "" : "checked"}/> 公开（上墙）</label>
+            <button type="button" class="btn-del-badge">删除此徽章</button>
+          </div>`;
+        d.querySelector(".btn-del-badge").addEventListener("click", () => d.remove());
+        return d;
+      }
+      $("#btn-add-badge").addEventListener("click", () => {
+        $("#special-items").appendChild(badgeRow({ public: true }));
+      });
+      function collectSpecial() {
+        const data = JSON.parse(JSON.stringify(loaded.special.json || { items: [] }));
+        const out = [];
+        document.querySelectorAll("#special-items .badge-row").forEach((row) => {
+          const g = (f) => row.querySelector(`[data-f="${f}"]`);
+          const val = (f) => (g(f) ? g(f).value.trim() : "");
+          const titleEn = val("title.en"),
+            titleZh = val("title.zh");
+          if (!titleEn && !titleZh) return; // 无标题的空行丢弃
+          const verify = val("verify");
+          const yearNum = Number(val("year"));
+          const extra = {};
+          if (val("issuer")) extra.issuer = val("issuer");
+          if (val("badge")) extra.badge = val("badge");
+          if (!Number.isNaN(yearNum) && val("year")) extra.year = yearNum;
+          out.push({
+            id: row.dataset.id || slugify(titleEn || titleZh),
+            title: { en: titleEn || null, zh: titleZh || null },
+            summary: { en: val("summary.en") || null, zh: val("summary.zh") || null },
+            date: val("date") || null,
+            tags: val("tags")
+              ? val("tags")
+                  .split(",")
+                  .map((t) => t.trim())
+                  .filter(Boolean)
+              : [],
+            links: verify ? [{ label: "Verify", url: verify }] : [],
+            public: g("public") ? g("public").checked : true,
+            extra,
+          });
+        });
+        data.items = out;
+        return data;
+      }
+
       // ---- 收集 + 保存 ----
       function collect() {
         const config = JSON.parse(JSON.stringify(loaded.config.json));
@@ -540,6 +656,7 @@
             ["config", FILES.config, next.config],
             ["en", FILES.en, next.en],
             ["zh", FILES.zh, next.zh],
+            ["special", FILES.special, collectSpecial()],
           ];
           let n = 0;
           for (const [key, path, obj] of jobs) {

@@ -10,6 +10,7 @@
     "menu": "私房菜单",
     "mystery": "谜题档案",
     "social": "自媒体",
+    "special": "特别馆藏",
     "about": "关于",
     "menuOpen": "打开菜单",
     "menuClose": "关闭菜单"
@@ -59,6 +60,11 @@
       "title": "自媒体",
       "ghost": "ÉMISSION",
       "intro": "各平台的精选内容。"
+    },
+    "special": {
+      "title": "特别馆藏",
+      "ghost": "TRÉSOR",
+      "intro": "徽章、证书与资质——已获得，可验证。"
     },
     "about": {
       "title": "关于",
@@ -147,5 +153,12 @@
     "demoTag": "内置音色演示",
     "comingSoon": "流媒体链接即将上线",
     "listenOn": "去听"
+  },
+  "special": {
+    "cabinetTag": "资质与认证 — 可验证记录",
+    "issuedBy": "颁发机构",
+    "verify": "验证",
+    "verified": "可在线验证",
+    "onRecord": "在册"
   }
 }

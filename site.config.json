@@ -86,6 +86,10 @@
       "enabled": false,
       "nav": false
     },
+    "special": {
+      "enabled": true,
+      "nav": true
+    },
     "about": {
       "enabled": true,
       "nav": true
