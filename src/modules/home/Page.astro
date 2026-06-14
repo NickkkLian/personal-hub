@@ -8,7 +8,6 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
 import Cover from "../../components/gallery/Cover.astro";
-import ColumnPiece from "../../components/gallery/ColumnPiece.astro";
 import Logo from "../../components/Logo.astro";
 import { t, localizePath, pickLang, altLocale, type Locale } from "../../i18n";
 import { siteConfig, enabledModules } from "../../config/site";
@@ -37,9 +36,6 @@ const totalOpen = rooms.length;
 
   {/* 编辑式 Hero */}
   <section class="hero-grid">
-    {/* 古典石柱：背景元素，置于右侧边缘、内容之后 */}
-    <div class="hero-column" aria-hidden="true"><ColumnPiece width={132} /></div>
-
     <div class="hero-left">
       <p class="meta-mono entrance-no">{t(locale, "home.entranceNo")} · {t(locale, "home.entrance")}</p>
       <h1 class="hero-name">
@@ -144,24 +140,10 @@ const totalOpen = rooms.length;
     padding-top: clamp(2rem, 7vh, 5rem);
     padding-bottom: clamp(2rem, 6vh, 4rem);
   }
-  /* 古典石柱：背景配角，右侧边缘、内容之后、出血到顶 */
-  .hero-column {
-    position: absolute;
-    right: clamp(-2rem, 2vw, 3rem);
-    top: -3.5rem;
-    z-index: 0;
-    opacity: 0.5;
-    pointer-events: none;
-  }
   .hero-left,
   .hero-right {
     position: relative;
     z-index: 1;
-  }
-  @media (max-width: 700px) {
-    .hero-column {
-      display: none;
-    }
   }
   @media (min-width: 880px) {
     .hero-grid {
@@ -219,18 +201,11 @@ const totalOpen = rooms.length;
     background: var(--line-hair);
   }
 
-  /* 右侧：石柱 + featured 浮框 */
+  /* 右侧：featured 浮框 */
   .hero-right {
     position: relative;
     display: flex;
     justify-content: flex-end;
-  }
-  .hero-column {
-    position: absolute;
-    right: -0.5rem;
-    top: 2.2rem;
-    z-index: 0;
-    opacity: 0.8;
   }
   .featured {
     position: relative;
