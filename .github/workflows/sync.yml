@@ -1,0 +1,19 @@
+# 数据同步：定时 + 应用「发布公开」触发 → 重新构建（拉取 Database-Public 最新公开数据）并部署。
+# 网站代码没变、但公开数据变了时，靠这个把新内容刷上线。
+name: Sync data
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # 每 6 小时（UTC）兜底刷新一次
+  repository_dispatch:
+    types: [data-published] # 可选：应用发布成功后 POST 此事件即时重建（详见 LAUNCH-CHECKLIST）
+  workflow_dispatch: {} # 允许手动「立即刷新数据」
+
+concurrency:
+  group: cloudflare-deploy
+  cancel-in-progress: true
+
+jobs:
+  call:
+    uses: ./.github/workflows/_build-deploy.yml
+    secrets: inherit

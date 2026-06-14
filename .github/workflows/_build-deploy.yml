@@ -1,0 +1,41 @@
+# 共享构建+部署模块（被 deploy.yml 与 sync.yml 调用，勿单独手动跑）。
+# 改部署逻辑只改这一处，两个入口自动同步。
+name: _build-deploy
+
+on:
+  workflow_call: {}
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # 仅读自身仓库；公开数据走 raw URL，无需额外权限
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (prebuild 自动同步公开数据，auto 模式)
+        run: npm run build
+        env:
+          HUB_DATA_MODE: auto
+          # 内置令牌仅用于把对 GitHub 公开 API 的读取限额从 60/h 抬到 1000/h；
+          # 它只能读本网站仓库、对私有 Database 零权限——不违反隐私铁律。
+          GH_READONLY_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          # 项目名须与 Cloudflare 后台创建的 Pages 项目一致；
+          # --branch=main 让本次为生产部署（项目生产分支须设为 main）。
+          command: pages deploy dist --project-name=personal-hub --branch=main

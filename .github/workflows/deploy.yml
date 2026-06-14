@@ -1,0 +1,17 @@
+# 代码部署：每次 push 到 main（含 admin.html 保存文本/改 site.config）→ 重新构建并部署。
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # 允许在 Actions 页手动触发一次部署
+
+# 与 sync.yml 共用一个并发组：同一时间只跑一次部署，新触发取消旧的在途构建。
+concurrency:
+  group: cloudflare-deploy
+  cancel-in-progress: true
+
+jobs:
+  call:
+    uses: ./.github/workflows/_build-deploy.yml
+    secrets: inherit
