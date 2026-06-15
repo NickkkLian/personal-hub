@@ -36,10 +36,10 @@
     },
     {
       "id": "ielts",
-      "title": { "en": "IELTS Academic", "zh": "雅思 学术类" },
+      "title": { "en": "IELTS", "zh": "雅思" },
       "summary": {
-        "en": "Academic module — Overall Band 8.0 (March 2026).",
-        "zh": "学术类——总分 8.0（2026 年 3 月）。"
+        "en": "Overall Band 8.0 (March 2026).",
+        "zh": "总分 8.0（2026 年 3 月）。"
       },
       "date": "2026-03-01",
       "tags": ["Language", "Band 8.0"],
@@ -58,14 +58,14 @@
         "en": "MITx 6.00.1x — verified certificate.",
         "zh": "MITx 6.00.1x——认证证书。"
       },
-      "date": "2024-12-10",
+      "date": "2025-03-01",
       "tags": ["Computer Science", "Course"],
       "cover": null,
       "links": [
         { "label": "Verify", "url": "https://courses.edx.org/certificates/2904fb12552947a1b346a56f81476b2a" }
       ],
       "public": true,
-      "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.png", "year": 2024 }
+      "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.png", "year": 2025 }
     }
   ]
 }
