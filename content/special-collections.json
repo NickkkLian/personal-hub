@@ -1,14 +1,28 @@
 {
-  "$comment": "特别馆藏（徽章墙）数据——站长可直接编辑本文件，或用 admin.html 的「特别馆藏」面板增删改。隐私铁律：证书原件（PDF/扫描件）绝不入库，这里只放『徽章图 + 信息』。每条需 public:true 才会上墙。字段：title/summary 双语；date 获得日期；tags 标签；links 验证链接（有官方在线验证页就填，会让整张徽章可点击跳转，新标签打开；没有就留空数组 → 静态徽章不可点）；extra.issuer 颁发机构；extra.badge 徽章图路径（放 public/badges/ 下，如 /badges/cfa.svg）；extra.year 年份。CFA 的徽章图仍是占位印章——站长可把官方 Accredible 徽章图下载后放 public/badges/cfa.svg 替换。",
+  "$comment": "特别馆藏（徽章墙）数据——站长可直接编辑本文件，或用 admin.html 的「特别馆藏」面板增删改。隐私铁律：证书原件（PDF/扫描件）绝不入库，这里只放『徽章图 + 信息』。每条需 public:true 才会上墙。字段：title/summary 双语；date 获得日期；tags 标签；links 验证链接（有官方在线验证页就填，会让整张徽章可点击跳转，新标签打开；没有就留空数组 → 静态徽章不可点）；extra.issuer 颁发机构；extra.badge 徽章图路径（放 public/badges/ 下）；extra.year 年份。",
   "items": [
+    {
+      "id": "ubc-bcom",
+      "title": { "en": "B.Com. — University of British Columbia", "zh": "UBC 商学学士" },
+      "summary": {
+        "en": "Bachelor of Commerce — Finance option, Business Analytics concentration.",
+        "zh": "商学学士——金融方向，商业分析专长。"
+      },
+      "date": "2026-05-01",
+      "tags": ["Degree", "Finance", "Business Analytics"],
+      "cover": null,
+      "links": [],
+      "public": true,
+      "extra": { "issuer": "University of British Columbia", "badge": "/badges/ubc.svg", "year": 2026 }
+    },
     {
       "id": "cfa-level-1",
       "title": { "en": "CFA Program — Level I", "zh": "CFA 一级" },
       "summary": {
-        "en": "Chartered Financial Analyst Program, Level I — passed.",
-        "zh": "特许金融分析师项目一级——已通过。"
+        "en": "Chartered Financial Analyst Program, Level I — passed (exam Feb 2026, result Mar 2026).",
+        "zh": "特许金融分析师项目一级——已通过（2026 年 2 月考试，3 月出分）。"
       },
-      "date": "2025-08-20",
+      "date": "2026-03-01",
       "tags": ["Finance"],
       "cover": null,
       "links": [
@@ -18,24 +32,7 @@
         }
       ],
       "public": true,
-      "extra": { "issuer": "CFA Institute", "badge": "/badges/cfa.svg", "year": 2025 }
-    },
-    {
-      "id": "mit-intro-cs-python",
-      "title": {
-        "en": "Introduction to Computer Science and Programming Using Python",
-        "zh": "计算机科学与 Python 编程导论"
-      },
-      "summary": {
-        "en": "Certificate issued by MIT Open Learning.",
-        "zh": "MIT Open Learning 颁发的课程证书。"
-      },
-      "date": "2024-12-10",
-      "tags": ["Computer Science", "Course"],
-      "cover": null,
-      "links": [],
-      "public": true,
-      "extra": { "issuer": "MIT Open Learning", "badge": "/badges/mit.svg", "year": 2024 }
+      "extra": { "issuer": "CFA Institute", "badge": "/badges/cfa.png", "year": 2026 }
     },
     {
       "id": "ielts",
@@ -52,18 +49,23 @@
       "extra": { "issuer": "IELTS", "badge": "/badges/ielts.png", "year": 2026 }
     },
     {
-      "id": "ubc-bsc",
-      "title": { "en": "B.Sc. — University of British Columbia", "zh": "UBC 理学学士" },
-      "summary": {
-        "en": "Bachelor of Science degree from the University of British Columbia.",
-        "zh": "不列颠哥伦比亚大学理学学士学位。"
+      "id": "mit-intro-cs-python",
+      "title": {
+        "en": "Introduction to Computer Science and Programming Using Python",
+        "zh": "计算机科学与 Python 编程导论"
       },
-      "date": "2024-06-01",
-      "tags": ["Degree"],
+      "summary": {
+        "en": "MITx 6.00.1x — verified certificate.",
+        "zh": "MITx 6.00.1x——认证证书。"
+      },
+      "date": "2024-12-10",
+      "tags": ["Computer Science", "Course"],
       "cover": null,
-      "links": [],
+      "links": [
+        { "label": "Verify", "url": "https://courses.edx.org/certificates/2904fb12552947a1b346a56f81476b2a" }
+      ],
       "public": true,
-      "extra": { "issuer": "University of British Columbia", "badge": "/badges/ubc.svg", "year": 2024 }
+      "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.svg", "year": 2024 }
     }
   ]
 }
