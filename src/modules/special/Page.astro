@@ -165,25 +165,22 @@ const initials = (s: string) =>
     height: 100%;
     overflow: hidden;
   }
-  /* 徽章承托面：略凹的画布方块，统一左上光 */
+  /* 徽章承托面：暖纸装裱底（passe-partout）——两套主题都用纸白，
+     好让未经改动的官方徽标在深浅主题下都清晰可读（装裱即"画框衬纸"隐喻）。 */
   .bw-tile {
     position: relative;
     display: grid;
     place-items: center;
     aspect-ratio: 1;
-    padding: clamp(1.4rem, 4vw, 2.2rem);
-    background: radial-gradient(
-      120% 120% at 30% 22%,
-      color-mix(in oklab, var(--room) 7%, var(--surface)),
-      var(--surface)
-    );
-    border-bottom: 0.5px solid color-mix(in oklab, var(--text) 8%, transparent);
+    padding: clamp(1.6rem, 5vw, 2.6rem);
+    background: var(--paint-canvas);
+    border-bottom: 0.5px solid rgba(28, 26, 23, 0.1);
   }
   .bw-badge {
     width: 100%;
     height: auto;
-    max-width: 160px;
-    filter: drop-shadow(2px 4px 8px color-mix(in oklab, var(--text) 14%, transparent));
+    max-width: 150px;
+    filter: drop-shadow(1px 2px 4px rgba(28, 26, 23, 0.16));
     transition: transform var(--dur-move) var(--ease-gallery);
   }
   .bw-card:hover .bw-badge {

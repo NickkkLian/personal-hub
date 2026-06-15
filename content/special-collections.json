@@ -13,7 +13,7 @@
       "cover": null,
       "links": [],
       "public": true,
-      "extra": { "issuer": "University of British Columbia", "badge": "/badges/ubc.svg", "year": 2026 }
+      "extra": { "issuer": "University of British Columbia", "badge": "/badges/ubc.png", "year": 2026 }
     },
     {
       "id": "cfa-level-1",
@@ -65,7 +65,7 @@
         { "label": "Verify", "url": "https://courses.edx.org/certificates/2904fb12552947a1b346a56f81476b2a" }
       ],
       "public": true,
-      "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.svg", "year": 2024 }
+      "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.png", "year": 2024 }
     }
   ]
 }
