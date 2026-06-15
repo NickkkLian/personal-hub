@@ -2,7 +2,7 @@
   "$comment": "站长唯一需要碰的文件。modules 每模块可设 enabled/nav；web3formsKey 填 Web3Forms 的 Access Key 后联系表单生效；about.timeline 是关于页时间线（占位内容请替换）。改完提交即可自动重新部署。",
   "site": {
     "owner": "NickkkLian",
-    "url": "https://personal-hub.pages.dev",
+    "url": "https://personal-hub-7uc.pages.dev",
     "title": {
       "en": "Nick Lian",
       "zh": "Nick Lian"
