@@ -37,14 +37,13 @@ const title = t(locale, "module.my-music.title");
         {meta.roomNo} — {t(locale, "myMusic.studioTag")}
       </p>
       <h1 class="module-title">{title}</h1>
-      <p class="module-intro">{t(locale, "module.my-music.intro")}</p>
     </header>
 
-    <RoomBand module="my-music" seed="band-my-music" />
+    <RoomBand module="my-music" seed="band-my-music" caption={t(locale, "module.my-music.intro")} />
 
     <hr class="hairline my-10" />
 
-    <ul class="grid grid-cols-1 gap-10 md:grid-cols-2" role="list">
+    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4" role="list">
       {
         tracks.map((e, i) => {
           const audio = typeof e.extra.audio === "string" ? e.extra.audio : null;
@@ -158,8 +157,8 @@ const title = t(locale, "module.my-music.title");
   .vinyl {
     position: absolute;
     top: 4%;
-    right: -14%;
-    width: 92%;
+    right: -8%;
+    width: 90%;
     aspect-ratio: 1;
     border-radius: 50%;
     background: radial-gradient(circle, #181512 30%, #221e1a 31%, #181512 60%, #25201b 61%, #181512 100%);
@@ -169,7 +168,7 @@ const title = t(locale, "module.my-music.title");
   }
   .record:hover .vinyl,
   .record.is-playing .vinyl {
-    right: -26%;
+    right: -15%;
   }
   .vinyl-grooves {
     position: absolute;

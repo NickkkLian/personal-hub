@@ -3,15 +3,13 @@
  * Special Collections（特别馆藏 · 徽章墙）：
  * 每枚徽章像一幅装裱好的画"挂在墙上"（发丝浮框 + 纸白衬底 passe-partout），题注在画下方、直接落在墙面上。
  * 隐私：网页只展示徽章图与信息，证书原件（PDF/扫描件）绝不入库（见 content/special-collections.json）。
- * 交互两态：
- *   - 有验证链接（links[0]）→ 整幅可点，新标签跳官方验证页（rel=noopener noreferrer），题注显示 Verify ↗
- *   - 无验证链接 → 静态徽章，不可跳转，题注显示「在册」
- * 无 feature 卡——以黄铜火漆印章分隔条作装饰，避免单调。
+ * 有验证链接（links[0]）→ 整幅徽章可点，新标签跳官方验证页（rel=noopener noreferrer）；无链接 → 静态。
+ * 题注：NO 编号 + 标题（破折号后另起一行）+ 年份（首行右对齐）；不显示颁发机构/简介/验证字样。
+ * 顶部装饰：流场纹理铭牌横幅（RoomBand，含副标题）。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
 import RoomBand from "../../components/gallery/RoomBand.astro";
-import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
 import { entries } from "../../lib/data";
@@ -24,7 +22,6 @@ const meta = MODULE_REGISTRY.special;
 const badges = entries("special");
 const title = t(locale, "module.special.title");
 
-/** 取徽章图路径（extra.badge）；缺失时回退首字母字母章 */
 const initials = (s: string) =>
   s
     .replace(/[^\p{L}\p{N} ]/gu, "")
@@ -50,24 +47,24 @@ const initials = (s: string) =>
         {meta.roomNo} — {t(locale, "special.cabinetTag")}
       </p>
       <h1 class="module-title">{title}</h1>
-      <p class="module-intro">{t(locale, "module.special.intro")}</p>
     </header>
 
-    {/* 装饰：流场纹理横幅 + 中央黄铜火漆印章（替代原取景框，画风与各展厅封面统一） */}
-    <RoomBand module="special" seed="band-special" seal />
+    <RoomBand module="special" seed="band-special" caption={t(locale, "module.special.intro")} />
 
     <ul class="bw-grid" role="list">
       {
         badges.map((e, i) => {
           const name = pickLang(e.title, locale).value;
-          const sm = pickLang(e.summary, locale).value;
-          const issuer = typeof e.extra.issuer === "string" ? e.extra.issuer : null;
           const badge = typeof e.extra.badge === "string" ? e.extra.badge : null;
           const year = e.extra.year ?? (e.date ? e.date.slice(0, 4) : undefined);
           const verifyUrl = e.links[0]?.url ?? null;
+          // 破折号后的内容另起一行
+          const parts = name.split(/\s*—+\s*/);
+          const line1 = parts[0];
+          const line2 = parts.slice(1).join(" — ");
+          const no = String(e.extra.no ?? 0).padStart(3, "0");
           return (
             <li class="bw-item enter-rise" style={`transition-delay:${Math.min(i * 50, 280)}ms`}>
-              {/* 挂在墙上的装裱徽章 */}
               <ExhibitFrame variant="float" class="bw-frame">
                 <div class="bw-tile">
                   {badge ? (
@@ -89,21 +86,13 @@ const initials = (s: string) =>
                 </div>
               </ExhibitFrame>
 
-              {/* 题注：落在墙面上（画框之外） */}
               <div class="bw-caption">
-                <ExhibitLabel
-                  no={e.extra.no ?? 0}
-                  module="COLLECTIONS"
-                  title={name}
-                  year={year}
-                  medium={issuer ?? undefined}
-                />
-                {sm && <p class="bw-summary">{sm}</p>}
-                {verifyUrl ? (
-                  <span class="bw-verify meta-mono">{t(locale, "special.verify")} ↗</span>
-                ) : (
-                  <span class="bw-onrecord meta-mono">{t(locale, "special.onRecord")}</span>
-                )}
+                <p class="bw-no meta-mono">NO. {no} · COLLECTIONS</p>
+                <div class="bw-titlerow">
+                  <h3 class="bw-title font-display">{line1}</h3>
+                  {year && <span class="bw-year meta-mono">{year}</span>}
+                </div>
+                {line2 && <p class="bw-title2 font-display">{line2}</p>}
               </div>
             </li>
           );
@@ -127,40 +116,38 @@ const initials = (s: string) =>
     font-weight: 590;
     margin-left: -0.04em;
   }
-  .module-intro {
-    margin-top: 1.6rem;
-    max-width: 36rem;
-    font-size: 1.05rem;
-    color: var(--muted);
-  }
 
   .bw-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(1.6rem, 3vw, 2.6rem) clamp(1.2rem, 2.5vw, 2rem);
+    gap: clamp(1.4rem, 2.6vw, 2.2rem) clamp(1rem, 2vw, 1.6rem);
   }
-  @media (min-width: 560px) {
+  @media (min-width: 480px) {
     .bw-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  @media (min-width: 900px) {
+  @media (min-width: 720px) {
     .bw-grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  @media (min-width: 1200px) {
+  @media (min-width: 980px) {
     .bw-grid {
       grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media (min-width: 1240px) {
+    .bw-grid {
+      grid-template-columns: repeat(6, 1fr);
     }
   }
 
   .bw-item {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 0.75rem;
   }
-  /* 画框：发丝浮框 + 抬升（挂画感） */
   .bw-frame {
     transition:
       transform var(--dur-move) var(--ease-gallery),
@@ -174,7 +161,6 @@ const initials = (s: string) =>
     outline: 2px solid color-mix(in oklab, var(--brass) 70%, transparent);
     outline-offset: 3px;
   }
-  /* 纸白衬底（两套主题都用纸白，让官方徽标清晰） */
   .bw-tile {
     position: relative;
     display: grid;
@@ -199,12 +185,12 @@ const initials = (s: string) =>
   .bw-mono {
     display: grid;
     place-items: center;
-    width: clamp(4.5rem, 14vw, 6rem);
+    width: clamp(4rem, 12vw, 5.5rem);
     aspect-ratio: 1;
     border-radius: 50%;
     border: 1px solid color-mix(in oklab, var(--brass) 60%, transparent);
     color: color-mix(in oklab, var(--brass) 70%, var(--text));
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     letter-spacing: 0.04em;
   }
   .bw-stretch {
@@ -213,34 +199,35 @@ const initials = (s: string) =>
     z-index: 3;
   }
 
-  /* 题注：直接落在墙面上 */
+  /* 题注：落在墙面上 */
   .bw-caption {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: 0.2rem;
     padding: 0 0.1rem;
   }
-  .bw-summary {
-    font-size: 0.86rem;
-    line-height: 1.5;
+  .bw-no {
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
+  }
+  .bw-titlerow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .bw-title {
+    font-size: 1rem;
+    font-weight: 545;
+    line-height: 1.14;
+  }
+  .bw-year {
+    flex: 0 0 auto;
     color: var(--muted);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
-  .bw-verify {
-    padding-top: 0.15rem;
-    color: color-mix(in oklab, var(--brass) 62%, var(--text));
-    width: max-content;
-  }
-  .bw-item:hover .bw-verify {
-    text-decoration: underline;
-  }
-  .bw-onrecord {
-    padding-top: 0.15rem;
+  .bw-title2 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.14;
     color: var(--muted);
-    opacity: 0.8;
   }
 </style>

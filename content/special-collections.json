@@ -3,7 +3,7 @@
   "items": [
     {
       "id": "ubc-bcom",
-      "title": { "en": "B.Com. — University of British Columbia", "zh": "UBC 商学学士" },
+      "title": { "en": "B.Com. — Finance & Business Analytics", "zh": "商学学士 — 金融与商业分析" },
       "summary": {
         "en": "Bachelor of Commerce — Finance option, Business Analytics concentration.",
         "zh": "商学学士——金融方向，商业分析专长。"
@@ -36,7 +36,7 @@
     },
     {
       "id": "ielts",
-      "title": { "en": "IELTS", "zh": "雅思" },
+      "title": { "en": "IELTS 8.0", "zh": "雅思 8.0" },
       "summary": {
         "en": "Overall Band 8.0 (March 2026).",
         "zh": "总分 8.0（2026 年 3 月）。"
@@ -51,8 +51,8 @@
     {
       "id": "mit-intro-cs-python",
       "title": {
-        "en": "Introduction to Computer Science and Programming Using Python",
-        "zh": "计算机科学与 Python 编程导论"
+        "en": "MITx 6.00.1x — Verified Certificate",
+        "zh": "MITx 6.00.1x——认证证书"
       },
       "summary": {
         "en": "MITx 6.00.1x — verified certificate.",

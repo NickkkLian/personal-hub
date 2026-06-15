@@ -1,77 +1,72 @@
 ---
 /**
- * 展厅装饰横幅：复用生成式流场封面纹理（与各展厅封面同一画风），作为没有 feature 卡的
- * 展厅（My Music / Special Collections）顶部的统一装饰，保持全站视觉一致。
- * seal=true 时在横幅中央压一枚黄铜火漆印章（Special Collections 用）。
+ * 展厅装饰横幅：复用生成式流场纹理（与封面同源），但叠一层展厅色调染 + 暗角，并把展厅副标题
+ * 压在上面，做出与普通封面图的差异化——像一块"题字铭牌"而非又一张封面。
+ * 宽度只占内容区约 2/3。
  */
 import Cover from "./Cover.astro";
 
 interface Props {
   module: string;
   seed: string;
-  seal?: boolean;
+  caption?: string;
 }
-const { module, seed, seal = false } = Astro.props;
+const { module, seed, caption } = Astro.props;
 ---
 
 <div class="room-band enter-rise is-in">
   <div class="room-band-art" aria-hidden="true">
-    <Cover id={seed} module={module} w={1440} h={300} />
+    <Cover id={seed} module={module} w={1200} h={300} />
   </div>
-  {
-    seal && (
-      <span class="room-band-seal" aria-hidden="true">
-        <svg viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="15.5" stroke="var(--brass)" stroke-width="1" />
-          <circle
-            cx="24"
-            cy="24"
-            r="11.5"
-            stroke="var(--brass)"
-            stroke-width="0.6"
-            stroke-dasharray="0.5 2.4"
-            opacity="0.8"
-          />
-          <path
-            d="M24 16.6l1.9 4.2 4.6.4-3.5 3 1.1 4.5L24 30.2l-4.1 2.5 1.1-4.5-3.5-3 4.6-.4z"
-            fill="var(--brass)"
-          />
-        </svg>
-      </span>
-    )
-  }
+  <div class="room-band-scrim">
+    {caption && <p class="room-band-caption font-display">{caption}</p>}
+  </div>
 </div>
 
 <style>
   .room-band {
     position: relative;
+    max-width: 66%;
     margin: clamp(2rem, 5vh, 3.2rem) 0;
     border-radius: var(--radius-frame);
     overflow: hidden;
     box-shadow: var(--shadow-exhibit);
     border: 0.5px solid color-mix(in oklab, var(--text) 9%, transparent);
   }
+  @media (max-width: 760px) {
+    .room-band {
+      max-width: 100%;
+    }
+  }
   .room-band-art {
-    height: clamp(110px, 16vh, 170px);
+    height: clamp(120px, 17vh, 175px);
   }
   .room-band-art :global(.cover-art),
   .room-band-art :global(svg) {
     height: 100%;
     width: 100%;
   }
-  /* 中央黄铜火漆印章：落在一枚展厅面色小圆盘上，像压在横幅上的封蜡 */
-  .room-band-seal {
+  /* 展厅色调染 + 左侧暗角（与普通封面区分；并保证题字可读） */
+  .room-band-scrim {
     position: absolute;
     inset: 0;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    padding: clamp(1.2rem, 3.5vw, 2.2rem);
+    background: linear-gradient(
+      100deg,
+      color-mix(in oklab, var(--room) 58%, rgba(18, 16, 13, 0.55)) 0%,
+      color-mix(in oklab, var(--room) 24%, transparent) 52%,
+      transparent 92%
+    );
   }
-  .room-band-seal svg {
-    width: 58px;
-    height: 58px;
-    padding: 9px;
-    border-radius: 50%;
-    background: var(--surface);
-    box-shadow: var(--shadow-lift);
+  .room-band-caption {
+    font-style: italic;
+    font-weight: 460;
+    font-size: clamp(1.05rem, 2vw, 1.5rem);
+    line-height: 1.25;
+    max-width: 62%;
+    color: #f3eee5;
+    text-wrap: balance;
   }
 </style>
