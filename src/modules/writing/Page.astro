@@ -7,10 +7,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
 import Cover from "../../components/gallery/Cover.astro";
-import ImmersiveFrame from "../../components/gallery/ImmersiveFrame.astro";
+import FeatureCard from "../../components/gallery/FeatureCard.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
-import { entries, exhibitNo, isNew } from "../../lib/data";
+import { entries, exhibitNo, isNew, pickFeatured } from "../../lib/data";
 
 interface Props {
   locale: Locale;
@@ -18,10 +18,12 @@ interface Props {
 const { locale } = Astro.props;
 const meta = MODULE_REGISTRY.writing;
 const all = entries("writing");
+const featured = pickFeatured("writing", all);
+const rest = all.filter((e) => e !== featured);
 
 // 按年份分层（无日期归入最早层底部）
-const groups = new Map<string, typeof all>();
-for (const e of all) {
+const groups = new Map<string, typeof rest>();
+for (const e of rest) {
   const y = e.date?.slice(0, 4) ?? "—";
   if (!groups.has(y)) groups.set(y, []);
   groups.get(y)!.push(e);
@@ -49,12 +51,18 @@ const title = t(locale, "module.writing.title");
       <p class="module-intro">{t(locale, "module.writing.intro")}</p>
     </header>
 
-    <ImmersiveFrame
-      seed="immersive-writing"
-      module="writing"
-      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · ${t(locale, "module.writing.ghost")}`}
-      caption={t(locale, "module.writing.intro")}
-    />
+    {
+      featured && (
+        <FeatureCard
+          locale={locale}
+          entry={featured}
+          module="writing"
+          moduleLabel="WRITING"
+          label={t(locale, "common.featured")}
+          meta={[featured.extra.sectionLabel, featured.date].filter(Boolean).join(" · ")}
+        />
+      )
+    }
 
     <hr class="hairline my-10" />
 
@@ -112,8 +120,8 @@ const title = t(locale, "module.writing.title");
     margin-bottom: 1.2rem;
   }
   .module-title {
-    font-size: clamp(3.2rem, 10vw, 7.5rem);
-    line-height: 0.96;
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 0.98;
     font-weight: 590;
     margin-left: -0.04em;
   }

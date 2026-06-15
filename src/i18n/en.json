@@ -95,6 +95,7 @@
   },
   "common": {
     "works": "works",
+    "featured": "Featured",
     "close": "Close",
     "mockNote": "Preview data — real works will hang here automatically once published."
   },

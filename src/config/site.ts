@@ -55,6 +55,8 @@ export interface SiteConfig {
     umamiWebsiteId: string;
   };
   fonts?: { display?: string; mono?: string };
+  /** 各模块 feature 卡选中的条目 id（站长在 admin 后台填；留空 = 自动选置顶/最新一条） */
+  featured?: Record<string, string>;
   about: {
     bio: { en: string; zh: string };
     timeline: { year: string; en: string; zh: string }[];

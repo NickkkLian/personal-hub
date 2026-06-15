@@ -1,16 +1,15 @@
 ---
 /**
  * Special Collections（特别馆藏 · 徽章墙）：
- * 陈列 badges / certificates / credentials —— 每条是一枚徽章卡（徽章图 + 凸版标签 + 颁发机构/年份）。
+ * 每枚徽章像一幅装裱好的画"挂在墙上"（发丝浮框 + 纸白衬底 passe-partout），题注在画下方、直接落在墙面上。
  * 隐私：网页只展示徽章图与信息，证书原件（PDF/扫描件）绝不入库（见 content/special-collections.json）。
  * 交互两态：
- *   - 有验证链接（links[0]）→ 整卡可点，新标签跳官方验证页（rel=noopener noreferrer）+ hover 射灯，显示 Verify ↗
- *   - 无验证链接 → 静态徽章，不可跳转，显示「在册」
- * 完全沿用全站设计基准：BaseLayout / ImmersiveFrame / ExhibitFrame / 凸版标签 / 幽灵字 / 房间色；双语双主题、移动端单列。
+ *   - 有验证链接（links[0]）→ 整幅可点，新标签跳官方验证页（rel=noopener noreferrer），题注显示 Verify ↗
+ *   - 无验证链接 → 静态徽章，不可跳转，题注显示「在册」
+ * 无 feature 卡——以黄铜火漆印章分隔条作装饰，避免单调。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
-import ImmersiveFrame from "../../components/gallery/ImmersiveFrame.astro";
 import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
@@ -53,14 +52,25 @@ const initials = (s: string) =>
       <p class="module-intro">{t(locale, "module.special.intro")}</p>
     </header>
 
-    <ImmersiveFrame
-      seed="immersive-special"
-      module="special"
-      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · ${t(locale, "special.cabinetTag")}`}
-      caption={t(locale, "module.special.intro")}
-    />
-
-    <hr class="hairline my-10" />
+    {/* 装饰：黄铜火漆印章分隔条（替代原取景框） */}
+    <div class="bw-divider enter-rise is-in" aria-hidden="true">
+      <span class="bw-rule"></span>
+      <svg class="bw-seal" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="15.5" stroke="var(--brass)" stroke-width="1"></circle>
+        <circle
+          cx="24"
+          cy="24"
+          r="11.5"
+          stroke="var(--brass)"
+          stroke-width="0.6"
+          stroke-dasharray="0.5 2.4"
+          opacity="0.8"></circle>
+        <path
+          d="M24 16.6l1.9 4.2 4.6.4-3.5 3 1.1 4.5L24 30.2l-4.1 2.5 1.1-4.5-3.5-3 4.6-.4z"
+          fill="var(--brass)"></path>
+      </svg>
+      <span class="bw-rule"></span>
+    </div>
 
     <ul class="bw-grid" role="list">
       {
@@ -72,8 +82,9 @@ const initials = (s: string) =>
           const year = e.extra.year ?? (e.date ? e.date.slice(0, 4) : undefined);
           const verifyUrl = e.links[0]?.url ?? null;
           return (
-            <li class="enter-rise" style={`transition-delay:${Math.min(i * 50, 280)}ms`}>
-              <ExhibitFrame interactive={Boolean(verifyUrl)} class="bw-card">
+            <li class="bw-item enter-rise" style={`transition-delay:${Math.min(i * 50, 280)}ms`}>
+              {/* 挂在墙上的装裱徽章 */}
+              <ExhibitFrame variant="float" class="bw-frame">
                 <div class="bw-tile">
                   {badge ? (
                     <img class="bw-badge" src={badge} alt={name} width="200" height="200" loading="lazy" />
@@ -82,32 +93,34 @@ const initials = (s: string) =>
                       {initials(name)}
                     </span>
                   )}
-                </div>
-                <div class="bw-body">
-                  <ExhibitLabel
-                    no={e.extra.no ?? 0}
-                    module="COLLECTIONS"
-                    title={name}
-                    year={year}
-                    medium={issuer ?? undefined}
-                  />
-                  {sm && <p class="bw-summary">{sm}</p>}
-                  {verifyUrl ? (
+                  {verifyUrl && (
                     <a
-                      class="bw-verify meta-mono"
+                      class="bw-stretch"
                       href={verifyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${t(locale, "special.verify")} — ${name}`}
-                    >
-                      <span class="bw-stretch" aria-hidden="true" />
-                      {t(locale, "special.verify")} ↗
-                    </a>
-                  ) : (
-                    <span class="bw-onrecord meta-mono">{t(locale, "special.onRecord")}</span>
+                    />
                   )}
                 </div>
               </ExhibitFrame>
+
+              {/* 题注：落在墙面上（画框之外） */}
+              <div class="bw-caption">
+                <ExhibitLabel
+                  no={e.extra.no ?? 0}
+                  module="COLLECTIONS"
+                  title={name}
+                  year={year}
+                  medium={issuer ?? undefined}
+                />
+                {sm && <p class="bw-summary">{sm}</p>}
+                {verifyUrl ? (
+                  <span class="bw-verify meta-mono">{t(locale, "special.verify")} ↗</span>
+                ) : (
+                  <span class="bw-onrecord meta-mono">{t(locale, "special.onRecord")}</span>
+                )}
+              </div>
             </li>
           );
         })
@@ -125,8 +138,8 @@ const initials = (s: string) =>
     margin-bottom: 1.2rem;
   }
   .module-title {
-    font-size: clamp(3.2rem, 10vw, 7.5rem);
-    line-height: 0.96;
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 0.98;
     font-weight: 590;
     margin-left: -0.04em;
   }
@@ -137,10 +150,36 @@ const initials = (s: string) =>
     color: var(--muted);
   }
 
+  /* 火漆印章分隔条 */
+  .bw-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin: clamp(2.4rem, 6vh, 4rem) 0 clamp(2rem, 5vh, 3rem);
+  }
+  .bw-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      to var(--rule-dir, right),
+      transparent,
+      color-mix(in oklab, var(--brass) 45%, transparent)
+    );
+  }
+  .bw-rule:last-child {
+    --rule-dir: left;
+  }
+  .bw-seal {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    filter: drop-shadow(var(--shadow-plaque));
+  }
+
   .bw-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(1.2rem, 2.5vw, 2rem);
+    gap: clamp(1.6rem, 3vw, 2.6rem) clamp(1.2rem, 2.5vw, 2rem);
   }
   @media (min-width: 560px) {
     .bw-grid {
@@ -158,35 +197,47 @@ const initials = (s: string) =>
     }
   }
 
-  .bw-card {
-    position: relative;
+  .bw-item {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    gap: 0.9rem;
   }
-  /* 徽章承托面：暖纸装裱底（passe-partout）——两套主题都用纸白，
-     好让未经改动的官方徽标在深浅主题下都清晰可读（装裱即"画框衬纸"隐喻）。 */
+  /* 画框：发丝浮框 + 抬升（挂画感） */
+  .bw-frame {
+    transition:
+      transform var(--dur-move) var(--ease-gallery),
+      box-shadow var(--dur-move) var(--ease-gallery);
+  }
+  .bw-item:hover .bw-frame {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+  .bw-item:focus-within .bw-frame {
+    outline: 2px solid color-mix(in oklab, var(--brass) 70%, transparent);
+    outline-offset: 3px;
+  }
+  /* 纸白衬底（两套主题都用纸白，让官方徽标清晰） */
   .bw-tile {
     position: relative;
     display: grid;
     place-items: center;
     aspect-ratio: 1;
-    padding: clamp(1.6rem, 5vw, 2.6rem);
+    padding: clamp(1rem, 3vw, 1.7rem);
     background: var(--paint-canvas);
-    border-bottom: 0.5px solid rgba(28, 26, 23, 0.1);
+    border-radius: 1px;
+    height: 100%;
   }
   .bw-badge {
-    width: 100%;
+    width: auto;
     height: auto;
-    max-width: 150px;
+    max-width: 82%;
+    max-height: 78%;
     filter: drop-shadow(1px 2px 4px rgba(28, 26, 23, 0.16));
     transition: transform var(--dur-move) var(--ease-gallery);
   }
-  .bw-card:hover .bw-badge {
-    transform: translateY(-2px) scale(1.03);
+  .bw-item:hover .bw-badge {
+    transform: scale(1.03);
   }
-  /* 无图回退：字母章 */
   .bw-mono {
     display: grid;
     place-items: center;
@@ -198,13 +249,18 @@ const initials = (s: string) =>
     font-size: 1.6rem;
     letter-spacing: 0.04em;
   }
+  .bw-stretch {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
 
-  .bw-body {
+  /* 题注：直接落在墙面上 */
+  .bw-caption {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
-    padding: 1rem 1.1rem 1.2rem;
-    flex: 1;
+    gap: 0.45rem;
+    padding: 0 0.1rem;
   }
   .bw-summary {
     font-size: 0.86rem;
@@ -216,28 +272,16 @@ const initials = (s: string) =>
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  /* 验证链接：黄铜色凸版小字 + 整卡覆盖热区（stretched link） */
   .bw-verify {
-    margin-top: auto;
-    padding-top: 0.4rem;
+    padding-top: 0.15rem;
     color: color-mix(in oklab, var(--brass) 62%, var(--text));
     width: max-content;
   }
-  .bw-verify:hover {
+  .bw-item:hover .bw-verify {
     text-decoration: underline;
   }
-  .bw-stretch {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-  }
-  .bw-card:focus-within {
-    outline: 2px solid color-mix(in oklab, var(--brass) 70%, transparent);
-    outline-offset: 2px;
-  }
   .bw-onrecord {
-    margin-top: auto;
-    padding-top: 0.4rem;
+    padding-top: 0.15rem;
     color: var(--muted);
     opacity: 0.8;
   }

@@ -452,6 +452,14 @@
         // 站点信息（site.*，排除 fonts，已单列）
         host.appendChild(renderConfigGroup("site", root.site, "站点"));
         host.appendChild(renderConfigGroup("about", root.about, "关于页"));
+        if (root.featured)
+          host.appendChild(
+            renderConfigGroup(
+              "featured",
+              root.featured,
+              "精选条目 feature 卡（填条目 id，留空 = 自动选最新/置顶一条）",
+            ),
+          );
         host.appendChild(renderModules(root.modules));
       }
       function renderConfigGroup(prefix, obj, label) {

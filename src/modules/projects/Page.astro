@@ -5,12 +5,11 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
-import ImmersiveFrame from "../../components/gallery/ImmersiveFrame.astro";
 import Cover from "../../components/gallery/Cover.astro";
 import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
-import { entries, exhibitNo } from "../../lib/data";
+import { entries, exhibitNo, pickFeatured } from "../../lib/data";
 
 interface Props {
   locale: Locale;
@@ -18,7 +17,7 @@ interface Props {
 const { locale } = Astro.props;
 const meta = MODULE_REGISTRY.projects;
 const all = entries("projects");
-const featured = all.find((e) => e.extra.featured);
+const featured = pickFeatured("projects", all);
 const rest = all.filter((e) => e !== featured);
 
 // 语言色（GitHub 习惯色压进低饱和颜料体系）
@@ -52,13 +51,6 @@ const title = t(locale, "module.projects.title");
       <h1 class="module-title">{title}</h1>
       <p class="module-intro">{t(locale, "module.projects.intro")}</p>
     </header>
-
-    <ImmersiveFrame
-      seed="immersive-projects"
-      module="projects"
-      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · ${t(locale, "projects.annotation")}`}
-      caption={t(locale, "module.projects.intro")}
-    />
 
     <hr class="hairline my-10" />
 
@@ -146,8 +138,8 @@ const title = t(locale, "module.projects.title");
     margin-bottom: 1.2rem;
   }
   .module-title {
-    font-size: clamp(3.2rem, 10vw, 7.5rem);
-    line-height: 0.96;
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 0.98;
     font-weight: 590;
     margin-left: -0.04em;
     max-width: 12ch;

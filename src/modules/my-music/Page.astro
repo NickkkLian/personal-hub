@@ -7,18 +7,20 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Cover from "../../components/gallery/Cover.astro";
-import ImmersiveFrame from "../../components/gallery/ImmersiveFrame.astro";
+import FeatureCard from "../../components/gallery/FeatureCard.astro";
 import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
-import { entries } from "../../lib/data";
+import { entries, pickFeatured } from "../../lib/data";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const meta = MODULE_REGISTRY["my-music"];
-const tracks = entries("my-music");
+const allTracks = entries("my-music");
+const featured = pickFeatured("my-music", allTracks);
+const tracks = allTracks.filter((e) => e !== featured);
 const title = t(locale, "module.my-music.title");
 ---
 
@@ -40,12 +42,19 @@ const title = t(locale, "module.my-music.title");
       <p class="module-intro">{t(locale, "module.my-music.intro")}</p>
     </header>
 
-    <ImmersiveFrame
-      seed="immersive-my-music"
-      module="my-music"
-      tag={`${t(locale, "home.roomLabel").toUpperCase()} ${meta.roomNo} · ${t(locale, "myMusic.studioTag")}`}
-      caption={t(locale, "module.my-music.intro")}
-    />
+    {
+      featured && (
+        <FeatureCard
+          locale={locale}
+          entry={featured}
+          module="my-music"
+          moduleLabel="MY MUSIC"
+          label={t(locale, "common.featured")}
+          href={featured.links[0]?.url ?? null}
+          meta={[featured.extra.year, featured.tags[0]].filter(Boolean).join(" · ")}
+        />
+      )
+    }
 
     <hr class="hairline my-10" />
 
@@ -127,8 +136,8 @@ const title = t(locale, "module.my-music.title");
     margin-bottom: 1.2rem;
   }
   .module-title {
-    font-size: clamp(3.2rem, 10vw, 7.5rem);
-    line-height: 0.96;
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 0.98;
     font-weight: 590;
     margin-left: -0.04em;
   }

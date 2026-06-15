@@ -26,6 +26,12 @@
     "display": "fraunces",
     "mono": "space-mono"
   },
+  "featured": {
+    "$comment": "各展厅 feature 大卡选中的条目 id（留空 = 自动选置顶/最新一条）。projects 也可在 projects-overrides.json 里给某项加 featured:true。",
+    "projects": "",
+    "writing": "",
+    "my-music": ""
+  },
   "about": {
     "bio": {
       "en": "I build small, sharp tools for my own life — trackers, atlases, archives — and this gallery is where their public faces hang. (Placeholder bio: edit me in site.config.json)",

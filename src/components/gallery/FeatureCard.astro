@@ -1,0 +1,95 @@
+---
+/**
+ * Feature 大卡（发丝浮框）：各展厅顶部精选一条展品的签名级展示。
+ * 替代原来的全幅取景框 ImmersiveFrame。选中条目由 site.config.featured[module] 决定
+ * （站长后台可改），见 lib/data.ts 的 pickFeatured。
+ * 有 href 时整卡可点（新标签），否则为静态展示。
+ */
+import ExhibitFrame from "./ExhibitFrame.astro";
+import Cover from "./Cover.astro";
+import { pickLang, type Locale } from "../../i18n";
+import type { NormalizedEntry } from "../../lib/data";
+
+interface Props {
+  locale: Locale;
+  entry: NormalizedEntry;
+  module: string;
+  moduleLabel: string;
+  label: string;
+  href?: string | null;
+  meta?: string | null;
+}
+const { locale, entry, module, moduleLabel, label, href, meta } = Astro.props;
+const title = pickLang(entry.title, locale).value;
+const summary = pickLang(entry.summary, locale).value;
+const no = `NO. ${String(entry.extra.no ?? 0).padStart(3, "0")}`;
+const Tag = href ? "a" : "div";
+const linkAttrs = href ? { href, target: "_blank", rel: "noopener noreferrer" } : {};
+---
+
+<section class="feature-wrap enter-rise is-in" aria-label={label}>
+  <ExhibitFrame variant="float" interactive>
+    <Tag class="feature-card" {...linkAttrs}>
+      <div class="feature-art">
+        <Cover id={entry.id} module={module} cover={entry.cover} w={560} h={320} />
+      </div>
+      <div class="feature-body">
+        <span class="meta-mono feature-tag">★ {label} · {no} · {moduleLabel}</span>
+        <h2 class="font-display feature-title">{title}</h2>
+        {summary && <p class="feature-summary text-muted">{summary}</p>}
+        {meta && <p class="meta-mono feature-meta">{meta}</p>}
+      </div>
+    </Tag>
+  </ExhibitFrame>
+</section>
+
+<style>
+  .feature-wrap {
+    margin-bottom: 3rem;
+  }
+  .feature-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    color: inherit;
+    text-decoration: none;
+  }
+  @media (min-width: 768px) {
+    .feature-card {
+      grid-template-columns: 5fr 4fr;
+    }
+  }
+  .feature-art {
+    min-height: 220px;
+    overflow: hidden;
+  }
+  .feature-art :global(.cover-art),
+  .feature-art :global(.cover-img) {
+    transition: transform 1.4s var(--ease-gallery);
+  }
+  .feature-card:hover .feature-art :global(.cover-art),
+  .feature-card:hover .feature-art :global(.cover-img) {
+    transform: scale(1.04);
+  }
+  .feature-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: clamp(1.4rem, 4vw, 2.2rem);
+  }
+  .feature-tag {
+    color: color-mix(in oklab, var(--brass) 55%, var(--text));
+  }
+  .feature-title {
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+    font-weight: 560;
+    line-height: 1.08;
+  }
+  .feature-summary {
+    line-height: 1.6;
+  }
+  .feature-meta {
+    margin-top: auto;
+    padding-top: 0.4rem;
+    color: color-mix(in oklab, var(--room) 50%, var(--muted));
+  }
+</style>

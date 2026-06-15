@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { LocalizedField } from "../i18n";
-import type { ModuleId } from "../config/site";
+import { siteConfig, type ModuleId } from "../config/site";
 
 // 构建打包后 import.meta.url 指向 chunk 而非源码目录——必须以项目根（process.cwd()）定位数据
 const DATA_DIR = path.resolve(process.cwd(), "src/data");
@@ -71,6 +71,20 @@ export function moduleData(module: ModuleId | string): ModuleData {
 
 export function entries(module: ModuleId | string): NormalizedEntry[] {
   return moduleData(module).entries;
+}
+
+/**
+ * 选出某模块 feature 卡要展示的条目：
+ * 优先 site.config.featured[module] 指定的 id（站长后台可改）；
+ * 缺省时回退 extra.featured 标记，再回退第一条（已按日期/置顶排序）。
+ */
+export function pickFeatured(module: ModuleId | string, list: NormalizedEntry[]): NormalizedEntry | null {
+  const id = siteConfig.featured?.[module];
+  if (id) {
+    const hit = list.find((e) => e.id === id);
+    if (hit) return hit;
+  }
+  return list.find((e) => e.extra.featured === true) ?? list[0] ?? null;
 }
 
 /** 展品编号格式化：NO. 047 */
