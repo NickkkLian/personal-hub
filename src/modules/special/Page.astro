@@ -10,6 +10,7 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import RoomBand from "../../components/gallery/RoomBand.astro";
 import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
@@ -52,25 +53,8 @@ const initials = (s: string) =>
       <p class="module-intro">{t(locale, "module.special.intro")}</p>
     </header>
 
-    {/* 装饰：黄铜火漆印章分隔条（替代原取景框） */}
-    <div class="bw-divider enter-rise is-in" aria-hidden="true">
-      <span class="bw-rule"></span>
-      <svg class="bw-seal" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="15.5" stroke="var(--brass)" stroke-width="1"></circle>
-        <circle
-          cx="24"
-          cy="24"
-          r="11.5"
-          stroke="var(--brass)"
-          stroke-width="0.6"
-          stroke-dasharray="0.5 2.4"
-          opacity="0.8"></circle>
-        <path
-          d="M24 16.6l1.9 4.2 4.6.4-3.5 3 1.1 4.5L24 30.2l-4.1 2.5 1.1-4.5-3.5-3 4.6-.4z"
-          fill="var(--brass)"></path>
-      </svg>
-      <span class="bw-rule"></span>
-    </div>
+    {/* 装饰：流场纹理横幅 + 中央黄铜火漆印章（替代原取景框，画风与各展厅封面统一） */}
+    <RoomBand module="special" seed="band-special" seal />
 
     <ul class="bw-grid" role="list">
       {
@@ -138,8 +122,8 @@ const initials = (s: string) =>
     margin-bottom: 1.2rem;
   }
   .module-title {
-    font-size: clamp(2.6rem, 7vw, 5rem);
-    line-height: 0.98;
+    font-size: clamp(2.1rem, 5vw, 3.6rem);
+    line-height: 1;
     font-weight: 590;
     margin-left: -0.04em;
   }
@@ -148,32 +132,6 @@ const initials = (s: string) =>
     max-width: 36rem;
     font-size: 1.05rem;
     color: var(--muted);
-  }
-
-  /* 火漆印章分隔条 */
-  .bw-divider {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    margin: clamp(2.4rem, 6vh, 4rem) 0 clamp(2rem, 5vh, 3rem);
-  }
-  .bw-rule {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(
-      to var(--rule-dir, right),
-      transparent,
-      color-mix(in oklab, var(--brass) 45%, transparent)
-    );
-  }
-  .bw-rule:last-child {
-    --rule-dir: left;
-  }
-  .bw-seal {
-    width: 46px;
-    height: 46px;
-    flex: 0 0 auto;
-    filter: drop-shadow(var(--shadow-plaque));
   }
 
   .bw-grid {
@@ -222,7 +180,7 @@ const initials = (s: string) =>
     display: grid;
     place-items: center;
     aspect-ratio: 1;
-    padding: clamp(1rem, 3vw, 1.7rem);
+    padding: clamp(0.7rem, 2.2vw, 1.2rem);
     background: var(--paint-canvas);
     border-radius: 1px;
     height: 100%;
@@ -230,8 +188,8 @@ const initials = (s: string) =>
   .bw-badge {
     width: auto;
     height: auto;
-    max-width: 82%;
-    max-height: 78%;
+    max-width: 100%;
+    max-height: 90%;
     filter: drop-shadow(1px 2px 4px rgba(28, 26, 23, 0.16));
     transition: transform var(--dur-move) var(--ease-gallery);
   }

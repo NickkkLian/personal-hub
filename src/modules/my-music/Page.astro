@@ -7,20 +7,18 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Cover from "../../components/gallery/Cover.astro";
-import FeatureCard from "../../components/gallery/FeatureCard.astro";
+import RoomBand from "../../components/gallery/RoomBand.astro";
 import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
-import { entries, pickFeatured } from "../../lib/data";
+import { entries } from "../../lib/data";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const meta = MODULE_REGISTRY["my-music"];
-const allTracks = entries("my-music");
-const featured = pickFeatured("my-music", allTracks);
-const tracks = allTracks.filter((e) => e !== featured);
+const tracks = entries("my-music");
 const title = t(locale, "module.my-music.title");
 ---
 
@@ -42,19 +40,7 @@ const title = t(locale, "module.my-music.title");
       <p class="module-intro">{t(locale, "module.my-music.intro")}</p>
     </header>
 
-    {
-      featured && (
-        <FeatureCard
-          locale={locale}
-          entry={featured}
-          module="my-music"
-          moduleLabel="MY MUSIC"
-          label={t(locale, "common.featured")}
-          href={featured.links[0]?.url ?? null}
-          meta={[featured.extra.year, featured.tags[0]].filter(Boolean).join(" · ")}
-        />
-      )
-    }
+    <RoomBand module="my-music" seed="band-my-music" />
 
     <hr class="hairline my-10" />
 
@@ -136,8 +122,8 @@ const title = t(locale, "module.my-music.title");
     margin-bottom: 1.2rem;
   }
   .module-title {
-    font-size: clamp(2.6rem, 7vw, 5rem);
-    line-height: 0.98;
+    font-size: clamp(2.1rem, 5vw, 3.6rem);
+    line-height: 1;
     font-weight: 590;
     margin-left: -0.04em;
   }
