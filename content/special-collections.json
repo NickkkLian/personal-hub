@@ -66,6 +66,20 @@
       ],
       "public": true,
       "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.png", "year": 2025 }
+    },
+    {
+      "id": "fudan-iss",
+      "title": { "en": "Fudan ISS — International Summer Session", "zh": "复旦 ISS — 国际暑期学堂" },
+      "summary": {
+        "en": "Fudan University International Summer Session.",
+        "zh": "复旦大学国际暑期学堂。"
+      },
+      "date": "2024-07-01",
+      "tags": ["Summer Program"],
+      "cover": null,
+      "links": [],
+      "public": true,
+      "extra": { "issuer": "Fudan University", "badge": "/badges/fudan.png", "year": 2024 }
     }
   ]
 }

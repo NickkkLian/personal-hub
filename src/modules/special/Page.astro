@@ -49,7 +49,12 @@ const initials = (s: string) =>
       <h1 class="module-title">{title}</h1>
     </header>
 
-    <RoomBand module="special" seed="band-special" caption={t(locale, "module.special.intro")} />
+    <RoomBand
+      module="special"
+      seed="band-special"
+      caption={t(locale, "module.special.intro")}
+      tint="var(--brass)"
+    />
 
     <ul class="bw-grid" role="list">
       {

@@ -1,8 +1,9 @@
 ---
 /**
- * 展厅装饰横幅：复用生成式流场纹理，但用 mix-blend 收进展厅主题色系（同色相、仅明度起伏），
- * 与普通封面区分；展厅副标题（首页大标题同款 Playfair，不斜不粗）压在左下角。
- * 高度较矮的一条横幅（占满宽度）。
+ * 展厅装饰横幅：流场纹理铭牌。多层叠加做出"漆面铜匾"般的厚度——
+ *   ① 流场纹理底  ② 主题色相染（mix-blend color）  ③ 胶片颗粒  ④ 暗角 + 斜向高光（景深/光泽）
+ *   ⑤ 左下暗角（题字可读）  ⑥ 首页大标题同款 Playfair 副标题（不斜不粗，左下角）
+ * tint 默认取展厅主题色（var(--room)）；Special Collections 传金色以呼应黄铜/Trésor 主题。
  */
 import Cover from "./Cover.astro";
 
@@ -10,15 +11,21 @@ interface Props {
   module: string;
   seed: string;
   caption?: string;
+  /** 色相覆盖（默认展厅房间色）；如 Special 传金色 */
+  tint?: string;
 }
-const { module, seed, caption } = Astro.props;
+const { module, seed, caption, tint = "var(--room)" } = Astro.props;
+const grain =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 ---
 
-<div class="room-band enter-rise is-in">
+<div class="room-band enter-rise is-in" style={`--band-tint:${tint}`}>
   <div class="room-band-art" aria-hidden="true">
     <Cover id={seed} module={module} w={1200} h={220} />
   </div>
   <div class="room-band-tint" aria-hidden="true"></div>
+  <div class="room-band-grain" aria-hidden="true" style={`background-image:${grain}`}></div>
+  <div class="room-band-depth" aria-hidden="true"></div>
   <div class="room-band-scrim" aria-hidden="true"></div>
   {caption && <p class="room-band-caption">{caption}</p>}
 </div>
@@ -29,9 +36,11 @@ const { module, seed, caption } = Astro.props;
     margin: clamp(1.6rem, 4vh, 2.6rem) 0;
     border-radius: var(--radius-frame);
     overflow: hidden;
-    box-shadow: var(--shadow-exhibit);
-    border: 0.5px solid color-mix(in oklab, var(--text) 9%, transparent);
-    background: var(--room);
+    background: var(--band-tint);
+    box-shadow:
+      var(--shadow-exhibit),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 0 0 0.5px color-mix(in oklab, var(--band-tint) 50%, transparent);
   }
   .room-band-art {
     height: clamp(82px, 11vh, 118px);
@@ -41,21 +50,48 @@ const { module, seed, caption } = Astro.props;
     height: 100%;
     width: 100%;
   }
-  /* 把流场纹理收进展厅主题色系：取主题色相 + 纹理明度 */
-  .room-band-tint {
-    position: absolute;
-    inset: 0;
-    background: var(--room);
-    mix-blend-mode: color;
-  }
-  /* 左下暗角：保证题字可读 */
+  .room-band-tint,
+  .room-band-grain,
+  .room-band-depth,
   .room-band-scrim {
     position: absolute;
     inset: 0;
+    pointer-events: none;
+  }
+  /* ② 收进主题色相（同色相、仅明度起伏） */
+  .room-band-tint {
+    background: var(--band-tint);
+    mix-blend-mode: color;
+  }
+  /* ③ 胶片颗粒：增加质感厚度 */
+  .room-band-grain {
+    background-size: 180px 180px;
+    mix-blend-mode: overlay;
+    opacity: 0.16;
+  }
+  /* ④ 暗角 + 斜向高光：漆面光泽与景深 */
+  .room-band-depth {
+    background:
+      radial-gradient(
+        130% 110% at 50% 36%,
+        transparent 42%,
+        color-mix(in oklab, var(--band-tint) 30%, rgba(8, 6, 4, 0.55)) 100%
+      ),
+      linear-gradient(
+        118deg,
+        rgba(255, 255, 255, 0.16) 0%,
+        rgba(255, 255, 255, 0.04) 24%,
+        transparent 46%,
+        transparent 72%,
+        rgba(255, 255, 255, 0.07) 100%
+      );
+  }
+  /* ⑤ 左下暗角：保证题字可读 */
+  .room-band-scrim {
     background: linear-gradient(
       to top right,
-      color-mix(in oklab, var(--room) 45%, rgba(14, 12, 10, 0.62)) 0%,
-      transparent 58%
+      color-mix(in oklab, var(--band-tint) 42%, rgba(12, 10, 8, 0.66)) 0%,
+      transparent 56%
     );
   }
   .room-band-caption {
@@ -63,13 +99,14 @@ const { module, seed, caption } = Astro.props;
     left: clamp(1rem, 3vw, 1.8rem);
     bottom: clamp(0.6rem, 1.8vw, 1rem);
     margin: 0;
+    z-index: 1;
     max-width: 72%;
     font-family: "Playfair Display Variable", Georgia, serif;
     font-weight: 400;
     font-style: normal;
     font-size: clamp(1rem, 1.9vw, 1.4rem);
     line-height: 1.2;
-    color: #f3eee5;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+    color: #f6efe2;
+    text-shadow: 0 1px 7px rgba(0, 0, 0, 0.5);
   }
 </style>
