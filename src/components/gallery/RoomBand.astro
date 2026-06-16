@@ -1,8 +1,8 @@
 ---
 /**
- * 展厅装饰横幅：复用生成式流场纹理（与封面同源），但叠一层展厅色调染 + 暗角，并把展厅副标题
- * 压在上面，做出与普通封面图的差异化——像一块"题字铭牌"而非又一张封面。
- * 宽度只占内容区约 2/3。
+ * 展厅装饰横幅：复用生成式流场纹理，但用 mix-blend 收进展厅主题色系（同色相、仅明度起伏），
+ * 与普通封面区分；展厅副标题（首页大标题同款 Playfair，不斜不粗）压在左下角。
+ * 高度较矮的一条横幅（占满宽度）。
  */
 import Cover from "./Cover.astro";
 
@@ -16,57 +16,60 @@ const { module, seed, caption } = Astro.props;
 
 <div class="room-band enter-rise is-in">
   <div class="room-band-art" aria-hidden="true">
-    <Cover id={seed} module={module} w={1200} h={300} />
+    <Cover id={seed} module={module} w={1200} h={220} />
   </div>
-  <div class="room-band-scrim">
-    {caption && <p class="room-band-caption font-display">{caption}</p>}
-  </div>
+  <div class="room-band-tint" aria-hidden="true"></div>
+  <div class="room-band-scrim" aria-hidden="true"></div>
+  {caption && <p class="room-band-caption">{caption}</p>}
 </div>
 
 <style>
   .room-band {
     position: relative;
-    max-width: 66%;
-    margin: clamp(2rem, 5vh, 3.2rem) 0;
+    margin: clamp(1.6rem, 4vh, 2.6rem) 0;
     border-radius: var(--radius-frame);
     overflow: hidden;
     box-shadow: var(--shadow-exhibit);
     border: 0.5px solid color-mix(in oklab, var(--text) 9%, transparent);
-  }
-  @media (max-width: 760px) {
-    .room-band {
-      max-width: 100%;
-    }
+    background: var(--room);
   }
   .room-band-art {
-    height: clamp(120px, 17vh, 175px);
+    height: clamp(82px, 11vh, 118px);
   }
   .room-band-art :global(.cover-art),
   .room-band-art :global(svg) {
     height: 100%;
     width: 100%;
   }
-  /* 展厅色调染 + 左侧暗角（与普通封面区分；并保证题字可读） */
+  /* 把流场纹理收进展厅主题色系：取主题色相 + 纹理明度 */
+  .room-band-tint {
+    position: absolute;
+    inset: 0;
+    background: var(--room);
+    mix-blend-mode: color;
+  }
+  /* 左下暗角：保证题字可读 */
   .room-band-scrim {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    padding: clamp(1.2rem, 3.5vw, 2.2rem);
     background: linear-gradient(
-      100deg,
-      color-mix(in oklab, var(--room) 58%, rgba(18, 16, 13, 0.55)) 0%,
-      color-mix(in oklab, var(--room) 24%, transparent) 52%,
-      transparent 92%
+      to top right,
+      color-mix(in oklab, var(--room) 45%, rgba(14, 12, 10, 0.62)) 0%,
+      transparent 58%
     );
   }
   .room-band-caption {
-    font-style: italic;
-    font-weight: 460;
-    font-size: clamp(1.05rem, 2vw, 1.5rem);
-    line-height: 1.25;
-    max-width: 62%;
+    position: absolute;
+    left: clamp(1rem, 3vw, 1.8rem);
+    bottom: clamp(0.6rem, 1.8vw, 1rem);
+    margin: 0;
+    max-width: 72%;
+    font-family: "Playfair Display Variable", Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(1rem, 1.9vw, 1.4rem);
+    line-height: 1.2;
     color: #f3eee5;
-    text-wrap: balance;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   }
 </style>

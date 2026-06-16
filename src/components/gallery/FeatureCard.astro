@@ -14,12 +14,11 @@ interface Props {
   locale: Locale;
   entry: NormalizedEntry;
   module: string;
-  moduleLabel: string;
   label: string;
   href?: string | null;
   meta?: string | null;
 }
-const { locale, entry, module, moduleLabel, label, href, meta } = Astro.props;
+const { locale, entry, module, label, href, meta } = Astro.props;
 const title = pickLang(entry.title, locale).value;
 const summary = pickLang(entry.summary, locale).value;
 const no = `NO. ${String(entry.extra.no ?? 0).padStart(3, "0")}`;
@@ -34,7 +33,7 @@ const linkAttrs = href ? { href, target: "_blank", rel: "noopener noreferrer" } 
         <Cover id={entry.id} module={module} cover={entry.cover} w={560} h={320} />
       </div>
       <div class="feature-body">
-        <span class="meta-mono feature-tag">★ {label} · {no} · {moduleLabel}</span>
+        <span class="meta-mono feature-tag">★ {label} · {no}</span>
         <h2 class="font-display feature-title">{title}</h2>
         {summary && <p class="feature-summary text-muted">{summary}</p>}
         {meta && <p class="meta-mono feature-meta">{meta}</p>}
@@ -59,7 +58,7 @@ const linkAttrs = href ? { href, target: "_blank", rel: "noopener noreferrer" } 
     }
   }
   .feature-art {
-    min-height: 112px;
+    min-height: 84px;
     overflow: hidden;
   }
   .feature-art :global(.cover-art),

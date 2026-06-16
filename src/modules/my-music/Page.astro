@@ -138,14 +138,18 @@ const title = t(locale, "module.my-music.title");
     flex-direction: column;
     gap: 1.1rem;
   }
+  /* 舞台比封套宽：封套是左侧方形小图，右侧留白给黑胶滑出 */
   .record-stage {
     position: relative;
-    width: min(100%, 340px);
-    aspect-ratio: 1;
+    width: min(100%, 360px);
+    aspect-ratio: 1.42;
   }
   .sleeve {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: 1;
     overflow: hidden;
     border: 0.5px solid color-mix(in oklab, var(--text) 10%, transparent);
     border-radius: 2px;
@@ -153,22 +157,22 @@ const title = t(locale, "module.my-music.title");
     background: var(--surface);
     z-index: 2;
   }
-  /* 黑胶探出封套一截；hover/播放时滑出更多 */
+  /* 黑胶从封套右侧探出；hover/播放时滑出更多 */
   .vinyl {
     position: absolute;
-    top: 4%;
-    right: -8%;
-    width: 90%;
+    top: 6%;
+    left: 36%;
+    height: 88%;
     aspect-ratio: 1;
     border-radius: 50%;
     background: radial-gradient(circle, #181512 30%, #221e1a 31%, #181512 60%, #25201b 61%, #181512 100%);
     box-shadow: var(--shadow-exhibit);
     z-index: 1;
-    transition: right var(--dur-move) var(--ease-gallery);
+    transition: left var(--dur-move) var(--ease-gallery);
   }
   .record:hover .vinyl,
   .record.is-playing .vinyl {
-    right: -15%;
+    left: 46%;
   }
   .vinyl-grooves {
     position: absolute;
