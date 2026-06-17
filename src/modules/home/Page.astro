@@ -92,7 +92,7 @@ const totalOpen = rooms.length;
                 {m.coverEntry ? (
                   <Cover id={m.coverEntry.id} module={m.id} cover={m.coverEntry.cover} w={420} h={340} />
                 ) : (
-                  <div class="rc-blank" />
+                  <Cover id={`room-${m.id}`} module={m.id} w={420} h={340} />
                 )}
                 <span class="card-sweep" aria-hidden="true" />
               </div>
@@ -159,7 +159,7 @@ const totalOpen = rooms.length;
   .hero-name {
     font-family: "Playfair Display Variable", Georgia, serif;
     font-variation-settings: normal;
-    font-size: clamp(2.6rem, 7vw, 4.8rem);
+    font-size: clamp(3.5rem, 9.5vw, 6.5rem);
     line-height: 0.9;
     font-weight: 680;
     letter-spacing: -0.005em;
@@ -178,8 +178,8 @@ const totalOpen = rooms.length;
     margin-top: 0.9rem;
     max-width: 30rem;
     font-size: clamp(1.1rem, 2vw, 1.45rem);
-    font-style: italic;
-    font-weight: 440;
+    font-style: normal;
+    font-weight: 400;
     color: var(--muted);
     text-wrap: balance;
   }
@@ -210,7 +210,7 @@ const totalOpen = rooms.length;
   .featured {
     position: relative;
     z-index: 1;
-    width: min(100%, 255px);
+    width: min(100%, 344px);
     margin: 0;
   }
   .featured-art {
@@ -234,7 +234,12 @@ const totalOpen = rooms.length;
     gap: 0.5rem;
   }
   .rooms-head h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+    line-height: 0.95;
+  }
+  .rooms-head p {
+    font-size: 0.6rem;
+    line-height: 1.05;
   }
   .rooms-grid {
     display: grid;

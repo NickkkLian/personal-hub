@@ -6,11 +6,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
 import RoomBand from "../../components/gallery/RoomBand.astro";
-import Cover from "../../components/gallery/Cover.astro";
+import FeatureCard from "../../components/gallery/FeatureCard.astro";
 import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
 import { t, pickLang, type Locale } from "../../i18n";
 import { MODULE_REGISTRY } from "../../config/site";
-import { entries, exhibitNo, pickFeatured } from "../../lib/data";
+import { entries, pickFeatured } from "../../lib/data";
 
 interface Props {
   locale: Locale;
@@ -58,26 +58,20 @@ const title = t(locale, "module.projects.title");
 
     {
       featured && (
-        <section class="enter-rise is-in mb-12" aria-label={t(locale, "projects.featured")}>
-          <ExhibitFrame variant="float" interactive>
-            <a href={featured.links[0]?.url} target="_blank" rel="noopener" class="featured-card">
-              <div class="featured-art">
-                <Cover id={featured.id} module="projects" cover={featured.cover} w={560} h={300} />
-              </div>
-              <div class="flex flex-col gap-3 p-6 sm:p-8">
-                <span class="meta-mono" style="color: color-mix(in oklab, var(--brass) 55%, var(--text))">
-                  ★ {t(locale, "projects.featured")} · {exhibitNo(featured)}
-                </span>
-                <h2 class="font-display text-3xl">{pickLang(featured.title, locale).value}</h2>
-                <p class="leading-relaxed text-muted">{pickLang(featured.summary, locale).value}</p>
-                <p class="meta-mono mt-auto pt-2">
-                  {featured.extra.language}
-                  {featured.extra.stars ? ` · ★ ${featured.extra.stars}` : ""} · GITHUB →
-                </p>
-              </div>
-            </a>
-          </ExhibitFrame>
-        </section>
+        <FeatureCard
+          locale={locale}
+          entry={featured}
+          module="projects"
+          label={t(locale, "projects.featured")}
+          href={featured.links[0]?.url ?? null}
+          meta={[
+            featured.extra.language,
+            featured.extra.stars ? `★ ${featured.extra.stars}` : null,
+            "GITHUB ↗",
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        />
       )
     }
 
@@ -151,22 +145,6 @@ const title = t(locale, "module.projects.title");
     max-width: 36rem;
     font-size: 1.05rem;
     color: var(--muted);
-  }
-
-  .featured-card {
-    display: grid;
-    color: inherit;
-    text-decoration: none;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 768px) {
-    .featured-card {
-      grid-template-columns: 5fr 4fr;
-    }
-  }
-  .featured-art {
-    min-height: 220px;
-    overflow: hidden;
   }
 
   .chip {
