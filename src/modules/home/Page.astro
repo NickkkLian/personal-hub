@@ -243,17 +243,55 @@ const totalOpen = rooms.length;
   }
   .rooms-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(1rem, 2.5vw, 2rem);
-  }
-  @media (min-width: 520px) {
-    .rooms-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.7rem, 2.5vw, 2rem);
   }
   @media (min-width: 760px) {
     .rooms-grid {
       grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* 手机端密度优化：缩小标题/featured、压缩间距、房间卡精简（隐藏简介、缩短封面） */
+  @media (max-width: 540px) {
+    .hero-name {
+      font-size: 2.5rem;
+    }
+    .hn-2 {
+      margin-left: 1rem;
+    }
+    .featured {
+      width: min(46%, 158px);
+    }
+    .hero-grid {
+      padding-top: 0.5rem;
+      padding-bottom: 0.6rem;
+      gap: 1rem;
+    }
+    .hero-tagline {
+      margin-top: 0.6rem;
+      font-size: 1.05rem;
+    }
+    .rooms-line {
+      margin-top: 0.7rem;
+    }
+    .rooms {
+      margin-top: 1rem;
+    }
+    .rooms-head h2 {
+      font-size: 1.35rem;
+    }
+    .rc-art {
+      aspect-ratio: 4 / 3;
+    }
+    .rc-intro {
+      display: none;
+    }
+    .rc-title {
+      font-size: 1.02rem;
+    }
+    .rc-label {
+      gap: 0.2rem;
     }
   }
 

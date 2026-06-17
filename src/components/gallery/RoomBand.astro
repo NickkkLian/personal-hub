@@ -45,6 +45,14 @@ const grain =
   .room-band-art {
     height: clamp(82px, 11vh, 118px);
   }
+  @media (max-width: 540px) {
+    .room-band {
+      margin: 1rem 0;
+    }
+    .room-band-art {
+      height: 76px;
+    }
+  }
   .room-band-art :global(.cover-art),
   .room-band-art :global(svg) {
     height: 100%;

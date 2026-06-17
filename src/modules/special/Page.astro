@@ -124,13 +124,8 @@ const initials = (s: string) =>
 
   .bw-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(1.4rem, 2.6vw, 2.2rem) clamp(1rem, 2vw, 1.6rem);
-  }
-  @media (min-width: 480px) {
-    .bw-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2.6vw, 2.2rem) clamp(0.7rem, 2vw, 1.6rem);
   }
   @media (min-width: 720px) {
     .bw-grid {
