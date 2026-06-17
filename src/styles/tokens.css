@@ -61,7 +61,7 @@
   /* ---------- 字体 ---------- */
   --font-display: "Fraunces Variable", "Noto Serif SC", serif;
   --font-body: "Inter Variable", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --font-mono: "Manrope Variable", system-ui, sans-serif;
 
   /* ---------- 动效（入场 ≤600ms，统一缓动） ---------- */
   --ease-gallery: cubic-bezier(0.22, 0.61, 0.21, 1);

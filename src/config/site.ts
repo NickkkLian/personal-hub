@@ -73,18 +73,20 @@ export const FONT_FAMILIES: { display: Record<string, string>; mono: Record<stri
     playfair: '"Playfair Display Variable"',
     cormorant: '"Cormorant Variable"',
   },
+  // "mono" 槽位现作「小字标签字体」——含等宽与精致无衬线两类，值自带兜底栈
   mono: {
-    "space-mono": '"Space Mono"',
-    "ibm-plex-mono": '"IBM Plex Mono"',
+    manrope: '"Manrope Variable", system-ui, sans-serif',
+    "space-mono": '"Space Mono", monospace',
+    "ibm-plex-mono": '"IBM Plex Mono", monospace',
   },
 };
 
 /** 解析当前选定字体的 CSS 栈（含中文与兜底） */
 export function fontStacks() {
   const d = siteConfig.fonts?.display ?? "fraunces";
-  const m = siteConfig.fonts?.mono ?? "space-mono";
+  const m = siteConfig.fonts?.mono ?? "manrope";
   const display = `${FONT_FAMILIES.display[d] ?? FONT_FAMILIES.display.fraunces}, "Noto Serif SC", serif`;
-  const mono = `${FONT_FAMILIES.mono[m] ?? FONT_FAMILIES.mono["space-mono"]}, monospace`;
+  const mono = FONT_FAMILIES.mono[m] ?? FONT_FAMILIES.mono.manrope;
   return { display, mono };
 }
 

@@ -22,9 +22,9 @@
     "umamiWebsiteId": ""
   },
   "fonts": {
-    "$comment": "标题字 display ∈ fraunces|playfair|cormorant；等宽字 mono ∈ space-mono|ibm-plex-mono。正文固定 Inter。改完重新部署即生效。",
+    "$comment": "标题字 display ∈ fraunces|playfair|cormorant；小字标签 mono ∈ manrope|space-mono|ibm-plex-mono。正文固定 Inter。改完重新部署即生效。",
     "display": "fraunces",
-    "mono": "space-mono"
+    "mono": "manrope"
   },
   "featured": {
     "$comment": "各展厅 feature 大卡选中的条目 id（留空 = 自动选置顶/最新一条）。projects 也可在 projects-overrides.json 里给某项加 featured:true。",
