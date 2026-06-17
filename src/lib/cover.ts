@@ -15,7 +15,7 @@ const ROOM_BASE: Record<string, string> = {
   menu: "#c9a227",
   mystery: "#8c7156",
   social: "#8b7e94",
-  about: "#b08d57",
+  about: "#c08d7c",
 };
 /** 邻近颜料（同一低饱和体系），作为辅调点缀 */
 const NEIGHBORS: Record<string, string> = {
@@ -28,7 +28,7 @@ const NEIGHBORS: Record<string, string> = {
   menu: "#c08d7c",
   mystery: "#b08d57",
   social: "#7e93a8",
-  about: "#c9a227",
+  about: "#8c7156",
 };
 
 /** mulberry32：小而稳定的种子 PRNG */

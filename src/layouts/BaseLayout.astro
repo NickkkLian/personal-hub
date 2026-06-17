@@ -128,7 +128,10 @@ const jsonLd = [
     <a href="#main" class="skip-link meta-mono">{t(locale, "a11y.skipToContent")}</a>
     <Backdrop room={room} ghost={ghost} />
     <Nav locale={locale} />
-    <main id="main" class="relative z-10 mx-auto w-full max-w-6xl px-5 pt-24 pb-20 sm:px-8">
+    <main
+      id="main"
+      class="relative z-10 mx-auto w-full max-w-6xl px-5 pt-[4.75rem] pb-12 sm:px-8 sm:pt-24 sm:pb-20"
+    >
       <slot />
     </main>
     <Footer locale={locale} />
