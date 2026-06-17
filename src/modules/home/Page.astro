@@ -243,8 +243,13 @@ const totalOpen = rooms.length;
   }
   .rooms-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: clamp(1rem, 2.5vw, 2rem);
+  }
+  @media (min-width: 520px) {
+    .rooms-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   @media (min-width: 760px) {
     .rooms-grid {
