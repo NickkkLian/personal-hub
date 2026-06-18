@@ -19,12 +19,12 @@
     "projects": {
       "title": "Projects",
       "ghost": "ATELIER",
-      "intro": "Open-source experiments, tools and studies."
+      "intro": "Think like a programmer"
     },
     "writing": {
       "title": "Writing",
       "ghost": "BIBLIOTHÈQUE",
-      "intro": "Essays, ideas and fragments of thought."
+      "intro": "Fragments of thought"
     },
     "music-wall": {
       "title": "Album Wall",
@@ -34,7 +34,7 @@
     "my-music": {
       "title": "My Music",
       "ghost": "STUDIO",
-      "intro": "Original works from the studio."
+      "intro": "Got a feeling"
     },
     "knowledge": {
       "title": "Knowledge",
@@ -64,12 +64,12 @@
     "special": {
       "title": "Special Collections",
       "ghost": "TRÉSOR",
-      "intro": "Badges, certificates and credentials — earned, and verifiable."
+      "intro": "Badges, certificates and credentials"
     },
     "about": {
       "title": "About",
       "ghost": "PORTRAIT",
-      "intro": "Who I am, and how to reach me."
+      "intro": "Who I am, and how to reach me"
     }
   },
   "home": {
@@ -77,13 +77,13 @@
     "heroKicker": "Personal Hub",
     "enter": "Enter",
     "hallTitle": "The Rooms",
-    "hallSubtitle": "Each room holds one domain. More rooms open over time.",
+    "hallSubtitle": "Welcome to the rooms",
     "roomLabel": "Room",
     "galerie": "GALERIE VIVANTE — PERSONAL HUB",
     "est": "EST. 2026",
     "entranceNo": "NO. 001",
     "entrance": "ENTRANCE HALL",
-    "featuredArt": "FEATURED · ON THE WALL",
+    "featuredArt": "FEATURED",
     "collection": "Today in the collection",
     "visitRooms": "Visit rooms",
     "open": "open"
