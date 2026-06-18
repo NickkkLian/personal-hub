@@ -392,7 +392,8 @@
         for (const [k, v] of Object.entries(obj)) {
           if (k.startsWith("$")) continue;
           const p = prefix ? `${prefix}.${k}` : k;
-          if (v && typeof v === "object" && !Array.isArray(v)) out = out.concat(leaves(v, p));
+          if (Array.isArray(v)) continue; // 数组（socials/timeline）此处不可编辑——跳过以免被序列化成 [object Object] 破坏构建
+          if (v && typeof v === "object") out = out.concat(leaves(v, p));
           else out.push({ path: p, value: v });
         }
         return out;

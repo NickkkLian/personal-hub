@@ -12,7 +12,7 @@
       "zh": "HELLO WORLD"
     },
     "email": "nicklian0315@gmail.com",
-    "socials": "[object Object]",
+    "socials": [{ "label": "GitHub", "url": "https://github.com/NickkkLian" }],
     "web3formsKey": "",
     "umamiWebsiteId": ""
   },
@@ -32,7 +32,15 @@
       "en": "Hiiiiiiiii",
       "zh": "Hiiiiiiii"
     },
-    "timeline": "[object Object],[object Object],[object Object]"
+    "timeline": [
+      {
+        "year": "2026",
+        "en": "Built the Personal Hub gallery and ten companion databases.",
+        "zh": "建成 Personal Hub 画廊与十个伴生数据库。"
+      },
+      { "year": "2025", "en": "Placeholder milestone — edit me.", "zh": "占位里程碑——请修改。" },
+      { "year": "2024", "en": "Placeholder milestone — edit me.", "zh": "占位里程碑——请修改。" }
+    ]
   },
   "modules": {
     "projects": {
