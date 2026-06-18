@@ -19,12 +19,12 @@
     "projects": {
       "title": "开源项目",
       "ghost": "ATELIER",
-      "intro": "开源实验、工具与研究。"
+      "intro": "像程序员一样思考"
     },
     "writing": {
       "title": "文字",
       "ghost": "BIBLIOTHÈQUE",
-      "intro": "文章、观点与思想的碎片。"
+      "intro": "思考碎片"
     },
     "music-wall": {
       "title": "专辑墙",
@@ -34,7 +34,7 @@
     "my-music": {
       "title": "原创音乐",
       "ghost": "STUDIO",
-      "intro": "来自录音室的原创作品。"
+      "intro": "来灵感了"
     },
     "knowledge": {
       "title": "知识图谱",
@@ -64,12 +64,12 @@
     "special": {
       "title": "特别馆藏",
       "ghost": "TRÉSOR",
-      "intro": "徽章、证书与资质——已获得，可验证。"
+      "intro": "徽章、证书与资质"
     },
     "about": {
       "title": "关于",
       "ghost": "PORTRAIT",
-      "intro": "我是谁，以及如何联系我。"
+      "intro": "我是谁？如何联系我？"
     }
   },
   "home": {
@@ -77,13 +77,13 @@
     "heroKicker": "个人主页",
     "enter": "进入",
     "hallTitle": "展厅",
-    "hallSubtitle": "每间展厅陈列一个领域，更多展厅将陆续开放。",
+    "hallSubtitle": "欢迎进入我的展厅",
     "roomLabel": "展厅",
-    "galerie": "GALERIE VIVANTE — 个人美术馆",
+    "galerie": "GALERIE VIVANTE — 个人展览馆",
     "est": "EST. 2026",
     "entranceNo": "NO. 001",
     "entrance": "门厅",
-    "featuredArt": "精选 · 上墙之作",
+    "featuredArt": "精选",
     "collection": "今日馆藏",
     "visitRooms": "参观展厅",
     "open": "间开放"
