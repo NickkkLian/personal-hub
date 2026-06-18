@@ -3,28 +3,42 @@
   "items": [
     {
       "id": "ubc-bcom",
-      "title": { "en": "UBC B.Com. — Finance & Business Analytics", "zh": "UBC 商学学士 — 金融与商业分析" },
+      "title": {
+        "en": "UBC B.Com. — Finance & Business Analytics",
+        "zh": "UBC 商学学士 — 金融与商业分析"
+      },
       "summary": {
         "en": "Bachelor of Commerce — Finance option, Business Analytics concentration.",
         "zh": "商学学士——金融方向，商业分析专长。"
       },
       "date": "2026-05-01",
-      "tags": ["Degree", "Finance", "Business Analytics"],
-      "cover": null,
+      "tags": [
+        "Degree",
+        "Finance",
+        "Business Analytics"
+      ],
       "links": [],
       "public": true,
-      "extra": { "issuer": "University of British Columbia", "badge": "/badges/ubc.png", "year": 2026 }
+      "extra": {
+        "issuer": "University of British Columbia",
+        "badge": "/badges/ubc.png",
+        "year": 2026
+      }
     },
     {
       "id": "cfa-level-1",
-      "title": { "en": "CFA Program — Level I", "zh": "CFA 一级" },
+      "title": {
+        "en": "CFA Program — Level I",
+        "zh": "CFA 一级"
+      },
       "summary": {
         "en": "Chartered Financial Analyst Program, Level I — passed (exam Feb 2026, result Mar 2026).",
         "zh": "特许金融分析师项目一级——已通过（2026 年 2 月考试，3 月出分）。"
       },
       "date": "2026-03-01",
-      "tags": ["Finance"],
-      "cover": null,
+      "tags": [
+        "Finance"
+      ],
       "links": [
         {
           "label": "Verify",
@@ -32,21 +46,34 @@
         }
       ],
       "public": true,
-      "extra": { "issuer": "CFA Institute", "badge": "/badges/cfa.png", "year": 2026 }
+      "extra": {
+        "issuer": "CFA Institute",
+        "badge": "/badges/cfa.png",
+        "year": 2026
+      }
     },
     {
       "id": "ielts",
-      "title": { "en": "IELTS 8.0", "zh": "雅思 8.0" },
+      "title": {
+        "en": "IELTS 8.0",
+        "zh": "雅思 8.0"
+      },
       "summary": {
         "en": "Overall Band 8.0 (March 2026).",
         "zh": "总分 8.0（2026 年 3 月）。"
       },
       "date": "2026-03-01",
-      "tags": ["Language", "Band 8.0"],
-      "cover": null,
+      "tags": [
+        "Language",
+        "Band 8.0"
+      ],
       "links": [],
       "public": true,
-      "extra": { "issuer": "IELTS", "badge": "/badges/ielts.png", "year": 2026 }
+      "extra": {
+        "issuer": "IELTS",
+        "badge": "/badges/ielts.png",
+        "year": 2026
+      }
     },
     {
       "id": "mit-intro-cs-python",
@@ -59,27 +86,44 @@
         "zh": "MITx 6.00.1x——认证证书。"
       },
       "date": "2025-03-01",
-      "tags": ["Computer Science", "Course"],
-      "cover": null,
+      "tags": [
+        "Computer Science",
+        "Course"
+      ],
       "links": [
-        { "label": "Verify", "url": "https://courses.edx.org/certificates/2904fb12552947a1b346a56f81476b2a" }
+        {
+          "label": "Verify",
+          "url": "https://courses.edx.org/certificates/2904fb12552947a1b346a56f81476b2a"
+        }
       ],
       "public": true,
-      "extra": { "issuer": "MITx · edX", "badge": "/badges/mit.png", "year": 2025 }
+      "extra": {
+        "issuer": "MITx · edX",
+        "badge": "/badges/mit.png",
+        "year": 2025
+      }
     },
     {
       "id": "fudan-iss",
-      "title": { "en": "Fudan ISS — International Summer Session", "zh": "复旦 ISS — 国际暑期学堂" },
+      "title": {
+        "en": "Fudan ISS — International Summer Session",
+        "zh": "复旦 ISS — 国际暑期学堂"
+      },
       "summary": {
         "en": "Fudan University International Summer Session.",
         "zh": "复旦大学国际暑期学堂。"
       },
       "date": "2024-07-01",
-      "tags": ["Summer Program"],
-      "cover": null,
+      "tags": [
+        "Summer Program"
+      ],
       "links": [],
       "public": true,
-      "extra": { "issuer": "Fudan University", "badge": "/badges/fudan.png", "year": 2024 }
+      "extra": {
+        "issuer": "Fudan University",
+        "badge": "/badges/fudan.png",
+        "year": 2024
+      }
     }
   ]
 }
