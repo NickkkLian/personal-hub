@@ -12,12 +12,7 @@
       "zh": "HELLO WORLD"
     },
     "email": "nicklian0315@gmail.com",
-    "socials": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/NickkkLian"
-      }
-    ],
+    "socials": "[object Object]",
     "web3formsKey": "",
     "umamiWebsiteId": ""
   },
@@ -34,26 +29,10 @@
   },
   "about": {
     "bio": {
-      "en": "I build small, sharp tools for my own life — trackers, atlases, archives — and this gallery is where their public faces hang. (Placeholder bio: edit me in site.config.json)",
-      "zh": "我为自己的生活打造一些小而锋利的工具——追踪器、图谱、档案柜——这座画廊陈列它们的公开面孔。（占位简介：请在 site.config.json 中修改）"
+      "en": "Hiiiiiiiii",
+      "zh": "Hiiiiiiii"
     },
-    "timeline": [
-      {
-        "year": "2026",
-        "en": "Built the Personal Hub gallery and ten companion databases.",
-        "zh": "建成 Personal Hub 画廊与十个伴生数据库。"
-      },
-      {
-        "year": "2025",
-        "en": "Placeholder milestone — edit me.",
-        "zh": "占位里程碑——请修改。"
-      },
-      {
-        "year": "2024",
-        "en": "Placeholder milestone — edit me.",
-        "zh": "占位里程碑——请修改。"
-      }
-    ]
+    "timeline": "[object Object],[object Object],[object Object]"
   },
   "modules": {
     "projects": {
