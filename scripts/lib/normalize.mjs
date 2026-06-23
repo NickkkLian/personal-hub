@@ -95,7 +95,9 @@ export function normalizeEntry(candidate, module) {
     date: asDate(candidate.date),
     tags: asTags(candidate.tags),
     cover:
-      typeof candidate.cover === "string" && /^https?:\/\//.test(candidate.cover) ? candidate.cover : null,
+      typeof candidate.cover === "string" && /^(https?:\/\/|\/)/.test(candidate.cover)
+        ? candidate.cover
+        : null,
     links: asLinks(candidate.links),
     extra: pickExtra(candidate.extra),
   };

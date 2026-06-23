@@ -11,7 +11,12 @@ node_modules/
 
 # sync script output (generated, P1+)
 src/data/*.normalized.json
-public/covers/
+
+# 误放在本仓库目录内的其它项目/私有数据目录——绝不入库（personal-hub 是公开仓库）
+/Database/
+/PIP/
+/hub-apps/
+/personal-hub-admin/
 
 # os / editor
 .DS_Store

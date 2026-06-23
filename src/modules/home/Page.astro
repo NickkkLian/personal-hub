@@ -60,11 +60,18 @@ const totalOpen = rooms.length;
       <figure class="featured">
         <ExhibitFrame variant="float">
           <div class="featured-art">
-            <Cover id="entrance-featured-000" module="music-wall" w={460} h={560} />
+            <Cover
+              id="entrance-featured-000"
+              module="my-music"
+              cover="/covers/my-music-cover.jpg"
+              alt={t(locale, "home.featuredName")}
+              w={520}
+              h={520}
+            />
           </div>
         </ExhibitFrame>
         <figcaption class="meta-mono featured-cap">
-          NO. 000 · {t(locale, "home.featuredArt")}
+          NO. 000 · {t(locale, "home.featuredName")}
         </figcaption>
       </figure>
     </div>
@@ -214,7 +221,7 @@ const totalOpen = rooms.length;
     margin: 0;
   }
   .featured-art {
-    aspect-ratio: 23 / 25;
+    aspect-ratio: 1;
     overflow: hidden;
   }
   .featured-cap {
