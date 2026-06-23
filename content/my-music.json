@@ -3,7 +3,7 @@
   "items": [
     {
       "id": "ncm-fanhua",
-      "title": { "en": "Blooming Flowers", "zh": "繁花" },
+      "title": { "en": "Blooming\nFlowers", "zh": "繁花" },
       "summary": { "en": null, "zh": null },
       "date": null,
       "tags": [],
@@ -14,7 +14,7 @@
     },
     {
       "id": "ncm-dengguang-ximie",
-      "title": { "en": "When the Lights Go Out", "zh": "当灯光熄灭时" },
+      "title": { "en": "When the Lights\nGo Out", "zh": "当灯光熄灭时" },
       "summary": { "en": null, "zh": null },
       "date": null,
       "tags": [],
@@ -25,7 +25,7 @@
     },
     {
       "id": "ncm-xiari-chongxian",
-      "title": { "en": "Summer Once More", "zh": "夏日重现" },
+      "title": { "en": "Summer\nOnce More", "zh": "夏日重现" },
       "summary": { "en": null, "zh": null },
       "date": null,
       "tags": [],
@@ -36,7 +36,7 @@
     },
     {
       "id": "ncm-paomo-tianshi",
-      "title": { "en": "Angels in Bubbles", "zh": "泡沫天使" },
+      "title": { "en": "Angels in\nBubbles", "zh": "泡沫天使" },
       "summary": { "en": null, "zh": null },
       "date": null,
       "tags": [],

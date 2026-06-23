@@ -96,11 +96,8 @@ const totalOpen = rooms.length;
               style={`--room: var(${m.room})`}
             >
               <div class="rc-art">
-                {m.coverEntry ? (
-                  <Cover id={m.coverEntry.id} module={m.id} cover={m.coverEntry.cover} w={420} h={340} />
-                ) : (
-                  <Cover id={`room-${m.id}`} module={m.id} w={420} h={340} />
-                )}
+                {/* 房间卡固定用生成式封面（不取条目真实封面，如 My Music 专辑图） */}
+                <Cover id={m.coverEntry?.id ?? `room-${m.id}`} module={m.id} w={420} h={340} />
                 <span class="card-sweep" aria-hidden="true" />
               </div>
               <div class="rc-label">

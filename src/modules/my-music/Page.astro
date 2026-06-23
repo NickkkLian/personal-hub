@@ -70,7 +70,7 @@ const title = t(locale, "module.my-music.title");
                     year={e.date?.slice(0, 4)}
                     medium={e.tags[0]}
                   />
-                  <h2 class="font-display text-2xl">{pickLang(e.title, locale).value}</h2>
+                  <h2 class="track-title font-display text-2xl">{pickLang(e.title, locale).value}</h2>
                   <p class="text-sm leading-relaxed text-muted">{pickLang(e.summary, locale).value}</p>
 
                   <div class="record-actions">
@@ -207,6 +207,11 @@ const title = t(locale, "module.my-music.title");
     flex-direction: column;
     gap: 0.6rem;
     max-width: 30rem;
+  }
+  /* 标题按数据里的换行符断行（英文歌名的合适位置换行） */
+  .track-title {
+    white-space: pre-line;
+    line-height: 1.1;
   }
   .record-actions {
     display: flex;
