@@ -69,7 +69,7 @@
       "nav": true
     },
     "music-wall": {
-      "enabled": true,
+      "enabled": false,
       "nav": false
     },
     "my-music": {
