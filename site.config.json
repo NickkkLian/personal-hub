@@ -13,8 +13,14 @@
     },
     "email": "nicklian0315@gmail.com",
     "socials": [
-      { "label": "GitHub", "url": "https://github.com/NickkkLian" },
-      { "label": "网易云音乐", "url": "https://music.163.com/user/home?id=1377691645" }
+      {
+        "label": "GitHub",
+        "url": "https://github.com/NickkkLian"
+      },
+      {
+        "label": "网易云音乐",
+        "url": "https://music.163.com/user/home?id=1377691645"
+      }
     ],
     "web3formsKey": "",
     "umamiWebsiteId": ""
@@ -41,8 +47,16 @@
         "en": "Built the Personal Hub gallery and ten companion databases.",
         "zh": "建成 Personal Hub 画廊与十个伴生数据库。"
       },
-      { "year": "2025", "en": "Placeholder milestone — edit me.", "zh": "占位里程碑——请修改。" },
-      { "year": "2024", "en": "Placeholder milestone — edit me.", "zh": "占位里程碑——请修改。" }
+      {
+        "year": "2025",
+        "en": "Placeholder milestone — edit me.",
+        "zh": "占位里程碑——请修改。"
+      },
+      {
+        "year": "2024",
+        "en": "Placeholder milestone — edit me.",
+        "zh": "占位里程碑——请修改。"
+      }
     ]
   },
   "modules": {
@@ -55,7 +69,7 @@
       "nav": true
     },
     "music-wall": {
-      "enabled": false,
+      "enabled": true,
       "nav": false
     },
     "my-music": {
