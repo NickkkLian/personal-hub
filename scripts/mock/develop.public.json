@@ -31,7 +31,12 @@
           "content": "Add jobs by pasting a JD (auto-parsed into fields) and track them through an Interested → Applied → Interviewing → Offered/Rejected/Interviewed-Rejected pipeline, kept separate per region. Generate tailored resumes and cover letters as copy-paste prompts for Claude.ai, with region-aware output (English PDF for Canada, two-page Traditional Chinese + English for Hong Kong, Simplified Chinese for Mainland China) plus translation support. The Insights tab visualizes the pipeline as a Sankey flow chart with response and offer rates. The Alerts tab scans pasted LinkedIn job-alert emails or runs a manual region-scoped web search, scores each listing against your profile, and adds matches to the tracker. A Batch Tailor feature generates tailored resume PDFs for multiple selected jobs automatically and saves them back into the tracker.",
           "tags": ["personal", "inuse"],
           "updatedAt": "2026-06-28",
-          "links": []
+          "links": [
+            {
+              "label": "GitHub",
+              "url": "https://github.com/NickkkLian/Job-Tracker"
+            }
+          ]
         },
         {
           "id": "52b89356-dac3-4bad-a05b-1edcaf93a40d",
@@ -40,7 +45,12 @@
           "content": "A student submits an eligibility form through a web portal; the system automatically checks their grade and attendance against configurable tiers and emails them the result. Eligible students receive a link to a single upload portal where they enter their request details (name, email, application link, days-until-deadline, message) and upload their letter of interest and transcript in one page. A background watchdog polls the portal, validates the deadline and request cap, downloads the files to the professor's UBC OneDrive, and emails confirmations to both the student and the professor. The professor manages everything from a local dashboard: roster import per course/section/term, eligibility tiers, a whitelist, reports, and a files view with download/delete. Portal URL and API key are baked into the app so the professor only ever enters their own email.",
           "tags": ["volunteer", "delivered"],
           "updatedAt": "2026-06-17",
-          "links": []
+          "links": [
+            {
+              "label": "GitHub",
+              "url": "https://github.com/NickkkLian/Prof-Reference-System"
+            }
+          ]
         },
         {
           "id": "6ef6e29e-70a6-469f-880f-3c9995535c55",

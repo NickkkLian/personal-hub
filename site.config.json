@@ -31,8 +31,8 @@
     "mono": "manrope"
   },
   "featured": {
-    "$comment": "各展厅 feature 大卡选中的条目 id（留空 = 自动选置顶/最新一条）。projects 也可在 projects-overrides.json 里给某项加 featured:true。",
-    "projects": "",
+    "$comment": "各展厅 feature 大卡选中的条目 id（留空 = 自动选置顶/最新一条）。",
+    "projects": "52b89356-dac3-4bad-a05b-1edcaf93a40d",
     "writing": "",
     "my-music": ""
   },
