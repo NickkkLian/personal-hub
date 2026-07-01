@@ -58,7 +58,8 @@
 ## 当前交接状态（每次推进后更新此节）
 
 - 已对齐站长概念参考图（2026-06-13）：流场笔触封面 / 双层背景(雾+可见色场圆) / 圆形 NL logo / 幽灵字精简换 Fraunces opsz / 编辑式拼版首页(masthead + 「NICK / LIAN.」两行错开 Playfair + featured 浮框 + 古典石柱 ColumnPiece 精致石膏色作右侧背景配角) / 全画幅封面卡(文字在图下) / Writing 去书架改详情卡网格 / 字体可切换(site.config.fonts)
-- 本网站项目已归档进 Database/develop.json（"Personal Hub · 个人网站"，12 条更新）
+- 本网站项目已归档进 Database/develop.json（"个人网站（Galerie Vivante）"，20 条更新，含上线后改动；devlog 记录随每次推进补录）
+- Projects 展厅读 devlog 精选公开数据 develop.public.json（name/summary 为 {zh,en} 双语对象 + links；sync-data 按 site.config.featured 把选中条目置顶=NO.001）；devlog App 已支持 nameEn/descEn 双语编辑并已推送上线；develop.json 全部 19 个项目已补齐中英文（2026-07-01）
 - ⚠️ Astro 样式作用域坑：父页 `.foo` 规则匹配不到子组件根元素——给子组件定位要用父作用域 div 包裹（见 home `.hero-column`）
 - **文本后台 `public/admin.html`**：PAT+GitHub API 编辑 i18n(en/zh，含幽灵字/批注)+ site.config(标题/简介/时间线/字体/模块开关)，写回网站仓库；上线(网站仓库存在)后即可用
 - Development-Log 补录与顺序修复 ✅ 均已推送；Database-Public ✅ 已创建（尚无数据文件）
