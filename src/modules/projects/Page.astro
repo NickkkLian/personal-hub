@@ -182,11 +182,8 @@ const title = t(locale, "module.projects.title");
     text-decoration: none;
   }
   .proj-summary {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    /* 简介较短，完整显示不截断 */
+    overflow: visible;
   }
   .proj-links {
     margin-top: auto;
