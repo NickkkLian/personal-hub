@@ -64,31 +64,33 @@ const title = t(locale, "module.projects.title");
           module="projects"
           label={t(locale, "projects.featured")}
           href={featured.links[0]?.url ?? null}
-          meta={[
-            featured.extra.language,
-            featured.extra.stars ? `★ ${featured.extra.stars}` : null,
-            "GITHUB ↗",
-          ]
-            .filter(Boolean)
-            .join(" · ")}
+          meta={featured.tags.join(" · ")}
         />
       )
     }
 
-    <div
-      class="mb-8 flex flex-wrap items-center gap-2"
-      role="group"
-      aria-label={t(locale, "projects.filterHint")}
-    >
-      <button class="chip meta-mono is-on" data-filter="*">{t(locale, "projects.all")}</button>
-      {
-        langs.map((l) => (
-          <button class="chip meta-mono" data-filter={l} style={`--chip: ${LANG_COLORS[l] ?? "var(--room)"}`}>
-            {l}
+    {
+      langs.length > 0 && (
+        <div
+          class="mb-8 flex flex-wrap items-center gap-2"
+          role="group"
+          aria-label={t(locale, "projects.filterHint")}
+        >
+          <button class="chip meta-mono is-on" data-filter="*">
+            {t(locale, "projects.all")}
           </button>
-        ))
-      }
-    </div>
+          {langs.map((l) => (
+            <button
+              class="chip meta-mono"
+              data-filter={l}
+              style={`--chip: ${LANG_COLORS[l] ?? "var(--room)"}`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+      )
+    }
 
     <ul id="proj-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
@@ -98,26 +100,31 @@ const title = t(locale, "module.projects.title");
             data-lang={e.extra.language ?? ""}
             style={`transition-delay:${Math.min(i * 50, 300)}ms`}
           >
-            <a href={e.links[0]?.url} target="_blank" rel="noopener" class="proj-link" data-tilt>
+            <div class="proj-link" data-tilt>
               <ExhibitFrame interactive class="h-full">
                 <div class="flex h-full flex-col">
                   <div
                     class="lang-bar"
-                    style={`background:${LANG_COLORS[e.extra.language ?? ""] ?? "var(--line-hair)"}`}
+                    style={`background:${LANG_COLORS[e.extra.language ?? ""] ?? "var(--room)"}`}
                   />
                   <div class="flex grow flex-col gap-2 p-5">
                     <ExhibitLabel no={e.extra.no ?? 0} module="PROJECTS" />
                     <h3 class="font-display text-xl font-medium">{pickLang(e.title, locale).value}</h3>
                     <p class="grow text-sm leading-relaxed text-muted">{pickLang(e.summary, locale).value}</p>
-                    <p class="meta-mono pt-2">
-                      {e.extra.language ?? "—"}
-                      {e.extra.stars ? ` · ★ ${e.extra.stars}` : ""}
-                      {e.extra.topics?.length ? ` · ${e.extra.topics.slice(0, 2).join(" / ")}` : ""}
-                    </p>
+                    {e.tags.length > 0 && <p class="meta-mono pt-1 proj-tags">{e.tags.join(" · ")}</p>}
+                    {e.links.length > 0 && (
+                      <p class="proj-links">
+                        {e.links.map((l) => (
+                          <a href={l.url} target="_blank" rel="noopener" class="meta-mono proj-link-a">
+                            {l.label} ↗
+                          </a>
+                        ))}
+                      </p>
+                    )}
                   </div>
                 </div>
               </ExhibitFrame>
-            </a>
+            </div>
           </li>
         ))
       }
@@ -172,6 +179,21 @@ const title = t(locale, "module.projects.title");
     height: 100%;
     color: inherit;
     text-decoration: none;
+  }
+  .proj-tags {
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
+  }
+  .proj-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    padding-top: 0.3rem;
+  }
+  .proj-link-a {
+    color: color-mix(in oklab, var(--brass) 60%, var(--text));
+  }
+  .proj-link-a:hover {
+    text-decoration: underline;
   }
   .lang-bar {
     height: 3px;

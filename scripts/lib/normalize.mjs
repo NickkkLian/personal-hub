@@ -124,7 +124,7 @@ export function flattenPublicPayload(payload, module) {
         date: asDate(it.updatedAt),
         tags: it.tags,
         cover: null,
-        links: [],
+        links: Array.isArray(it.links) ? it.links : [],
         extra: {
           content: it.content || null,
           category: it.category || null,

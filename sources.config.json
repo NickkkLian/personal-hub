@@ -4,10 +4,9 @@
   "sources": [
     {
       "module": "projects",
-      "adapter": "github-api",
-      "user": "NickkkLian",
-      "overrides": "content/projects-overrides.json",
-      "mock": "scripts/mock/projects.json"
+      "adapter": "public-json",
+      "file": "develop.public.json",
+      "mock": "scripts/mock/develop.public.json"
     },
     {
       "module": "writing",
