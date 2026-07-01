@@ -126,6 +126,20 @@ async function main() {
     (byModule[source.module] ??= []).push(...normalized);
   }
 
+  // 依据 site.config.json 的 featured[module]=id 给对应条目打标记，使其成为本模块首位（展品 NO.001 起）
+  let featuredMap = {};
+  try {
+    const sc = JSON.parse(await readFile(path.join(ROOT, "site.config.json"), "utf8"));
+    featuredMap = sc.featured ?? {};
+  } catch {
+    /* 无 site.config 或无 featured，跳过 */
+  }
+  for (const [m, id] of Object.entries(featuredMap)) {
+    if (!id || m.startsWith("$")) continue;
+    const hit = (byModule[m] ?? []).find((e) => e.id === id);
+    if (hit) hit.extra.featured = true;
+  }
+
   // 模块内排序：featured 优先（projects），再按日期倒序
   for (const m of Object.keys(byModule)) {
     byModule[m].sort((a, b) => {
