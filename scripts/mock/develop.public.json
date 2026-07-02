@@ -90,7 +90,7 @@
             "en": "Front-end tool to fetch, classify and archive Xiaohongshu posts, with AI note-merging."
           },
           "category": "个人项目",
-          "content": "纯前端零构建静态站（index.html + 原生 JS，挂 window.XHS），GitHub Pages 部署。链接整理：经 Jina Reader 抓取标题/正文/图片/话题（已修复登录墙、稳定解析页面真实数据），关键词打分自动归入 16 类（美食/旅行/穿搭…），反爬时「手动粘贴」兜底。收藏库：搜索 / 分类筛选 / 复制 Markdown / 导出 MD·JSON。AI 整理成合集：勾选多篇同主题笔记直连 Claude API（结构化输出）综合去重、分板块改写成一篇长文，可追加整合。整理过的素材笔记自动归档到「📥 已归档」视图（也可手动归档单条 / 取出恢复），主库只留未整理的、保持清爽。多设备云同步：GitHub Contents API 读写私有仓库 Database/xhs.json，复用导航站 pha-config 令牌；GitHub / Anthropic 令牌只存本机浏览器、绝不入库。",
+          "content": "纯前端零构建静态站（index.html + 原生 JS，挂 window.XHS），GitHub Pages 部署。链接整理：经 Jina Reader 抓取标题/正文/图片/话题（已修复登录墙、稳定解析页面真实数据），关键词打分自动归入 16 类（美食/旅行/穿搭…），反爬时「手动粘贴」兜底。收藏库：搜索 / 分类筛选 / 复制 Markdown / 导出 MD·JSON。AI 整理成合集：勾选多篇同主题笔记直连 Claude API（结构化输出）综合去重、分板块改写成一篇长文，可追加整合。整理过的素材笔记自动归档到「📥 已归档」视图（也可手动归档单条 / 取出恢复），主库只留未整理的、保持清爽。多设备云同步：GitHub Contents API 读写私有仓库 Database/xhs.json，复用导航站 pha-config 令牌；GitHub / Anthropic 令牌只存本机浏览器、绝不入库。图片会自动永久归档进私有仓库（防小红书链接过期失效），AI 整理支持连图片一起分析。",
           "tags": [],
           "links": [
             {
@@ -102,7 +102,7 @@
               "url": "https://nickkklian.github.io/xhs-organizer"
             }
           ],
-          "updatedAt": "2026-06-21"
+          "updatedAt": "2026-07-01"
         },
         {
           "id": "6e564377-7b8b-46ba-a188-3bc7d8a11919",
