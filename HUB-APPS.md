@@ -148,5 +148,6 @@
 - canvas 在 `display:none` 容器内宽度为 0——切 tab 时重绘（Investment-Info IBKR 已处理）。
 - 预览测试数据记得清（localStorage 各 app 的 cache 键），别让测试数据被同步上仓库。
 - Gmail Pages/API 刚创建资源时偶发 500/404——sleep 后重试。
+- **GitHub Pages 部署偶发失败（纯服务端抖动，非代码问题）**：表现为一次 run **build 成功、deploy 失败**，annotation 写「Deployment failed, try again later」。诊断：`git ls-remote` 看 gh-pages HEAD 是新提交，但线上主 js 仍是旧 hash（curl 抓 `assets/index-*.js` grep 新卡片名，缺失=没部署上）；`GET /repos/{o}/{r}/deployments?environment=github-pages` 看最近 sha 的状态（failure）。**修法：① 优先 `POST /actions/runs/{id}/rerun-failed-jobs`（重发同一份正确产物）；② 若重跑卡在 queued 且取消不掉（运行器积压），改为往 gh-pages 推一个空提交 `git commit --allow-empty` 重触发一次全新部署——全新 run 会顶掉卡住的那次。** 门户（database-combined）就是这么修好 People-Atlas 卡片的（2026-07-03）。CDN 缓存刷新可能再等 1–2 分钟。
 - devlog/develop.json 并发写 409——重新 GET sha 重试。
 - 别用 `git add -A` 在 personal-hub 根（曾误吞私有 Database/ 等目录；.gitignore 已挡，但保持显式 add 习惯）。
