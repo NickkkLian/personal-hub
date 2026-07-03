@@ -2,6 +2,8 @@
 
 多领域个人网站（NickkkLian）。**唯一需求来源：`BLUEPRINT.md` v1.7**，遇到冲突以它为准；变更需求先改 BLUEPRINT 并提版本号。
 
+**⚠️ 动 `~/Desktop/hub-apps/` 下任何应用（devlog/生活地图/情报终端/门户…共 17 个）之前，必读 `HUB-APPS.md`**——全家生态地图、共同约定（pha-config/双语/保存冲突/隐私）、各 app 数据结构要点（哪些保存时会剥未知键）、部署凭据路径、devlog 纪律、常见坑。改动生态后同步更新它。
+
 ## 技术栈与硬约束
 
 - Astro 5（SSG）+ React 19 islands（按需水合，能不用 React 就不用）+ Tailwind CSS 4（经 `@tailwindcss/vite`，无 Astro integration）
