@@ -11,7 +11,7 @@
 |---|---|---|---|
 | 个人网站 | `personal-hub` | Cloudflare Pages（deploy.yml 自动） | Astro 5，见本仓库 CLAUDE.md/BLUEPRINT.md |
 | 导航站（门户） | `database-combined` | GitHub Pages **gh-pages 分支**（构建产物） | Vite+Preact+TS，卡片注册表 `src/lib/registry.ts`；改完 `npm run build` → dist 推 gh-pages（worktree 法） |
-| 私有数据仓库 | `Database`（私有） | — | 各 app 的 JSON 数据 + `.github/workflows/`（investment-sync.yml、mail-sync.yml）+ `investment/` `mail/` 脚本 + `xhs-images/` `business-lab-files/` 附件目录 |
+| 私有数据仓库 | `Database`（私有） | — | 各 app 的 JSON 数据 + `.github/workflows/`（investment-sync.yml、mail-sync.yml、birthday-reminder.yml）+ `investment/` `mail/` `scripts/` 脚本 + `xhs-images/` `business-lab-files/` 附件目录 |
 | 公开数据仓库 | `Database-Public` | — | **只放显式导出的 `*.public.json`**；网站只读这里 |
 | 各应用 | 一 app 一公开仓库（下表） | 各自 GitHub Pages（main 分支根目录） | 同源 `nickkklian.github.io/<Repo>/` |
 
@@ -103,8 +103,10 @@
 - 已知无害怪癖：海报导出函数内局部 `const T=(str,x,y,...)` 与全局 i18n T 同名，作用域隔离，勿动。
 
 ### People-Atlas（people.json）
-- `{version,updatedAt,dims:{friends[],work[],venture[]},people[]}`；dim：`{id,name,weight}`；person：`{id,cat,name,scores{dimId:0-10},contact,source,profile,notes,tags[],lastContact,createdAt,updatedAt}`。
-- 综合分＝已评维度加权平均（未评不计入）。**本库无任何公开导出，保持如此。**
+- `{version,updatedAt,dims:{friends[],work[],venture[]},people[]}`；dim：`{id,name,weight}`；person：`{id,cat,name,scores{dimId:0-10},contact,source,profile,notes,tags[],lastContact,birthday,createdAt,updatedAt}`。
+- 综合分＝已评维度加权平均（未评不计入）。三类人各自独立可编辑维度。视图：名录 / 各维度单项排行榜（`ui.view`）。**本库无任何公开导出，保持如此。**
+- `birthday`：可选，存 `MM-DD`（年份未知）或 `YYYY-MM-DD`（可算年龄）；前端 `parseBday/bdayInfo` 算下一次生日倒计时，卡片 ≤14 天显示 🎂 徽章、当天变红。
+- **生日提醒（服务端）**：Database repo `scripts/birthday-reminder.mjs` + `.github/workflows/birthday-reminder.yml`（每天 15:00 UTC）。读 people.json，谁的生日 `∈ LEAD`（默认 `7,0`＝提前一周+当天，可用 workflow 输入 `lead_days` 或 env `BIRTHDAY_LEAD_DAYS` 改）就用 nodemailer 经 Gmail SMTP 给站长自己发提醒邮件（含联系方式/备注）。**复用 Mail-Sorter 的 GMAIL_USER/GMAIL_APP_PASSWORD，无新 Secret**。`DRY_RUN=1` 只打印命中不发信；无命中/无凭据均 exit 0 不红。用温哥华时区定「今天」避免差一天。数据仍私有，邮件只发给自己。
 
 ### Investment-Info（investment/ 目录）
 - 文件：invest.json（持仓/交易/计划，网页自动保存）、news.json、jobs.json（Actions 写）、config.json（news_sources + `fetch_enabled` 总闸）、ibkr.json（快照+交易）、books.json（书库蒸馏大全）、invest.public.json（发布到**私有库本目录**，非 Database-Public——投资数据不出私有库）。
