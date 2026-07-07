@@ -55,7 +55,7 @@
 
 ## 3. 部署与凭据（每次操作的正确路径）
 
-- **本地镜像** `~/Desktop/hub-apps/<App>/`＝工作副本（本地 git 仓库，**无远程**）。**线上各 repo 才是真相源**。改前必做：`git clone --depth 1 git@github.com:NickkkLian/<Repo>.git` 到 scratchpad → **diff 线上 vs 本地**确认无漂移 → 在克隆里改 → 语法检查（`node --check` / `new Function(scriptBlock)`）→ 预览实测 → SSH push → `cp` 回本地镜像。
+- **本地镜像** `~/Desktop/Dev/hub-apps/<App>/`＝工作副本（本地 git 仓库，**无远程**）。**线上各 repo 才是真相源**。改前必做：`git clone --depth 1 git@github.com:NickkkLian/<Repo>.git` 到 scratchpad → **diff 线上 vs 本地**确认无漂移 → 在克隆里改 → 语法检查（`node --check` / `new Function(scriptBlock)`）→ 预览实测 → SSH push → `cp` 回本地镜像。
 - **SSH 可推所有仓库**（用户级 key），包括 workflow 文件；**fine-grained PAT**（聊天中提供，勿写入任何文件）只能读写 Database/Database-Public 的 Contents，**不能**写 workflow、不能写其它 repo、不能建仓库。
 - **建新仓库/开 Pages**：需要 owner 的 classic token（临时提供）或 owner 手动点。Pages API 刚建仓库时可能 500，隔几秒重试。
 - **门户改卡片**：registry.ts → `npm run build` → dist 覆盖到 gh-pages worktree → push 两个分支。

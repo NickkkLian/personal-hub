@@ -10,7 +10,7 @@
     {
       "name": "apps",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "/Users/nickkk/Desktop/hub-apps"],
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "/Users/nickkk/Desktop/Dev/hub-apps"],
       "port": 8765
     }
   ]
