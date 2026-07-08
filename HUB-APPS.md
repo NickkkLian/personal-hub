@@ -100,6 +100,8 @@
 - city：`{id,name(中文),country,lat,lng,status(resided/visited/want),scores{六维:0-10},guide,attractions,review,notes,restaurants[],bars[],others[]}`。
 - restaurant：`{id,name,rating(null=未评),note}`；bar：`+cocktails[{id,name,level(tried/liked/loved),food?:true}]`（food=true 是「菜」）；other：`+type(取 otherTypes.label，如 咖啡/茶、甜品/烘焙)`。
 - id 风格 `Date.now().toString(36)+rand`；新城市 scores 六维默认 5。
+- 侧栏搜索有 `state.searchMode`（'city'|'venue'）切换：venue 模式 `renderVenueList()` 跨全部城市搜 restaurants/bars/others（名/备注/类别/城市/cocktail），点结果 `openVenue()` → 开城市详情并 `_flashVenue` 滚动高亮那条 `[data-eid]`。city 模式才走 geocode 加城市。
+- 地图交互：Leaflet `preferCanvas` + `zoomSnap:0` 连续缩放 + 触控板双指 wheel→平移（`scrollWheelZoom.disable()` 自管 wheel）；城市点 `POINT_ZOOM=3.8` 起显示。区域高亮就近吸附只吸「中国省 / 非中国整国」（`nearestRegionId`，别吸非中国省否则如魁北克单独变色）；`regions.geojson` 里原 8 国共用 `a0_-99` 已各给独立 id。
 - 已知无害怪癖：海报导出函数内局部 `const T=(str,x,y,...)` 与全局 i18n T 同名，作用域隔离，勿动。
 
 ### People-Atlas（people.json）
