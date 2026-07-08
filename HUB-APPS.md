@@ -1,7 +1,7 @@
 # Hub Apps 开发手册（个人网站 + 导航站 + 全家应用）
 
 > 目的：compact 上下文后不丢细节。**动任何 app 前先读本文档相关小节。**
-> 最后更新：2026-07-03。改动生态结构/约定后同步更新本文档。
+> 最后更新：2026-07-08。改动生态结构/约定后同步更新本文档。
 
 ---
 
@@ -15,7 +15,7 @@
 | 公开数据仓库 | `Database-Public` | — | **只放显式导出的 `*.public.json`**；网站只读这里 |
 | 各应用 | 一 app 一公开仓库（下表） | 各自 GitHub Pages（main 分支根目录） | 同源 `nickkklian.github.io/<Repo>/` |
 
-### 应用清单（17 张门户卡）
+### 应用清单（18 张门户卡）
 
 | 应用 | 仓库 | 数据文件（Database/） | 特殊点 |
 |---|---|---|---|
@@ -34,6 +34,7 @@
 | 暂存库存 | Storage-Tracker | storage 数据 | |
 | 求职追踪 | Job-Tracker | jobapp/ 多文件 | ⚠️ React 18 CDN + babel-standalone（JSX），非 vanilla |
 | 邮件分拣台 | Mail-Sorter | mail/mail.json + mail/config.json | 后台在 Database repo（§8） |
+| 媒体台账 | Media-Ops | media-ops.json | 自媒体账号运营台账；与 `~/Desktop/Dev/media-swarm` 蜂群 accounts/ 同 id 对应；成本收益敏感，**无公开导出** |
 | 人力资源 | People-Atlas | people.json | **绝无公开导出功能**（§5） |
 | 网站后台 | personal-hub `/admin` | 写回网站仓库 | Cloudflare 域，独立登录，不共享 pha-config |
 
