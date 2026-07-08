@@ -103,10 +103,12 @@
 - 已知无害怪癖：海报导出函数内局部 `const T=(str,x,y,...)` 与全局 i18n T 同名，作用域隔离，勿动。
 
 ### People-Atlas（people.json）
-- `{version,updatedAt,dims:{friends[],work[],venture[]},people[]}`；dim：`{id,name,weight}`；person：`{id,cat,name,scores{dimId:0-10},contact,source,profile,notes,tags[],lastContact,birthday,createdAt,updatedAt}`。
+- `{version,updatedAt,dims:{friends[],work[],venture[]},people[]}`；dim：`{id,name,weight}`；person：`{id,cat,name,scores{dimId:0-10},contact,source,profile,notes,tags[],lastContact,birthday,character[],essence[],quotes[],createdAt,updatedAt}`。
 - 综合分＝已评维度加权平均（未评不计入）。三类人各自独立可编辑维度。视图：名录 / 各维度单项排行榜（`ui.view`）。**本库无任何公开导出，保持如此。**
 - `birthday`：可选，存 `MM-DD`（年份未知）或 `YYYY-MM-DD`（可算年龄）；前端 `parseBday/bdayInfo` 算下一次生日倒计时，卡片 ≤14 天显示 🎂 徽章、当天变红。
 - **生日提醒（服务端）**：Database repo `scripts/birthday-reminder.mjs` + `.github/workflows/birthday-reminder.yml`（每天 15:00 UTC）。读 people.json，谁的生日 `∈ LEAD`（默认 `7,0`＝提前一周+当天，可用 workflow 输入 `lead_days` 或 env `BIRTHDAY_LEAD_DAYS` 改）就用 nodemailer 经 Gmail SMTP 给站长自己发提醒邮件（含联系方式/备注）。**复用 Mail-Sorter 的 GMAIL_USER/GMAIL_APP_PASSWORD，无新 Secret**。`DRY_RUN=1` 只打印命中不发信；无命中/无凭据均 exit 0 不红。用温哥华时区定「今天」避免差一天。数据仍私有，邮件只发给自己。
+- **深读档案（纪念+文学创作向）**：每人一个「📖 深读」模态（抽屉底部按钮进）。三块：`character[{id,label,text}]`（人物蒸馏，默认 3 维度 性格特质/说话方式/观念·价值观，`charAspects()` 空时按需 seed、可增删）、`essence[{id,topic,text,quote,date,createdAt}]`（探讨精华）、`quotes[{id,text,context,date,createdAt}]`（金句原话）。卡片有内容时显示 📖。
+- **AI 蒸馏（本 app 首个 AI）**：设置里填 Anthropic key，存 `localStorage['people_ai_cfg']={key,model}`（默认 `claude-opus-4-8`，可切 `claude-sonnet-5`；**各 app 自己的 key 名，只存本机**）。深读页「🧪 从聊天记录蒸馏」→ 浏览器直连 `api.anthropic.com/v1/messages`（headers：x-api-key + anthropic-version 2023-06-01 + **anthropic-dangerous-direct-browser-access:true**）+ `output_config.format` json_schema（**结构化 JSON，保证可解析**；schema 每层 `additionalProperties:false`、字段全 required）→ 提取 character/essence/quotes → 审阅后 `adoptDistill()` **增量合并**（同名 aspect 追加不覆盖、essence/quotes 前插）。查过 stop_reason==='refusal'。max_tokens 8000 非流式。**纯私有，无公开导出，key 不进仓库。**
 
 ### Investment-Info（investment/ 目录）
 - 文件：invest.json（持仓/交易/计划，网页自动保存）、news.json、jobs.json（Actions 写）、config.json（news_sources + `fetch_enabled` 总闸）、ibkr.json（快照+交易）、books.json（书库蒸馏大全）、invest.public.json（发布到**私有库本目录**，非 Database-Public——投资数据不出私有库）。
