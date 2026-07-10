@@ -1,7 +1,7 @@
 # Hub Apps 开发手册（个人网站 + 导航站 + 全家应用）
 
 > 目的：compact 上下文后不丢细节。**动任何 app 前先读本文档相关小节。**
-> 最后更新：2026-07-08。改动生态结构/约定后同步更新本文档。
+> 最后更新：2026-07-09。改动生态结构/约定后同步更新本文档。
 
 ---
 
@@ -11,7 +11,7 @@
 |---|---|---|---|
 | 个人网站 | `personal-hub` | Cloudflare Pages（deploy.yml 自动） | Astro 5，见本仓库 CLAUDE.md/BLUEPRINT.md |
 | 导航站（门户） | `database-combined` | GitHub Pages **gh-pages 分支**（构建产物） | Vite+Preact+TS，卡片注册表 `src/lib/registry.ts`；改完 `npm run build` → dist 推 gh-pages（worktree 法） |
-| 私有数据仓库 | `Database`（私有） | — | 各 app 的 JSON 数据 + `.github/workflows/`（investment-sync.yml、mail-sync.yml、birthday-reminder.yml）+ `investment/` `mail/` `scripts/` 脚本 + `xhs-images/` `business-lab-files/` 附件目录 |
+| 私有数据仓库 | `Database`（私有） | — | 各 app 的 JSON 数据 + `.github/workflows/`（investment-sync.yml、mail-sync.yml、birthday-reminder.yml）+ `investment/` `mail/` `scripts/` 脚本 + `xhs-images/` `business-lab-files/` 附件目录 + `toronto-plan/` 多伦多计划文档包（devlog 项目「多伦多计划」；本地工作副本 `~/Desktop/Dev/toronto-plan/`，改动后推回仓库） |
 | 公开数据仓库 | `Database-Public` | — | **只放显式导出的 `*.public.json`**；网站只读这里 |
 | 各应用 | 一 app 一公开仓库（下表） | 各自 GitHub Pages（main 分支根目录） | 同源 `nickkklian.github.io/<Repo>/` |
 
@@ -24,7 +24,7 @@
 | 情报终端 | Investment-Info | investment/ 目录多文件 | tab：动态/投资/IBKR/书库/趋势；PREFIX='investment'；抓取总闸 config.json `fetch_enabled` |
 | 生活地图 | Life-Atlas | life.json | 城市/餐厅/酒吧/cocktails schema 见 §6 |
 | 选题实验室 | Business-Lab | business.json | ⚠️ 保存 payload 显式字段白名单；LIBS（research+marketing 引用库）见 §5 |
-| 知识图谱 | Knowledge-Atlas | knowledge.json | vis-network 图谱 |
+| 知识图谱 | Knowledge-Atlas | knowledge.json | vis-network 图谱；🎯 学习计划 tab 读 `plans[]`（CS/AI、Business X-Ray、french-tef-2027 三个计划），保存整包写回 |
 | 菜单 | My-Menu | menu.json | |
 | 思维库 | Mind-Archive | thoughts.json | 每次保存前取新 sha（免疫冲突）；附件 images/ files/ |
 | 诡计逻辑库 | Mystery-Trick-Archive | data.json | |
