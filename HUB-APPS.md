@@ -15,7 +15,7 @@
 | 公开数据仓库 | `Database-Public` | — | **只放显式导出的 `*.public.json`**；网站只读这里 |
 | 各应用 | 一 app 一公开仓库（下表） | 各自 GitHub Pages（main 分支根目录） | 同源 `nickkklian.github.io/<Repo>/` |
 
-### 应用清单（18 张门户卡）
+### 应用清单（19 张门户卡）
 
 | 应用 | 仓库 | 数据文件（Database/） | 特殊点 |
 |---|---|---|---|
@@ -36,6 +36,7 @@
 | 邮件分拣台 | Mail-Sorter | mail/mail.json + mail/config.json | 后台在 Database repo（§8） |
 | 媒体台账 | Media-Ops | media-ops.json | 自媒体账号运营台账；与 `~/Desktop/Dev/media-swarm` 蜂群 accounts/ 同 id 对应；成本收益敏感，**无公开导出** |
 | 人力资源 | People-Atlas | people.json | **绝无公开导出功能**（§5） |
+| 多伦多计划 | Toronto-Plan | toronto.json | 六线追踪：现金流 vs 目标带 / 里程碑 / 季度检查点；现金流敏感，**无公开导出**；文档包 Database/toronto-plan/，法语计划在 Knowledge-Atlas plans[] |
 | 网站后台 | personal-hub `/admin` | 写回网站仓库 | Cloudflare 域，独立登录，不共享 pha-config |
 
 ---
