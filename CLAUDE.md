@@ -50,7 +50,7 @@
 - [x] P2 核心模块（Home 流场+门厅 / Projects 档案网格 / Writing 书架 / About+表单；表单等 web3formsKey 填入后生效）
 - [x] P3 My Music 录音室（黑胶卡+播放器+音波可视化；mock 数据，真实作品与平台链接待站长填 content/my-music.json）
 - [x] P4 SEO 全套/双语 RSS/Umami 槽位/性能（Lighthouse 移动端六页实测：Perf 90–98 / A11y 100 / SEO 100）
-- [ ] P5 部署上线（Cloudflare Pages + sync.yml）
+- [x] P5 部署上线 —— **网站早已在线**：https://personal-hub-7uc.pages.dev （Cloudflare Pages）。`sync.yml` 每 6 小时 cron 兜底刷新公开数据 + `workflow_dispatch` 可手动立即刷（`gh workflow run sync.yml` 或 API `POST /actions/workflows/sync.yml/dispatches {"ref":"main"}`）。**改了 Database-Public 的数据后，不跑一次 sync 就不会上站。**
 
 ## 常用命令
 
@@ -69,7 +69,7 @@
 - v1.8 变更：专辑墙搁置（music-wall 关闭）→ BACKLOG；My Music 录音室已上线（mock）
 - 字体策略（性能关键，勿回退）：英文页零 CJK；中文页正文=系统字体（苹方/雅黑），网络字体仅思源宋 600 标题；CJK @font-face 独立 chunk 只挂中文路由；assetsInlineLimit=0
 - 数据读取以 process.cwd() 定位 src/data（import.meta.url 在打包后失效——曾致全站空数据，已修复并加告警）
-- 仅剩 P5 部署：Cloudflare Pages + deploy.yml/sync.yml + Secrets，需站长按 LAUNCH-CHECKLIST 配合
+- ✅ 已上线并在跑：https://personal-hub-7uc.pages.dev （Cloudflare Pages，deploy.yml/sync.yml + Secrets 均已配好；sync 定时跑成功中）。**别再照旧文档说「还没部署」——2026-07-14 就是这么误导过站长的。**
 
 ## 工作方式（站长要求）
 
