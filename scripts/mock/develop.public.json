@@ -1,6 +1,7 @@
 {
   "dbId": "develop",
   "title": "开发日志台账",
+  "generatedAt": "2026-07-15T06:01:17.549Z",
   "sections": [
     {
       "type": "volunteer",
@@ -80,31 +81,6 @@
           "updatedAt": "2026-05-04"
         },
         {
-          "id": "fc1b7a5b-82bd-4282-b73c-a6e2e61bdfa5",
-          "name": {
-            "zh": "小红书图文整理工具",
-            "en": "xhs-organizer"
-          },
-          "summary": {
-            "zh": "抓取、分类、收藏小红书图文并支持 AI 整理的纯前端工具。",
-            "en": "Front-end tool to fetch, classify and archive Xiaohongshu posts, with AI note-merging."
-          },
-          "category": "个人项目",
-          "content": "纯前端零构建静态站（index.html + 原生 JS，挂 window.XHS），GitHub Pages 部署。链接整理：经 Jina Reader 抓取标题/正文/图片/话题（已修复登录墙、稳定解析页面真实数据），关键词打分自动归入 16 类（美食/旅行/穿搭…），反爬时「手动粘贴」兜底。收藏库：搜索 / 分类筛选 / 复制 Markdown / 导出 MD·JSON。AI 整理成合集：勾选多篇同主题笔记直连 Claude API（结构化输出）综合去重、分板块改写成一篇长文，可追加整合。整理过的素材笔记自动归档到「📥 已归档」视图（也可手动归档单条 / 取出恢复），主库只留未整理的、保持清爽。多设备云同步：GitHub Contents API 读写私有仓库 Database/xhs.json，复用导航站 pha-config 令牌；GitHub / Anthropic 令牌只存本机浏览器、绝不入库。图片会自动永久归档进私有仓库（防小红书链接过期失效），AI 整理支持连图片一起分析。",
-          "tags": [],
-          "links": [
-            {
-              "label": "GitHub",
-              "url": "https://github.com/NickkkLian/xhs-organizer"
-            },
-            {
-              "label": "Live",
-              "url": "https://nickkklian.github.io/xhs-organizer"
-            }
-          ],
-          "updatedAt": "2026-07-01"
-        },
-        {
           "id": "6e564377-7b8b-46ba-a188-3bc7d8a11919",
           "name": {
             "zh": "求职指挥中心",
@@ -123,7 +99,32 @@
               "url": "https://github.com/NickkkLian/Job-Tracker"
             }
           ],
-          "updatedAt": "2026-06-22"
+          "updatedAt": "2026-07-10"
+        },
+        {
+          "id": "729af88c-4b8c-4fa2-9df8-ee11cc1591a3",
+          "name": {
+            "zh": "收藏整理库",
+            "en": "Content Organizer"
+          },
+          "summary": {
+            "zh": "小红书(图文/视频) + B站(视频) 统一收藏库，跨平台 AI 整理成合集。",
+            "en": "Unified library merging Xiaohongshu (posts/videos) + Bilibili (videos), with cross-platform AI compilation."
+          },
+          "category": "个人项目",
+          "content": "合并原「小红书整理」+「B站归档」为一个统一库（纯前端静态站，GitHub Pages）。数据统一到私有仓库 Database/content.json——首次运行自动从旧的 xhs.json + bilibili.json 引导合并（原文件不动作备份），每条带 platform 标签。统一 UI：一个列表，顶部按「平台(小红书/B站)·类型(图文/视频)」+ 分类三级筛选，搜索纳入语音转写；视频卡显示可折叠转写与时长。视频抓取（🎬 抓视频）：网页里粘链接 → 本地菜单栏小程序(content_server.py，住宅IP避风控)用 yt-dlp 下视频、B站优先取现成字幕否则 faster-whisper 本地转写、PyAV 抽候选帧 → 候选帧交 Claude 视觉只留有信息价值的截图 → 存 content.json + 归档图。跨平台 AI 整理：勾选小红书/B站任意内容整进同一合集，视频带上转写喂入。后端不碰任何密钥、不碰 git；Claude/GitHub 令牌只在浏览器。",
+          "tags": [],
+          "links": [
+            {
+              "label": "GitHub",
+              "url": "https://github.com/NickkkLian/content-organizer"
+            },
+            {
+              "label": "Live",
+              "url": "https://nickkklian.github.io/content-organizer/"
+            }
+          ],
+          "updatedAt": "2026-07-14"
         }
       ]
     }
