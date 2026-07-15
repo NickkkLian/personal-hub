@@ -15,29 +15,32 @@
 | 公开数据仓库 | `Database-Public` | — | **只放显式导出的 `*.public.json`**；网站只读这里 |
 | 各应用 | 一 app 一公开仓库（下表） | 各自 GitHub Pages（main 分支根目录） | 同源 `nickkklian.github.io/<Repo>/` |
 
-### 应用清单（19 张门户卡）
+### 应用清单（18 张门户卡）
+
+> 卡数以 `personal-hub-admin/src/lib/registry.ts` 为准（数 `label:` 要减掉 interface 里那个声明）。
 
 | 应用 | 仓库 | 数据文件（Database/） | 特殊点 |
 |---|---|---|---|
 | 开发日志 devlog | Development-Log | develop.json | §4 devlog 纪律；导出 develop.public.json |
 | 创意想法库 | Creation-Ideas | writing.json | ⚠️ mergeData 剥未知键；歌词库在顶层 `lyrics` 键（§5） |
 | 情报终端 | Investment-Info | investment/ 目录多文件 | tab：动态/投资/IBKR/书库/趋势；PREFIX='investment'；抓取总闸 config.json `fetch_enabled` |
-| 生活地图 | Life-Atlas | life.json | 城市/餐厅/酒吧/cocktails schema 见 §6 |
+| 生活地图 | Life-Atlas | life.json | 城市/餐厅/酒吧/cocktails schema 见 §5 |
 | 选题实验室 | Business-Lab | business.json | ⚠️ 保存 payload 显式字段白名单；LIBS（research+marketing 引用库）见 §5 |
 | 知识图谱 | Knowledge-Atlas | knowledge.json | vis-network 图谱；🎯 学习计划 tab 读 `plans[]`（CS/AI、Business X-Ray、french-tef-2027 三个计划），保存整包写回 |
 | 菜单 | My-Menu | menu.json | |
 | 思维库 | Mind-Archive | thoughts.json | 每次保存前取新 sha（免疫冲突）；附件 images/ files/ |
 | 诡计逻辑库 | Mystery-Trick-Archive | data.json | |
 | 专辑收藏 | Album-Journal | albums 数据 | |
-| 小红书整理 | xhs-organizer | xhs.json + xhs-images/ | ⚠️ 多文件（js/ 模块）；图片归档见 §7 |
-| B站归档 | bilibili-organizer | bilibili 数据 | 多文件；线上另有 worker/（Cloudflare 字幕代理），本地镜像无 |
+| 收藏整理库 | content-organizer | content.json + xhs-images/ | ⚠️ 多文件（js/ 模块，挂 `window.XHS`）；小红书(图文/视频)+B站(视频) 合一，跨平台 AI 整理；图片归档与缓存陷阱见 §6；本地抓取后端 `local/content_server.py`（yt-dlp+whisper，须住宅 IP，双击 `收藏整理库抓取.app` 开关） |
 | 暂存库存 | Storage-Tracker | storage 数据 | |
 | 求职追踪 | Job-Tracker | jobapp/ 多文件 | ⚠️ React 18 CDN + babel-standalone（JSX），非 vanilla |
-| 邮件分拣台 | Mail-Sorter | mail/mail.json + mail/config.json | 后台在 Database repo（§8） |
+| 邮件分拣台 | Mail-Sorter | mail/mail.json + mail/config.json | 后台在 Database repo（§7） |
 | 媒体台账 | Media-Ops | media-ops.json | 自媒体账号运营台账；与 `~/Desktop/Dev/media-swarm` 蜂群 accounts/ 同 id 对应；成本收益敏感，**无公开导出** |
 | 人力资源 | People-Atlas | people.json | **绝无公开导出功能**（§5） |
 | 多伦多计划 | Toronto-Plan | toronto.json | 六线追踪：现金流 vs 目标带 / 里程碑 / 季度检查点；现金流敏感，**无公开导出**；文档包 Database/toronto-plan/，法语计划在 Knowledge-Atlas plans[] |
 | 网站后台 | personal-hub `/admin` | 写回网站仓库 | Cloudflare 域，独立登录，不共享 pha-config |
+
+**已退役（别再找、别再改）**：`xhs-organizer`（小红书整理）+ `bilibili-organizer`（B站归档）→ **2026-07-11 合并进「收藏整理库」**。两个仓库与 `Database/xhs.json`、`bilibili.json` 仅作备份（**不再被写**，content.json 首次运行时自动引导合并），门户卡已撤，devlog 里 `status=archived`、`public:false`。`bilibili-organizer` 原先那个 Cloudflare Worker（B 站字幕代理）**一并退役**——数据中心 IP 被 B 站拦，改走本地住宅 IP。本地镜像 `hub-apps/{xhs,bilibili}-organizer/` 留着只为查历史。
 
 ---
 
@@ -51,7 +54,7 @@
 - **保存要有 try/catch 并把失败显示给用户**（My-Menu 曾静默失败，已修）。
 - **XSS**：所有用户内容进 innerHTML 前过 `esc()`。Job-Tracker 是 React 自动转义。
 - **隐私铁律**：默认私有、显式公开。只有用户勾选 `public` 的条目、经「发布公开数据」按钮才进 Database-Public 的 `*.public.json`。**Investment-Info、Job-Tracker、People-Atlas 永不公开**（People-Atlas 连导出代码都没有，保持如此）。
-- **本地缓存**：localStorage 缓存数据秒开，连接后 ghPull 覆盖。多设备并发以「合并/最新者胜」或「整文件最后写入胜」为准（xhs/bili 是真合并+墓碑）。
+- **本地缓存**：localStorage 缓存数据秒开，连接后 ghPull 覆盖。多设备并发以「合并/最新者胜」或「整文件最后写入胜」为准（收藏整理库 content.json 是真合并+墓碑）。
 
 ---
 
@@ -62,7 +65,7 @@
 - **建新仓库/开 Pages**：需要 owner 的 classic token（临时提供）或 owner 手动点。Pages API 刚建仓库时可能 500，隔几秒重试。
 - **门户改卡片**：registry.ts → `npm run build` → dist 覆盖到 gh-pages worktree → push 两个分支。
 - **workflow 升级基线**：actions/checkout@v5 + setup-node@v5 + Node 22（Node 20 已弃用）。
-- **Anthropic API 直连**（app 内 AI 功能）：`anthropic-dangerous-direct-browser-access: true` 头；key 存 localStorage（各 app 自己的 key 名），绝不进仓库。模型选择惯例：Opus 4.8 默认/推荐，Sonnet 4.6 省钱档；Actions 里批量任务用 Haiku（`claude-haiku-4-5-20251001`）。
+- **Anthropic API 直连**（app 内 AI 功能）：`anthropic-dangerous-direct-browser-access: true` 头；key 存 localStorage（各 app 自己的 key 名），绝不进仓库。模型选择惯例：`claude-opus-4-8` 默认/推荐，`claude-sonnet-5` 省钱档（2026-07 全家已从 Sonnet 4.6 升级到 5，别再写 4.6）；Actions 里批量任务用 Haiku（`claude-haiku-4-5-20251001`）。
 - **图片/附件**：存私有仓库子目录（xhs-images/、book-images/、business-lab-files/、images/），Contents API PUT base64；读取带令牌 `Accept: application/vnd.github.raw` → blob URL。
 
 ---
@@ -120,14 +123,15 @@
 
 ---
 
-## 6. 小红书 xhs-organizer 图片机制（§7 引用）
+## 6. 收藏整理库 content-organizer 图片机制
 
 - **CDN 链接自带签名时效**（URL 第一段 `/202607021008/`＝过期时间戳 UTC+8），过期 403 无解。
 - 收藏时自动归档：weserv.nl 代理取字节（`images.weserv.nl/?url=…&w=1080&q=78&output=webp`，解决 CORS）→ PUT 私有库 `xhs-images/<noteId>/<i>.webp` → note.imagesRepo[i]。渲染优先 repo 图（带令牌 raw→blob），回退 https 化直连→weserv→「已过期」占位。
 - ⚠️ **取 sha 的 GET 必须 `cache:'no-store'`**（凡"同一 contents URL 既用 raw 取图、又用 JSON 取 sha"的 app 都适用）：渲染截图用 `Accept: vnd.github.raw` 请求过 `contents/<path>` 后，Chrome 把原始图片字节缓存在该 URL 下、**且不按 Accept 分桶**（GitHub 发了 `Vary: Accept`，但浏览器侧读到 null）；之后 PUT 撞 422（文件已存在）回头 GET 同一 URL 取 sha 时命中那份缓存，`.json()` 拿到图片字节报 `Unexpected token 'R', "RIFF…"`。实测**只加显式 Accept 挡不住，只有 no-store 管用**。2026-07-14 content-organizer 踩到：重抓已存在的视频时截图 0/N 全灭。
 - 旧笔记「🔧 修复图片/修复全部」：重抓原帖（Jina Reader）拿新签名链接再归档。
-- AI 整理「连图片一起分析」：带所选笔记**全部**图片（API 上限 100 截断提示；归档图发 base64，未过期直链发 url block）。
-- 模块化：js/{i18n,classify,parse,store,sync,ai,images,app}.js，加载顺序 images.js 在 ai.js 前。
+- AI 整理「连图片一起分析」：**默认勾选**，带所选笔记**全部**图片（API 上限 100 截断提示；归档图发 base64，未过期直链发 url block）。⚠️ 送 Claude 前必须限尺寸：单请求 >20 张图时单图上限 2000×2000，长图直接送会 400（`image dimensions exceed max`）——`visionUrl()` 走 weserv `fit=inside` 限长边 1568，归档图用 `capB64()` 在 canvas 里缩。
+- 视频截图同走这套：本地后端抽候选帧 → `ai.judgeFrames()` 判有无信息价值 → `images.saveFrames(key, kept)` 存 `xhs-images/<key>/<i>.webp`（所以上面那条 no-store 陷阱正是在这踩到的）。
+- 模块化（**真实加载顺序**，i18n.js 必须最先）：`js/{i18n,classify,parse,store,sync,images,fetch,ai,app}.js`——images.js 在 ai.js 前；`fetch.js`（连本地抓取后端）是收藏整理库比原 xhs-organizer 多出来的一个。
 
 ---
 

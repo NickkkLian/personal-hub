@@ -1,7 +1,12 @@
 # 上线部署指引（P5 · GitHub Actions + Cloudflare Pages）
 
-> 给站长的逐步操作手册。技术活已写好（`.github/workflows/` 三个文件），你只需做下面的一次性配置。
-> 全程约 **20 分钟**，不需要写任何代码。做完打勾。
+> ✅ **这一步早已做完（2026-07-14 核实）**：站点在 https://personal-hub-7uc.pages.dev 跑着，`deploy.yml`/`sync.yml` 正常工作、Secrets 已配。
+> **本文档现在是「参考/重建手册」**，不是待办——别再照它去跟站长说「还没部署」。
+> 日常只需记住：改了 `Database-Public` 的公开数据后要跑一次 `sync.yml`（每 6 小时也会自动兜底），否则新数据不会上站。
+>
+> ---
+>
+> 以下为原始逐步手册（首次部署时用；重建站点时照做）。给站长的逐步操作手册，技术活已写好（`.github/workflows/` 三个文件），只需做下面的一次性配置，全程约 **20 分钟**，不需要写任何代码。
 
 部署方式：**GitHub Actions 全自动**。逻辑是——你 push 代码或数据应用发布公开 → GitHub 自动构建 → 部署到 Cloudflare Pages。
 公开数据走 `raw.githubusercontent.com` 直读，**全程不碰任何私有令牌**，隐私铁律不受影响。

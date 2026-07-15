@@ -4,7 +4,7 @@
 > **v1.8 变更**：站长决定——专辑墙（Album Wall/music-wall）暂时搁置（连带 Spotify 元数据补全与 now-playing，详见仓库 `BACKLOG.md`）；音乐板块以原创音乐（my-music）为先，P3 范围相应调整。
 > **文档定位**：本文档是交给 Claude Code 执行的完整开发蓝图，同时可作为项目规划档案。
 > **使用方式**：见第 9 章「Claude Code 执行指南」。核心 Prompt 在第 8 章，可直接粘贴使用。
-> **作者数据现状**：10 个自建单文件 HTML 数据库（GitHub Pages 托管），数据以 JSON 形式通过 GitHub API 同步到 GitHub 仓库；另有 GitHub 开源项目、网易云 + Spotify 音乐、原创音乐作品，未来将扩展至 bilibili / 抖音 / 小红书 / YouTube / Instagram 等自媒体账号。
+> **作者数据现状**（事实更新 2026-07-14，非需求变更故不提版本号）：**17 个**自建 app + 门户 = 18 张导航卡（原文写「10 个」，早已长大；准确清单见 `HUB-APPS.md` §1，以 `personal-hub-admin/src/lib/registry.ts` 为准），多为单文件 HTML、少数多文件（收藏整理库 / 求职追踪），GitHub Pages 托管，数据以 JSON 形式通过 GitHub API 同步到私有 `Database` 仓库；另有 GitHub 开源项目、网易云 + Spotify 音乐、原创音乐作品，未来将扩展至 bilibili / 抖音 / 小红书 / YouTube / Instagram 等自媒体账号。
 
 ---
 

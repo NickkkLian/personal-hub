@@ -48,7 +48,7 @@
 - [x] P0 脚手架（双语路由 / 令牌 / 主题 / 模块开关 / logo / 组件库雏形）
 - [x] P1 数据层（sync-data.mjs + adapters + schema 校验 + mock↔真实 auto 切换；GitHub Actions 接入在 P5）
 - [x] P2 核心模块（Home 流场+门厅 / Projects 档案网格 / Writing 书架 / About+表单；表单等 web3formsKey 填入后生效）
-- [x] P3 My Music 录音室（黑胶卡+播放器+音波可视化；mock 数据，真实作品与平台链接待站长填 content/my-music.json）
+- [x] P3 My Music 录音室（黑胶卡+播放器+音波可视化）。**已填真实作品**：content/my-music.json 里 4 首（繁花/当灯光熄灭时/夏日重现/泡沫天使）带网易云链接、线上 `/music` 展出中；只差试听音频文件（无 `audio` 字段 → 页内放不了，只跳外链）
 - [x] P4 SEO 全套/双语 RSS/Umami 槽位/性能（Lighthouse 移动端六页实测：Perf 90–98 / A11y 100 / SEO 100）
 - [x] P5 部署上线 —— **网站早已在线**：https://personal-hub-7uc.pages.dev （Cloudflare Pages）。`sync.yml` 每 6 小时 cron 兜底刷新公开数据 + `workflow_dispatch` 可手动立即刷（`gh workflow run sync.yml` 或 API `POST /actions/workflows/sync.yml/dispatches {"ref":"main"}`）。**改了 Database-Public 的数据后，不跑一次 sync 就不会上站。**
 
@@ -66,7 +66,7 @@
 - **文本后台 `public/admin.html`**：PAT+GitHub API 编辑 i18n(en/zh，含幽灵字/批注)+ site.config(标题/简介/时间线/字体/模块开关)，写回网站仓库；上线(网站仓库存在)后即可用
 - Development-Log 补录与顺序修复 ✅ 均已推送；Database-Public ✅ 已创建（尚无数据文件）
 - **站长待办统一收口在 `LAUNCH-CHECKLIST.md`**（上线前一次性做）；搁置功能在 `BACKLOG.md`
-- v1.8 变更：专辑墙搁置（music-wall 关闭）→ BACKLOG；My Music 录音室已上线（mock）
+- v1.8 变更：专辑墙搁置（music-wall 关闭）→ BACKLOG；My Music 录音室已上线（**已是真实作品数据，非 mock**）
 - 字体策略（性能关键，勿回退）：英文页零 CJK；中文页正文=系统字体（苹方/雅黑），网络字体仅思源宋 600 标题；CJK @font-face 独立 chunk 只挂中文路由；assetsInlineLimit=0
 - 数据读取以 process.cwd() 定位 src/data（import.meta.url 在打包后失效——曾致全站空数据，已修复并加告警）
 - ✅ 已上线并在跑：https://personal-hub-7uc.pages.dev （Cloudflare Pages，deploy.yml/sync.yml + Secrets 均已配好；sync 定时跑成功中）。**别再照旧文档说「还没部署」——2026-07-14 就是这么误导过站长的。**
