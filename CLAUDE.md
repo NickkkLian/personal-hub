@@ -15,7 +15,7 @@
 ## 隐私铁律（不可妥协）
 
 - **默认私有，显式公开**：同步层只放行 `visibility === "public"` / `public === true` / `*.public.json` 来源的条目
-- Investment-Info、Job-Tracker 不进同步清单
+- **永不公开的 app 名单 → 唯一权威在 `HUB-APPS.md` §2「隐私铁律」**（现为 5 个：Investment-Info / Job-Tracker / People-Atlas / Media-Ops / Toronto-Plan）。此处曾自抄一份并漏掉 People-Atlas，已改为指针——**别再在这里复制名单**
 - 任何 token/PAT 只存 GitHub Actions Secrets / Cloudflare 环境变量，**绝不进前端代码或仓库**
 - 规范化输出剥离 schema 白名单之外的所有字段
 

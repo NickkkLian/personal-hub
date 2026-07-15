@@ -1,7 +1,28 @@
 # Hub Apps 开发手册（个人网站 + 导航站 + 全家应用）
 
 > 目的：compact 上下文后不丢细节。**动任何 app 前先读本文档相关小节。**
-> 最后更新：2026-07-09。改动生态结构/约定后同步更新本文档。
+> 最后更新：2026-07-14（全量彻查过一遍：卡数、退役 app、交叉引用、模型档位、隐私名单，逐条对着 registry.ts / 线上 HTTP / 配置核实）。改动生态结构/约定后同步更新本文档。
+
+---
+
+## 0. 文档地图（**先看这里，别在别处重复同一个事实**）
+
+一个事实**只有一个家**，别处只放指针。2026-07-14 的教训：隐私铁律被抄成三份、**两份抄漏**（最危险那份恰是改 sync 时自动加载的技能）；「网站没部署」的旧勾选把人误导了一整轮。**重复 = 迟早分歧。**
+
+| 文档 | 唯一负责 | 明确**不要**在这写 |
+|---|---|---|
+| **`HUB-APPS.md`（本文）** | 全生态：app 清单 / 共同约定 / **隐私铁律权威名单(§2)** / 部署与凭据 / devlog 纪律 / 各 app schema 要点 / 常见坑 | 网站 Astro 本体的实现细节；站长一次性操作步骤 |
+| `personal-hub/CLAUDE.md` | **网站本体**（Astro 技术栈、设计基准、阶段状态、交接） | 生态清单、隐私名单（指向 §2 即可） |
+| `personal-hub/BLUEPRINT.md` | 网站**需求蓝图**（唯一需求来源，改需求要提版本号） | 实时状态（状态在 CLAUDE.md，蓝图里写状态必然过时） |
+| `.claude/skills/hub-data/SKILL.md` | 数据层**实现**：adapter 契约、规范化 schema、同步脚本行为规则 | 隐私名单、仓库清单（指向 §1/§2/§4） |
+| `.claude/skills/hub-design/SKILL.md` | 设计系统（令牌/房间色/装裱/动效） | — |
+| `LAUNCH-CHECKLIST.md` | **站长待办**（一次性、未完成项） | 已完成的事（做完就打勾，别攒） |
+| `DEPLOY-GUIDE.md` | 部署**参考/重建手册**（已完成，非待办） | 待办（待办去 LAUNCH-CHECKLIST） |
+| `BACKLOG.md` | 明确**搁置**的功能 | 已做完的（曾把 My Music 写成"占位页"，实际早已上线） |
+| `hub-apps/CLAUDE.md` | 镜像目录说明（含「content-organizer/local 即运行时」） | 任何生态约定（指向本文） |
+| `~/.claude/CLAUDE.md`（用户级） | 跨项目工作纪律（问/留痕/别乱改/验收/同步远端） | 任何项目细节 |
+
+**记忆库**（`~/.claude/projects/.../memory/`）记的是「换会话/换模型要知道、但代码和 git 看不出」的事；与本文重复的部分以本文为准。
 
 ---
 
@@ -53,7 +74,16 @@
 - **保存冲突**：PUT 409/422 → 重新 GET sha → 重试一次（全家标准 idiom，2026-07-02 体检已补齐所有 app）。Mind-Archive 例外：每次保存前都取新 sha。
 - **保存要有 try/catch 并把失败显示给用户**（My-Menu 曾静默失败，已修）。
 - **XSS**：所有用户内容进 innerHTML 前过 `esc()`。Job-Tracker 是 React 自动转义。
-- **隐私铁律**：默认私有、显式公开。只有用户勾选 `public` 的条目、经「发布公开数据」按钮才进 Database-Public 的 `*.public.json`。**Investment-Info、Job-Tracker、People-Atlas 永不公开**（People-Atlas 连导出代码都没有，保持如此）。
+- **隐私铁律（本节是全生态唯一权威名单，别处只许指向这里、不许各自抄一份）**：默认私有、显式公开。只有用户勾选 `public` 的条目、经「发布公开数据」按钮才进 Database-Public 的 `*.public.json`。
+  **永不公开 / 永不进同步清单（5 个）**：
+  | app | 为什么 | 现状 |
+  |---|---|---|
+  | Investment-Info | 投资数据 | 导出只写**私有库** `investment/invest.public.json`，网站永不读 |
+  | Job-Tracker | 求职数据过敏感 | **刻意不做导出功能**，杜绝误发布 |
+  | People-Atlas | 人际关系/AI 蒸馏私密内容 | **连导出代码都没有，保持如此** |
+  | Media-Ops | 成本收益敏感 | 无公开导出 |
+  | Toronto-Plan | 现金流敏感 | 无公开导出 |
+  > ⚠️ 2026-07-14 查出：这条铁律曾被抄成三份并**各自抄漏**——`personal-hub/CLAUDE.md` 漏了 People-Atlas，`.claude/skills/hub-data/SKILL.md`（**恰恰是改 sync 脚本时自动加载的那份**）漏了 People-Atlas / Media-Ops / Toronto-Plan。已改为都指向本节。**以后新增敏感 app 只改这里一处。**
 - **本地缓存**：localStorage 缓存数据秒开，连接后 ghPull 覆盖。多设备并发以「合并/最新者胜」或「整文件最后写入胜」为准（收藏整理库 content.json 是真合并+墓碑）。
 
 ---
