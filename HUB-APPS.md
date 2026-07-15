@@ -124,6 +124,7 @@
 
 - **CDN 链接自带签名时效**（URL 第一段 `/202607021008/`＝过期时间戳 UTC+8），过期 403 无解。
 - 收藏时自动归档：weserv.nl 代理取字节（`images.weserv.nl/?url=…&w=1080&q=78&output=webp`，解决 CORS）→ PUT 私有库 `xhs-images/<noteId>/<i>.webp` → note.imagesRepo[i]。渲染优先 repo 图（带令牌 raw→blob），回退 https 化直连→weserv→「已过期」占位。
+- ⚠️ **取 sha 的 GET 必须 `cache:'no-store'`**（凡"同一 contents URL 既用 raw 取图、又用 JSON 取 sha"的 app 都适用）：渲染截图用 `Accept: vnd.github.raw` 请求过 `contents/<path>` 后，Chrome 把原始图片字节缓存在该 URL 下、**且不按 Accept 分桶**（GitHub 发了 `Vary: Accept`，但浏览器侧读到 null）；之后 PUT 撞 422（文件已存在）回头 GET 同一 URL 取 sha 时命中那份缓存，`.json()` 拿到图片字节报 `Unexpected token 'R', "RIFF…"`。实测**只加显式 Accept 挡不住，只有 no-store 管用**。2026-07-14 content-organizer 踩到：重抓已存在的视频时截图 0/N 全灭。
 - 旧笔记「🔧 修复图片/修复全部」：重抓原帖（Jina Reader）拿新签名链接再归档。
 - AI 整理「连图片一起分析」：带所选笔记**全部**图片（API 上限 100 截断提示；归档图发 base64，未过期直链发 url block）。
 - 模块化：js/{i18n,classify,parse,store,sync,ai,images,app}.js，加载顺序 images.js 在 ai.js 前。
