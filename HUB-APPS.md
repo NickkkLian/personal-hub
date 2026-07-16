@@ -36,7 +36,7 @@
 | 公开数据仓库 | `Database-Public` | — | **只放显式导出的 `*.public.json`**；网站只读这里 |
 | 各应用 | 一 app 一公开仓库（下表） | 各自 GitHub Pages（main 分支根目录） | 同源 `nickkklian.github.io/<Repo>/` |
 
-### 应用清单（19 张门户卡）
+### 应用清单（20 张门户卡）
 
 > 卡数以 `personal-hub-admin/src/lib/registry.ts` 为准（数 `label:` 要减掉 interface 里那个声明）。
 
@@ -61,6 +61,7 @@
 | 多伦多计划 | Toronto-Plan | toronto.json | 六线追踪：现金流 vs 目标带 / 里程碑 / 季度检查点；现金流敏感，**无公开导出**；文档包 Database/toronto-plan/，法语计划在 Knowledge-Atlas plans[] |
 | 工具箱 | Toolbox | toolbox/ 目录（*.md） | 只读文档阅读器（README=通用整理归纳 SOP，主题侧栏读 INDEX.md 描述，内置精简 MD 渲染器）；编辑走本地工作副本 `~/Desktop/Dev/toolbox/` 再同步；未来项目情报，**无公开导出** |
 | 网站后台 | personal-hub `/admin` | 写回网站仓库 | Cloudflare 域，独立登录，不共享 pha-config |
+| Claude 遥控 | claude-remote（**本地项目，无 github repo**） | 无（不碰数据） | ⚠️ 非 github.io：卡 url 指向 Mac 的 `Nickwonderhow.local:8768`，仅家中同 Wi-Fi 可达。手机当遥控器发键给 Claude 桌面 app（文字/方向/权限弹窗选项）。本地 `~/Desktop/Dev/claude-remote/`：`remote_server.py`(前台闸+键注入) + `remote.html`(手机页) + `Claude遥控.app`(双击开关)。安全两道闸：口令 + 每次发键校验前台是 Claude。需站长授「辅助功能」权限；权限弹窗确切键位待真机验 |
 
 **已退役（别再找、别再改）**：`xhs-organizer`（小红书整理）+ `bilibili-organizer`（B站归档）→ **2026-07-11 合并进「收藏整理库」**。两个仓库与 `Database/xhs.json`、`bilibili.json` 仅作备份（**不再被写**，content.json 首次运行时自动引导合并），门户卡已撤，devlog 里 `status=archived`、`public:false`。`bilibili-organizer` 原先那个 Cloudflare Worker（B 站字幕代理）**一并退役**——数据中心 IP 被 B 站拦，改走本地住宅 IP。本地镜像 `hub-apps/{xhs,bilibili}-organizer/` 留着只为查历史。
 
