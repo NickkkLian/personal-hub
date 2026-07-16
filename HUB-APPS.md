@@ -44,7 +44,7 @@
 |---|---|---|---|
 | 开发日志 devlog | Development-Log | develop.json | §4 devlog 纪律；导出 develop.public.json |
 | 创意想法库 | Creation-Ideas | writing.json | ⚠️ mergeData 剥未知键；歌词库在顶层 `lyrics` 键（§5） |
-| 情报终端 | Investment-Info | investment/ 目录多文件 | tab：动态/投资/IBKR/书库/趋势；PREFIX='investment'；抓取总闸 config.json `fetch_enabled` |
+| 情报终端 | Investment-Info | investment/ 目录多文件 | tab：动态/投资/IBKR/**Wealthsimple**/书库/趋势；PREFIX='investment'；抓取总闸 config.json `fetch_enabled` |
 | 生活地图 | Life-Atlas | life.json | 城市/餐厅/酒吧/cocktails schema 见 §5 |
 | 选题实验室 | Business-Lab | business.json | ⚠️ 保存 payload 显式字段白名单；LIBS（research+marketing 引用库）见 §5 |
 | 知识图谱 | Knowledge-Atlas | knowledge.json | vis-network 图谱；🎯 学习计划 tab 读 `plans[]`（CS/AI、Business X-Ray、french-tef-2027 三个计划），保存整包写回 |
@@ -149,8 +149,11 @@
 - **AI 蒸馏（本 app 首个 AI）**：设置里填 Anthropic key，存 `localStorage['people_ai_cfg']={key,model}`（默认 `claude-opus-4-8`，可切 `claude-sonnet-5`；**各 app 自己的 key 名，只存本机**）。深读页「🧪 从聊天记录蒸馏」→ 浏览器直连 `api.anthropic.com/v1/messages`（headers：x-api-key + anthropic-version 2023-06-01 + **anthropic-dangerous-direct-browser-access:true**）+ `output_config.format` json_schema（**结构化 JSON，保证可解析**；schema 每层 `additionalProperties:false`、字段全 required）→ 提取 character/essence/quotes → 审阅后 `adoptDistill()` **增量合并**（同名 aspect 追加不覆盖、essence/quotes 前插）。查过 stop_reason==='refusal'。max_tokens 8000 非流式。**纯私有，无公开导出，key 不进仓库。**
 
 ### Investment-Info（investment/ 目录）
-- 文件：invest.json（持仓/交易/计划，网页自动保存）、news.json、jobs.json（Actions 写）、config.json（news_sources + `fetch_enabled` 总闸）、ibkr.json（快照+交易）、books.json（书库蒸馏大全）、invest.public.json（发布到**私有库本目录**，非 Database-Public——投资数据不出私有库）。
-- ghGet/ghPut 带 PREFIX='investment'；IBKR 解析器吃 Activity Statement CSV（多段式，Statement/Net Asset Value/Open Positions/Trades 段）；书库蒸馏走浏览器直连 Claude（key 存 `id_ai_cfg`），大全在 books.compendium.sections[].points[]（sources=bookId，img=book-images/ 路径）。
+- 文件：invest.json（持仓/交易/计划，网页自动保存）、news.json、jobs.json（Actions 写）、config.json（news_sources + `fetch_enabled` 总闸）、ibkr.json（快照+交易）、books.json（书库蒸馏大全）、invest.public.json（发布到**私有库本目录**，非 Database-Public——投资数据不出私有库）、**ws.json**（Wealthsimple TFSA，2026-07-15 新增）。
+- ghGet/ghPut 带 PREFIX='investment'；IBKR 解析器吃 Activity Statement CSV（多段式，Statement/Net Asset Value/Open Positions/Trades 段）；
+- **Wealthsimple（ws.json）**：`{updated_at, tfsa:{room_amount,room_asof}, flows:[{id,date,type:contribute|withdraw,amount,note}], positions:[{id,symbol,cat,cur,qty,costPrice,price}], cash, snapshots:[…同 ibkr], trades:[]}`。positions 是**可编辑的当前持仓**（value/costBasis/unreal 由 `wsCalc()` 现算、不落库），点「存为今日快照」才 push 进 snapshots（同日覆盖）→ 复用 `drawNavChart/drawAllocChart`。
+  - ⚠️ **WS 没有官方 API**，非官方库要账号密码+2FA（券商凭据，不碰；WS 也在封）→ 只做「导出→解析」，与 IBKR 同套路。**解析器待站长给真实样本**，格式不猜（猜错＝算错持仓成本）。
+  - ⚠️ **TFSA 额度规则（别自作聪明）**：基准 `room_amount/room_asof` 由站长从 **CRA My Account** 抄，**代码不推算每年限额**（算错会害站长超额，CRA 罚超出部分 1%/月）。两条硬规则在 `wsRoom()`：① 当年取款**不**恢复额度（下一个 1/1 才恢复）→ 记 `pending`；② `asof` 跨年即 `stale`（缺新年度限额 + 去年取款的恢复）→ 红字提示回 CRA 更新。已单测 9 例。书库蒸馏走浏览器直连 Claude（key 存 `id_ai_cfg`），大全在 books.compendium.sections[].points[]（sources=bookId，img=book-images/ 路径）。
 
 ---
 
