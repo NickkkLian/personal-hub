@@ -152,7 +152,11 @@
 - 文件：invest.json（持仓/交易/计划，网页自动保存）、news.json、jobs.json（Actions 写）、config.json（news_sources + `fetch_enabled` 总闸）、ibkr.json（快照+交易）、books.json（书库蒸馏大全）、invest.public.json（发布到**私有库本目录**，非 Database-Public——投资数据不出私有库）、**ws.json**（Wealthsimple TFSA，2026-07-15 新增）。
 - ghGet/ghPut 带 PREFIX='investment'；IBKR 解析器吃 Activity Statement CSV（多段式，Statement/Net Asset Value/Open Positions/Trades 段）；
 - **Wealthsimple（ws.json）**：`{updated_at, tfsa:{room_amount,room_asof}, flows:[{id,date,type:contribute|withdraw,amount,note}], positions:[{id,symbol,cat,cur,qty,costPrice,price}], cash, snapshots:[…同 ibkr], trades:[]}`。positions 是**可编辑的当前持仓**（value/costBasis/unreal 由 `wsCalc()` 现算、不落库），点「存为今日快照」才 push 进 snapshots（同日覆盖）→ 复用 `drawNavChart/drawAllocChart`。
-  - ⚠️ **WS 没有官方 API**，非官方库要账号密码+2FA（券商凭据，不碰；WS 也在封）→ 只做「导出→解析」，与 IBKR 同套路。**解析器待站长给真实样本**，格式不猜（猜错＝算错持仓成本）。
+  - ⚠️ **WS 没有官方 API**，非官方库要账号密码+2FA（券商凭据，不碰；WS 也在封）→ 只做「导出→解析」，与 IBKR 同套路。
+  - **解析器（2026-07-15 照真实样本写成）**：两种导出按表头自动认——`holdings-report`（Account Name…Book Value (CAD)…）＝全量持仓快照，整体替换；`activities-export`（transaction_date…activity_type…net_cash_amount）＝成交 + 出入金。两份可一次选中同时导入。末尾 `"As of …"` 行与空行要跳过；复用现成 `parseCSVLine`；只收 `account_type=TFSA`。
+  - 🚨 **绝不按内容去重（血的教训）**：WS 同一天可能有**多笔完全相同**的成交——真实样本里两笔 BUY 各 13.1814 股 @189.6599，持仓表 26.3628＝2×13.1814 印证是两笔真成交。**照搬 IBKR 的 `date|symbol|qty|price` 去重会把持仓算成一半。** 改用**按导出日期区间整段替换**：重复导入幂等、新导出覆盖重叠区间、手动流水（`src!=='ws'`）不受影响。
+  - ⚠️ **持仓表不含现金** → 现金只能由活动表 `net_cash_amount` 累加推得，且只有导出「全部历史」才准 → 只做建议+按钮，**不自动写**。
+  - ⚠️ **认不出的活动不猜、也不静默丢弃**：只自动认 `MoneyMovement/EFT`（按金额正负判供款/取款），股息/利息/转账等一律列出来交站长判断——TFSA 里股息利息不占额度、机构间直接转账也不占，但从非注册账户转入就占；猜错会让他以为还有额度→超额→罚 1%/月。
   - ⚠️ **TFSA 额度规则（别自作聪明）**：基准 `room_amount/room_asof` 由站长从 **CRA My Account** 抄，**代码不推算每年限额**（算错会害站长超额，CRA 罚超出部分 1%/月）。两条硬规则在 `wsRoom()`：① 当年取款**不**恢复额度（下一个 1/1 才恢复）→ 记 `pending`；② `asof` 跨年即 `stale`（缺新年度限额 + 去年取款的恢复）→ 红字提示回 CRA 更新。已单测 9 例。书库蒸馏走浏览器直连 Claude（key 存 `id_ai_cfg`），大全在 books.compendium.sections[].points[]（sources=bookId，img=book-images/ 路径）。
 
 ---
