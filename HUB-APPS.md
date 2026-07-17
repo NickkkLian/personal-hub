@@ -71,7 +71,7 @@
 ## 2. 全家共同约定（写代码必须遵守）
 
 - **单文件哲学**：app = 一个 index.html（例外见上表）。无构建、无依赖（CDN 字体/库除外）。
-- **令牌共享**：`localStorage['pha-config']`＝`{owner, repo, token}`，全家同源共享（门户配置一次）。app 读取时**只补空缺不覆盖**；写回时**整体合并**，绝不丢其它字段。
+- **令牌共享**：`localStorage['pha-config']`＝`{owner, repo, token}`，全家同源共享（门户配置一次）。app 读取时**只补空缺不覆盖**；写回时**整体合并**，绝不丢其它字段。⚠️ **设备上的实际值可能缺 repo（甚至缺 owner）**——app 读取端必须缺省补 `NickkkLian`/`Database`（门户 store.ts 的 DEFAULTS 就是这么做的）；北极星曾因要求三字段齐全而误报「未配置令牌」（2026-07-17 修复）。
 - **双语**：`localStorage['pha-lang']`（'zh' 默认/'en'）。惯用法：`const T=(zh,en)=>lang==='en'?en:zh` + 静态 HTML 用 `data-i18n` 词典 + `applyStatic()`。存储值（枚举/分类 key）不译，只译显示。
 - **base64 必须 UTF-8 安全**：TextEncoder/TextDecoder 或 `btoa(unescape(encodeURIComponent()))`。裸 btoa/atob 处理中文=数据损坏。
 - **保存冲突**：PUT 409/422 → 重新 GET sha → 重试一次（全家标准 idiom，2026-07-02 体检已补齐所有 app）。Mind-Archive 例外：每次保存前都取新 sha。
