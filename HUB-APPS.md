@@ -1,7 +1,7 @@
 # Hub Apps 开发手册（个人网站 + 导航站 + 全家应用）
 
 > 目的：compact 上下文后不丢细节。**动任何 app 前先读本文档相关小节。**
-> 最后更新：2026-07-16（Toronto-Plan 隐私加固：公开壳清零 + 新增「公开壳零个人数据」铁律条目）。上次全量彻查 2026-07-14。改动生态结构/约定后同步更新本文档。
+> 最后更新：2026-07-16（Toronto-Plan 隐私加固后泛化更名为 **Polaris 北极星**：多计划结构、数据迁 polaris.json；同日新增「公开壳零个人数据」铁律条目）。上次全量彻查 2026-07-14。改动生态结构/约定后同步更新本文档。
 
 ---
 
@@ -58,7 +58,7 @@
 | 邮件分拣台 | Mail-Sorter | mail/mail.json + mail/config.json | 后台在 Database repo（§7） |
 | 媒体台账 | Media-Ops | media-ops.json | 自媒体账号运营台账；与 `~/Desktop/Dev/media-swarm` 蜂群 accounts/ 同 id 对应；成本收益敏感，**无公开导出** |
 | 人力资源 | People-Atlas | people.json | **绝无公开导出功能**（§5） |
-| 多伦多计划 | Toronto-Plan | toronto.json | 六线追踪：现金流 vs 目标带 / 里程碑 / 季度检查点；现金流敏感，**无公开导出**；**公开壳零个人数据**（种子/文档链接/打卡链接全由私有 toronto.json 的 config.docLinks 与 line.link 驱动）；文档包 Database/toronto-plan/，法语计划在 Knowledge-Atlas plans[] |
+| 北极星 | Polaris | polaris.json | 多计划人生追踪（原 Toronto-Plan，2026-07-16 泛化更名）：plans[] 每计划独立线路/现金流 vs 目标带/里程碑/检查点/配置，App 内可建删计划与线；多伦多计划=plans[0]；现金流敏感，**无公开导出**；**公开壳零个人数据**（种子/链接由私有 polaris.json 的 config.docLinks 与 line.link 驱动）；多伦多文档包 Database/toronto-plan/，法语计划在 Knowledge-Atlas plans[] |
 | 工具箱 | Toolbox | toolbox/ 目录（*.md） | 只读文档阅读器（README=通用整理归纳 SOP，主题侧栏读 INDEX.md 描述，内置精简 MD 渲染器）；编辑走本地工作副本 `~/Desktop/Dev/toolbox/` 再同步；未来项目情报，**无公开导出** |
 | 网站后台 | personal-hub `/admin` | 写回网站仓库 | Cloudflare 域，独立登录，不共享 pha-config |
 
@@ -85,7 +85,7 @@
   | Job-Tracker | 求职数据过敏感 | **刻意不做导出功能**，杜绝误发布 |
   | People-Atlas | 人际关系/AI 蒸馏私密内容 | **连导出代码都没有，保持如此** |
   | Media-Ops | 成本收益敏感 | 无公开导出 |
-  | Toronto-Plan | 现金流敏感 | 无公开导出 |
+  | Polaris（北极星，原 Toronto-Plan） | 现金流敏感 | 无公开导出 |
   > ⚠️ 2026-07-14 查出：这条铁律曾被抄成三份并**各自抄漏**——`personal-hub/CLAUDE.md` 漏了 People-Atlas，`.claude/skills/hub-data/SKILL.md`（**恰恰是改 sync 脚本时自动加载的那份**）漏了 People-Atlas / Media-Ops / Toronto-Plan。已改为都指向本节。**以后新增敏感 app 只改这里一处。**
 - **公开壳零个人数据**：app 的 index.html（公开仓库+公开 Pages 站点，即使仓库转私有站点也公开）里不得内嵌任何个人内容——种子数据、默认目标、日期、文档链接、业务槽名都算；一律放私有数据文件由 config 驱动，壳只留空态提示。**新 app 上线前 grep 壳里的个人字符串**；若已泄露：清壳 + orphan 重写历史强推 + 验证线上。（2026-07-16 教训：Toronto-Plan 壳曾内嵌六线/里程碑/现金流目标/PR 日期种子，站长指正后已修复。）
 - **本地缓存**：localStorage 缓存数据秒开，连接后 ghPull 覆盖。多设备并发以「合并/最新者胜」或「整文件最后写入胜」为准（收藏整理库 content.json 是真合并+墓碑）。
