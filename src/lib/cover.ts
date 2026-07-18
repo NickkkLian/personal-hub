@@ -5,16 +5,23 @@
  * 同一条目永远同一幅画；零外部 API；构建时内联为 SVG。
  */
 
+/**
+ * ⚠️ 这是 tokens.css 房间色（--paint-*）之外的第二份表——新增/改房间色两处都要动！
+ * 漏了会静默落到兜底 #b08d57：2026-07-18 photography 与 special 都缺席，门厅两卡
+ * 渲染成同一种黄铜褐撞色，token 怎么改都无效。
+ */
 const ROOM_BASE: Record<string, string> = {
   projects: "#6e6a60",
   writing: "#7c8b6f",
   "music-wall": "#7e93a8",
   "my-music": "#6b7f95",
+  photography: "#7d5f76", // 银盐紫 = --paint-halide
   knowledge: "#5c6e84",
   life: "#c08d7c",
   menu: "#c9a227",
   mystery: "#8c7156",
   social: "#8b7e94",
+  special: "#8f7a4a", // 奖章卡其金 = --paint-medal
   about: "#c08d7c",
 };
 /** 邻近颜料（同一低饱和体系），作为辅调点缀 */
@@ -23,11 +30,13 @@ const NEIGHBORS: Record<string, string> = {
   writing: "#c9a227",
   "music-wall": "#7c8b6f",
   "my-music": "#7e93a8",
+  photography: "#7e93a8", // 雾蓝点缀，保持冷调、与 about 暖玫瑰拉开
   knowledge: "#7e93a8",
   life: "#c9a227",
   menu: "#c08d7c",
   mystery: "#b08d57",
   social: "#7e93a8",
+  special: "#8c7156", // 焦赭点缀，呼应奖章古铜
   about: "#8c7156",
 };
 

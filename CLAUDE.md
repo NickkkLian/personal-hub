@@ -63,6 +63,7 @@
 - 本网站项目已归档进 Database/develop.json（"个人网站（Galerie Vivante）"，20 条更新，含上线后改动；devlog 记录随每次推进补录）
 - Projects 展厅读 devlog 精选公开数据 develop.public.json（name/summary 为 {zh,en} 双语对象 + links；sync-data 按 site.config.featured 把选中条目置顶=NO.001）；devlog App 已支持 nameEn/descEn 双语编辑并已推送上线；develop.json 全部 19 个项目已补齐中英文（2026-07-01）
 - ⚠️ Astro 样式作用域坑：父页 `.foo` 规则匹配不到子组件根元素——给子组件定位要用父作用域 div 包裹（见 home `.hero-column`）；同坑变体：父页样式选不中子组件渲染的元素（如 Cover 的 img），要 `:global()` 包裹（2026-07-18 摄影页 aspect-ratio 因此没生效、图未加载时按钮高度 0 不可点）
+- ⚠️ 房间色双表坑：`src/lib/cover.ts` 的 ROOM_BASE/NEIGHBORS 是 tokens.css 之外的**第二份房间色表**（门厅生成式封面用）——新增/改房间色两处都要动，漏了会静默落兜底 #b08d57（2026-07-18 photography/special 因此门厅同色相撞，token 改了也无效）
 - ⚠️ ClientRouter 坑：站内换页**不重跑页面 `<script>`**，元素级监听随 DOM 替换丢失（表现＝直接输网址正常、站内导航进来交互全失灵）——页面交互一律 document 级委托 + 每次现查元素，或挂 `astro:page-load`/`astro:after-swap`（参考 BaseLayout 的 wireEnterRise 与 photography Page 的视频弹窗）
 - **文本后台 `public/admin.html`**：PAT+GitHub API 编辑 i18n(en/zh，含幽灵字/批注)+ site.config(标题/简介/时间线/字体/模块开关)，写回网站仓库；上线(网站仓库存在)后即可用
 - Development-Log 补录与顺序修复 ✅ 均已推送；Database-Public ✅ 已创建（尚无数据文件）

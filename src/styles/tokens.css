@@ -21,21 +21,21 @@
   --paint-umber: #8c7156; /* 焦赭 — mystery */
   --paint-violet: #8b7e94; /* 紫灰 — social */
   --paint-deepmist: #6b7f95; /* 深雾蓝 — my-music */
-  --paint-verd: #5f8076; /* 铜绿 — special（奖章/铜匾，呼应黄铜金属） */
-  --paint-safelight: #8a4f47; /* 暗房安全灯红 — photography（冲印暗房红灯；青灰与 special 铜绿撞色已弃） */
+  --paint-medal: #8f7a4a; /* 奖章卡其金 — special（奖章/证书厅；比黄铜金属 #B08D57 更暗更颜料化。铜绿已弃：站长不要，且门厅封面从未渲染过它） */
+  --paint-halide: #7d5f76; /* 银盐紫 — photography（卤化银感光变紫的化学隐喻；暗房红与 about 干玫瑰同族撞色已弃） */
 
   /* ---------- 模块房间色（同一家族、不同房间） ---------- */
   --room-projects: var(--paint-graphite);
   --room-writing: var(--paint-sage);
   --room-music-wall: var(--paint-mist);
   --room-my-music: var(--paint-deepmist);
-  --room-photography: var(--paint-safelight);
+  --room-photography: var(--paint-halide);
   --room-knowledge: var(--paint-night);
   --room-life: var(--paint-rose);
   --room-menu: var(--paint-ochre);
   --room-mystery: var(--paint-umber);
   --room-social: var(--paint-violet);
-  --room-special: var(--paint-verd);
+  --room-special: var(--paint-medal);
   --room-about: var(--paint-rose);
 
   /* ---------- 语义令牌 · 浅色（日场画廊） ---------- */
@@ -90,8 +90,8 @@
   --paint-umber: #a48a6e;
   --paint-violet: #a195ab;
   --paint-deepmist: #8298ae;
-  --paint-verd: #79988d;
-  --paint-safelight: #b57a6e;
+  --paint-medal: #b29a66;
+  --paint-halide: #a3849b;
   --brass: #c3a06a;
   --brass-hi: #e3c993;
 
