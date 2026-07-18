@@ -1,11 +1,10 @@
 ---
 /**
  * Photography（摄影展厅）：冲印相纸墙。
- * - featured（site.config.featured.photography，或自动取最新）→ 全幅沉浸大图，装在大圆角取景框，
- *   白边相纸 + 发丝浮框；题注压在图下方墙面。
- * - 其余作品 → 双列相纸卡（无框画布装裱 + 柔影），hover 射灯微抬。
+ * - 无 feature 大图：所有作品等大排列，桌面一排两张、移动端单列。
+ * - 每张封面统一裁成视频封面比例（16:9），无框画布装裱 + 柔影，hover 射灯微抬。
  * - 每件可有多个原文链接（同一作品被多家转发）；有拍摄地则以 meta-mono 标出。
- * reduced-motion 退化为静态；移动端单列。
+ * reduced-motion 退化为静态。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RoomBand from "../../components/gallery/RoomBand.astro";
@@ -23,9 +22,6 @@ const { locale } = Astro.props;
 const meta = MODULE_REGISTRY.photography;
 const shots = entries("photography");
 const title = t(locale, "module.photography.title");
-
-// featured 排在首位（sync-data 已按 featured 优先排序）→ 取第一件做沉浸大图，其余进网格
-const [lead, ...rest] = shots;
 ---
 
 <BaseLayout
@@ -47,52 +43,15 @@ const [lead, ...rest] = shots;
 
     <RoomBand module="photography" seed="band-photography" caption={t(locale, "module.photography.intro")} />
 
-    {
-      lead && (
-        <section class="lead enter-rise" aria-label={pickLang(lead.title, locale).value}>
-          <ExhibitFrame variant="float" interactive class="lead-frame">
-            <figure class="lead-paper">
-              <Cover
-                id={lead.id}
-                module="photography"
-                cover={lead.cover}
-                alt={pickLang(lead.title, locale).value}
-                w={1400}
-                h={560}
-                class="lead-img"
-              />
-            </figure>
-          </ExhibitFrame>
-          <div class="lead-cap">
-            <ExhibitLabel no={lead.extra.no ?? 0} year={lead.date?.slice(0, 4)} medium={lead.tags[0]} />
-            <h2 class="lead-title font-display">{pickLang(lead.title, locale).value}</h2>
-            <p class="lead-summary">{pickLang(lead.summary, locale).value}</p>
-            <p class="cap-foot meta-mono">
-              {typeof lead.extra.location === "string" && (
-                <span class="loc">{t(locale, "photography.shotAt")} {lead.extra.location}</span>
-              )}
-              {lead.links.map((l) => (
-                <a href={l.url} target="_blank" rel="noopener noreferrer" class="src">
-                  {l.label} ↗
-                </a>
-              ))}
-            </p>
-          </div>
-        </section>
-      )
-    }
-
-    {rest.length > 0 && <hr class="hairline my-10" />}
-
     <ul class="shots-grid" role="list">
       {
-        rest.map((e, i) => {
+        shots.map((e, i) => {
           const name = pickLang(e.title, locale).value;
           return (
             <li class="shot enter-rise" style={`transition-delay:${Math.min(i * 70, 320)}ms`}>
               <ExhibitFrame variant="canvas" interactive class="shot-frame">
                 <figure class="shot-paper">
-                  <Cover id={e.id} module="photography" cover={e.cover} alt={name} w={720} h={560} class="shot-img" />
+                  <Cover id={e.id} module="photography" cover={e.cover} alt={name} w={752} h={423} class="shot-img" />
                 </figure>
               </ExhibitFrame>
               <div class="shot-cap">
@@ -133,52 +92,16 @@ const [lead, ...rest] = shots;
     margin-left: -0.04em;
   }
 
-  /* —— 沉浸大图（featured）：白边相纸 + 大圆角取景框 —— */
-  .lead {
-    margin-top: clamp(1.8rem, 4vw, 3rem);
-    display: grid;
-    gap: clamp(1rem, 2.4vw, 1.8rem);
-  }
-  .lead-frame {
-    border-radius: var(--radius-viewport);
-    overflow: hidden;
-  }
-  .lead-paper {
-    margin: 0;
-    padding: clamp(0.5rem, 1.3vw, 1rem);
-    background: var(--surface);
-  }
-  .lead-img,
-  .shot-img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 2px;
-  }
-  .lead-cap {
-    max-width: 44rem;
-  }
-  .lead-title {
-    font-size: clamp(1.6rem, 3.4vw, 2.5rem);
-    line-height: 1.08;
-    margin: 0.5rem 0 0.4rem;
-  }
-  .lead-summary {
-    font-size: 1.02rem;
-    line-height: 1.7;
-    color: var(--muted);
-    max-width: 40rem;
-  }
-
-  /* —— 相纸网格 —— */
+  /* —— 相纸网格：桌面两列、移动单列 —— */
   .shots-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(1.6rem, 4vw, 3rem) clamp(1rem, 2.4vw, 2rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.8rem, 4vw, 3rem) clamp(1.2rem, 2.6vw, 2rem);
+    margin-top: clamp(1.6rem, 3.5vw, 2.6rem);
   }
   @media (min-width: 720px) {
     .shots-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .shot {
@@ -191,16 +114,24 @@ const [lead, ...rest] = shots;
     padding: clamp(0.4rem, 1vw, 0.7rem);
     background: var(--surface);
   }
+  /* 视频封面比例（16:9），object-fit 兜底任何轻微比例误差 */
+  .shot-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 2px;
+  }
   .shot-title {
     font-size: clamp(1.2rem, 2.2vw, 1.55rem);
-    line-height: 1.12;
+    line-height: 1.15;
     margin: 0.35rem 0 0.3rem;
   }
   .shot-summary {
     font-size: 0.92rem;
     line-height: 1.65;
     color: var(--muted);
-    max-width: 32rem;
+    max-width: 34rem;
   }
 
   .cap-foot {
