@@ -173,6 +173,10 @@
     "darkroomTag": "PHOTOGRAPHY — MOMENTS ON THE GROUND",
     "shotAt": "Shot at",
     "published": "Published in",
-    "viewOriginal": "View original ↗"
+    "viewOriginal": "View original ↗",
+    "playVideo": "Play video",
+    "videoBadge": "VIDEO",
+    "closeVideo": "Close",
+    "videoUnsupported": "Sorry, this video cannot be played in your browser."
   }
 }

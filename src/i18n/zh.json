@@ -173,6 +173,10 @@
     "darkroomTag": "摄影 — 现场捕捉的瞬间",
     "shotAt": "拍摄于",
     "published": "发表于",
-    "viewOriginal": "看原文 ↗"
+    "viewOriginal": "看原文 ↗",
+    "playVideo": "播放视频",
+    "videoBadge": "视频",
+    "closeVideo": "关闭",
+    "videoUnsupported": "抱歉，你的浏览器无法播放该视频。"
   }
 }

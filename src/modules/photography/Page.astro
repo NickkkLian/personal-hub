@@ -1,9 +1,11 @@
 ---
 /**
- * Photography（摄影展厅）：冲印相纸墙。
+ * Photography（摄影展厅）：冲印相纸墙 + 视频报道。
  * - 无 feature 大图：所有作品等大排列，桌面一排两张、移动端单列。
- * - 每张封面统一裁成视频封面比例（16:9），无框画布装裱 + 柔影，hover 射灯微抬。
- * - 每件可有多个原文链接（同一作品被多家转发）；有拍摄地则以 meta-mono 标出。
+ * - 每张封面统一视频封面比例（16:9），无框画布装裱 + 柔影。
+ * - 有 extra.video 的作品：封面变可点击 → 站内弹窗播放（HLS：Safari 原生 / 其余 hls.js 动态加载）。
+ *   目前 hotlink 点新闻 CDN 流；本地已存 .ts 备份防删，日后可改自托管。
+ * - 每件可有多个原文链接；有拍摄地则以 meta-mono 标出。
  * reduced-motion 退化为静态。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -47,11 +49,28 @@ const title = t(locale, "module.photography.title");
       {
         shots.map((e, i) => {
           const name = pickLang(e.title, locale).value;
+          const video = typeof e.extra.video === "string" ? e.extra.video : null;
           return (
             <li class="shot enter-rise" style={`transition-delay:${Math.min(i * 70, 320)}ms`}>
               <ExhibitFrame variant="canvas" interactive class="shot-frame">
                 <figure class="shot-paper">
-                  <Cover id={e.id} module="photography" cover={e.cover} alt={name} w={752} h={423} class="shot-img" />
+                  {video ? (
+                    <button
+                      type="button"
+                      class="shot-play"
+                      data-video={video}
+                      data-poster={e.cover}
+                      data-label={name}
+                      aria-label={`${t(locale, "photography.playVideo")}: ${name}`}
+                    >
+                      <Cover id={e.id} module="photography" cover={e.cover} alt={name} w={1280} h={719} class="shot-img" />
+                      <span class="shot-badge meta-mono" aria-hidden="true">
+                        ▶ {t(locale, "photography.videoBadge")}
+                      </span>
+                    </button>
+                  ) : (
+                    <Cover id={e.id} module="photography" cover={e.cover} alt={name} w={1280} h={719} class="shot-img" />
+                  )}
                 </figure>
               </ExhibitFrame>
               <div class="shot-cap">
@@ -74,8 +93,85 @@ const title = t(locale, "module.photography.title");
         })
       }
     </ul>
+
+    <dialog id="video-modal" class="vm" aria-label={t(locale, "photography.playVideo")}>
+      <div class="vm-frame">
+        <button type="button" class="vm-close" aria-label={t(locale, "photography.closeVideo")}>×</button>
+        <video class="vm-video" controls playsinline preload="none"></video>
+        <p class="vm-error meta-mono" hidden>{t(locale, "photography.videoUnsupported")}</p>
+      </div>
+    </dialog>
   </article>
 </BaseLayout>
+
+<script>
+  const modal = document.getElementById("video-modal") as HTMLDialogElement | null;
+  if (modal) {
+    const video = modal.querySelector<HTMLVideoElement>(".vm-video")!;
+    const errEl = modal.querySelector<HTMLParagraphElement>(".vm-error")!;
+    let hls: { destroy: () => void } | null = null;
+
+    async function play(src: string, poster: string) {
+      errEl.hidden = true;
+      video.poster = poster || "";
+      // Safari 等原生支持 HLS：直接喂 m3u8；其余浏览器动态加载 hls.js
+      if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = src;
+      } else {
+        try {
+          const { default: Hls } = await import("hls.js");
+          if (Hls.isSupported()) {
+            const inst = new Hls({ enableWorker: true });
+            inst.loadSource(src);
+            inst.attachMedia(video);
+            inst.on(Hls.Events.ERROR, (_e, data) => {
+              if (data.fatal) errEl.hidden = false;
+            });
+            hls = inst;
+          } else {
+            video.src = src; // 最后兜底
+          }
+        } catch {
+          errEl.hidden = false;
+        }
+      }
+      if (typeof modal!.showModal === "function") modal!.showModal();
+      video.play().catch(() => {});
+    }
+
+    function cleanup() {
+      video.pause();
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      video.removeAttribute("src");
+      video.load();
+    }
+
+    function closeModal() {
+      cleanup(); // 显式清理，不依赖 close 事件（部分环境 dialog.close() 不触发该事件 → 后台续播）
+      if (modal!.open) modal!.close();
+    }
+
+    document.querySelectorAll<HTMLButtonElement>(".shot-play").forEach((btn) => {
+      btn.addEventListener("click", () => play(btn.dataset.video || "", btn.dataset.poster || ""));
+    });
+    modal.querySelector(".vm-close")!.addEventListener("click", closeModal);
+    // 点背景（dialog 本体，非内容区）关闭
+    modal.addEventListener("click", (ev) => {
+      if (ev.target === modal) closeModal();
+    });
+    // Esc：拦截原生关闭，确保清理后再关（否则视频在后台继续播放）
+    modal.addEventListener("keydown", (ev) => {
+      if ((ev as KeyboardEvent).key === "Escape") {
+        ev.preventDefault();
+        closeModal();
+      }
+    });
+    modal.addEventListener("close", cleanup); // 若浏览器确有触发，作兜底
+  }
+</script>
 
 <style>
   .module-head {
@@ -114,7 +210,6 @@ const title = t(locale, "module.photography.title");
     padding: clamp(0.4rem, 1vw, 0.7rem);
     background: var(--surface);
   }
-  /* 视频封面比例（16:9），object-fit 兜底任何轻微比例误差 */
   .shot-img {
     display: block;
     width: 100%;
@@ -122,6 +217,60 @@ const title = t(locale, "module.photography.title");
     object-fit: cover;
     border-radius: 2px;
   }
+
+  /* —— 可播放封面：整块变按钮 —— */
+  .shot-play {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .shot-play .shot-img {
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.4s ease;
+  }
+  .shot-play::after {
+    /* hover 微暗罩，提示可点 */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 90% at 50% 45%, transparent 40%, rgb(0 0 0 / 0.18));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .shot-play:hover .shot-img,
+  .shot-play:focus-visible .shot-img {
+    transform: scale(1.02);
+  }
+  .shot-play:hover::after,
+  .shot-play:focus-visible::after {
+    opacity: 1;
+  }
+  .shot-play:focus-visible {
+    outline: 2px solid var(--room);
+    outline-offset: 3px;
+  }
+  .shot-badge {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: rgb(0 0 0 / 0.55);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+
   .shot-title {
     font-size: clamp(1.2rem, 2.2vw, 1.55rem);
     line-height: 1.15;
@@ -150,5 +299,73 @@ const title = t(locale, "module.photography.title");
   }
   .src:hover {
     text-decoration: underline;
+  }
+
+  /* —— 视频弹窗 —— */
+  .vm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0; /* 显式居中：站点全局 margin 复位会破坏 dialog:modal 的 auto 居中 */
+    width: min(92vw, 1100px);
+    max-width: 1100px;
+    max-height: 92vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    overflow: visible;
+  }
+  .vm::backdrop {
+    background: rgb(0 0 0 / 0.82);
+    backdrop-filter: blur(6px);
+  }
+  .vm-frame {
+    position: relative;
+  }
+  .vm-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--radius-viewport, 14px);
+    box-shadow: 0 24px 70px rgb(0 0 0 / 0.5);
+  }
+  .vm-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 2;
+    width: 2.3rem;
+    height: 2.3rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #fff;
+    background: rgb(0 0 0 / 0.55);
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+  }
+  .vm-close:hover {
+    background: rgb(0 0 0 / 0.75);
+  }
+  .vm-error {
+    margin-top: 0.8rem;
+    text-align: center;
+    color: #ffd7d7;
+    font-size: 0.75rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shot-play .shot-img {
+      transition: none;
+    }
+    .shot-play:hover .shot-img,
+    .shot-play:focus-visible .shot-img {
+      transform: none;
+    }
   }
 </style>

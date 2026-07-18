@@ -1,5 +1,5 @@
 {
-  "$comment": "摄影展厅数据（站长直接编辑本文件，或用 admin.html 的『摄影』面板）。每条 public:true 才上墙。cover 填 public/ 下的本地图路径（如 /photography/xxx.jpg）或 https 网址；留 null 用生成式封面。links 放原文/发表链接（label 显示在按钮上，可多条：如同一件作品被多家转发）。date 拍摄或发表日。extra.location 拍摄地；extra.featured 由 site.config.featured.photography 控制（留空则自动取最新）。隐私：只放已公开发表的作品。",
+  "$comment": "摄影展厅数据（站长直接编辑本文件，或用 admin.html 的『摄影』面板）。每条 public:true 才上墙。cover 填 public/ 下的本地图路径（如 /photography/xxx.jpg）或 https 网址；留 null 用生成式封面。links 放原文/发表链接（label 显示在按钮上，可多条：如同一件作品被多家转发）。date 拍摄或发表日。extra.location 拍摄地；extra.featured 由 site.config.featured.photography 控制（留空则自动取最新）。extra.video 填视频流地址（如新闻视频 m3u8）→ 封面变可点击、站内弹窗播放（HLS，Safari 原生 / 其余走 hls.js）；目前 hotlink 点新闻 CDN，本地已下载 .ts 备份存 ~/Desktop/Dev/_media-backup/photography/ 防删，日后可改自托管。隐私：只放已公开发表的作品。",
   "items": [
     {
       "id": "worldcup-vancouver-0614",
@@ -19,7 +19,10 @@
         { "label": "点新闻", "url": "https://www.dotdotnews.com/s/202606/14/AP6a2e5eb5e4b09ea233186330.html" }
       ],
       "public": true,
-      "extra": { "location": "BC Place, Vancouver" }
+      "extra": {
+        "location": "BC Place, Vancouver",
+        "video": "https://dw-media.dotdotnews.com/dams/product/video/202606/14/6a2e5d72e4b08c07fcf93f1a/adc91a097f7d4a7eb9cfb3ea7ab604e7.m3u8"
+      }
     },
     {
       "id": "giant-football-science-world",
@@ -38,7 +41,10 @@
         { "label": "点新闻", "url": "https://www.dotdotnews.com/a/202606/03/AP6a2006fbe4b09ea233174483.html" }
       ],
       "public": true,
-      "extra": { "location": "Science World, Vancouver" }
+      "extra": {
+        "location": "Science World, Vancouver",
+        "video": "https://dw-media.dotdotnews.com/dams/product/video/202606/03/6a200128e4b08c07fcf5e712/768cf3c795e8483ea4dd0a02d9430290.m3u8"
+      }
     }
   ]
 }
