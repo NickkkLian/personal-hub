@@ -27,6 +27,7 @@
       "mock": "scripts/mock/album-journal.public.json"
     },
     { "module": "my-music", "adapter": "local-json", "file": "content/my-music.json" },
+    { "module": "photography", "adapter": "local-json", "file": "content/photography.json" },
     {
       "module": "knowledge",
       "adapter": "public-json",

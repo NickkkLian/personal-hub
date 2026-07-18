@@ -5,6 +5,7 @@
     "writing": "Writing",
     "music-wall": "Album Wall",
     "my-music": "My Music",
+    "photography": "Photography",
     "knowledge": "Knowledge",
     "life": "Life",
     "menu": "Kitchen",
@@ -35,6 +36,11 @@
       "title": "My Music",
       "ghost": "STUDIO",
       "intro": "Got a feeling"
+    },
+    "photography": {
+      "title": "Photography",
+      "ghost": "OBJECTIF",
+      "intro": "Moments caught on the ground."
     },
     "knowledge": {
       "title": "Knowledge",
@@ -162,5 +168,11 @@
     "verify": "Verify",
     "verified": "Verifiable credential",
     "onRecord": "On record"
+  },
+  "photography": {
+    "darkroomTag": "PHOTOGRAPHY — MOMENTS ON THE GROUND",
+    "shotAt": "Shot at",
+    "published": "Published in",
+    "viewOriginal": "View original ↗"
   }
 }

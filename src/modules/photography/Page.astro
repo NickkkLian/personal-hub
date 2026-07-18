@@ -1,0 +1,223 @@
+---
+/**
+ * Photography（摄影展厅）：冲印相纸墙。
+ * - featured（site.config.featured.photography，或自动取最新）→ 全幅沉浸大图，装在大圆角取景框，
+ *   白边相纸 + 发丝浮框；题注压在图下方墙面。
+ * - 其余作品 → 双列相纸卡（无框画布装裱 + 柔影），hover 射灯微抬。
+ * - 每件可有多个原文链接（同一作品被多家转发）；有拍摄地则以 meta-mono 标出。
+ * reduced-motion 退化为静态；移动端单列。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RoomBand from "../../components/gallery/RoomBand.astro";
+import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
+import ExhibitLabel from "../../components/gallery/ExhibitLabel.astro";
+import Cover from "../../components/gallery/Cover.astro";
+import { t, pickLang, type Locale } from "../../i18n";
+import { MODULE_REGISTRY } from "../../config/site";
+import { entries } from "../../lib/data";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const meta = MODULE_REGISTRY.photography;
+const shots = entries("photography");
+const title = t(locale, "module.photography.title");
+
+// featured 排在首位（sync-data 已按 featured 优先排序）→ 取第一件做沉浸大图，其余进网格
+const [lead, ...rest] = shots;
+---
+
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={t(locale, "module.photography.intro")}
+  path={`/${meta.slug}`}
+  room={meta.room}
+  ghost={t(locale, "module.photography.ghost")}
+>
+  <article style={`--room: var(${meta.room})`}>
+    <header class="module-head enter-rise is-in">
+      <p class="meta-mono room-tag">
+        {t(locale, "home.roomLabel")}
+        {meta.roomNo} — {t(locale, "photography.darkroomTag")}
+      </p>
+      <h1 class="module-title">{title}</h1>
+    </header>
+
+    <RoomBand module="photography" seed="band-photography" caption={t(locale, "module.photography.intro")} />
+
+    {
+      lead && (
+        <section class="lead enter-rise" aria-label={pickLang(lead.title, locale).value}>
+          <ExhibitFrame variant="float" interactive class="lead-frame">
+            <figure class="lead-paper">
+              <Cover
+                id={lead.id}
+                module="photography"
+                cover={lead.cover}
+                alt={pickLang(lead.title, locale).value}
+                w={1400}
+                h={560}
+                class="lead-img"
+              />
+            </figure>
+          </ExhibitFrame>
+          <div class="lead-cap">
+            <ExhibitLabel no={lead.extra.no ?? 0} year={lead.date?.slice(0, 4)} medium={lead.tags[0]} />
+            <h2 class="lead-title font-display">{pickLang(lead.title, locale).value}</h2>
+            <p class="lead-summary">{pickLang(lead.summary, locale).value}</p>
+            <p class="cap-foot meta-mono">
+              {typeof lead.extra.location === "string" && (
+                <span class="loc">{t(locale, "photography.shotAt")} {lead.extra.location}</span>
+              )}
+              {lead.links.map((l) => (
+                <a href={l.url} target="_blank" rel="noopener noreferrer" class="src">
+                  {l.label} ↗
+                </a>
+              ))}
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    {rest.length > 0 && <hr class="hairline my-10" />}
+
+    <ul class="shots-grid" role="list">
+      {
+        rest.map((e, i) => {
+          const name = pickLang(e.title, locale).value;
+          return (
+            <li class="shot enter-rise" style={`transition-delay:${Math.min(i * 70, 320)}ms`}>
+              <ExhibitFrame variant="canvas" interactive class="shot-frame">
+                <figure class="shot-paper">
+                  <Cover id={e.id} module="photography" cover={e.cover} alt={name} w={720} h={560} class="shot-img" />
+                </figure>
+              </ExhibitFrame>
+              <div class="shot-cap">
+                <ExhibitLabel no={e.extra.no ?? 0} year={e.date?.slice(0, 4)} medium={e.tags[0]} />
+                <h3 class="shot-title font-display">{name}</h3>
+                <p class="shot-summary">{pickLang(e.summary, locale).value}</p>
+                <p class="cap-foot meta-mono">
+                  {typeof e.extra.location === "string" && (
+                    <span class="loc">{t(locale, "photography.shotAt")} {e.extra.location}</span>
+                  )}
+                  {e.links.map((l) => (
+                    <a href={l.url} target="_blank" rel="noopener noreferrer" class="src">
+                      {l.label} ↗
+                    </a>
+                  ))}
+                </p>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </article>
+</BaseLayout>
+
+<style>
+  .module-head {
+    padding-top: clamp(1.4rem, 4.5vh, 5rem);
+  }
+  .room-tag {
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
+    margin-bottom: 1.2rem;
+  }
+  .module-title {
+    font-size: clamp(2.1rem, 5vw, 3.6rem);
+    line-height: 1;
+    font-weight: 590;
+    margin-left: -0.04em;
+  }
+
+  /* —— 沉浸大图（featured）：白边相纸 + 大圆角取景框 —— */
+  .lead {
+    margin-top: clamp(1.8rem, 4vw, 3rem);
+    display: grid;
+    gap: clamp(1rem, 2.4vw, 1.8rem);
+  }
+  .lead-frame {
+    border-radius: var(--radius-viewport);
+    overflow: hidden;
+  }
+  .lead-paper {
+    margin: 0;
+    padding: clamp(0.5rem, 1.3vw, 1rem);
+    background: var(--surface);
+  }
+  .lead-img,
+  .shot-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+  .lead-cap {
+    max-width: 44rem;
+  }
+  .lead-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+    line-height: 1.08;
+    margin: 0.5rem 0 0.4rem;
+  }
+  .lead-summary {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 40rem;
+  }
+
+  /* —— 相纸网格 —— */
+  .shots-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.6rem, 4vw, 3rem) clamp(1rem, 2.4vw, 2rem);
+  }
+  @media (min-width: 720px) {
+    .shots-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .shot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .shot-paper {
+    margin: 0;
+    padding: clamp(0.4rem, 1vw, 0.7rem);
+    background: var(--surface);
+  }
+  .shot-title {
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    line-height: 1.12;
+    margin: 0.35rem 0 0.3rem;
+  }
+  .shot-summary {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 32rem;
+  }
+
+  .cap-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    margin-top: 0.6rem;
+    font-size: 0.62rem;
+  }
+  .loc {
+    color: color-mix(in oklab, var(--room) 50%, var(--muted));
+  }
+  .src {
+    color: color-mix(in oklab, var(--room) 60%, var(--text));
+  }
+  .src:hover {
+    text-decoration: underline;
+  }
+</style>

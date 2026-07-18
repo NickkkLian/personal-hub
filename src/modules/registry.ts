@@ -3,6 +3,7 @@ import ProjectsPage from "./projects/Page.astro";
 import WritingPage from "./writing/Page.astro";
 import MusicWallPage from "./music-wall/Page.astro";
 import MyMusicPage from "./my-music/Page.astro";
+import PhotographyPage from "./photography/Page.astro";
 import KnowledgePage from "./knowledge/Page.astro";
 import LifePage from "./life/Page.astro";
 import MenuPage from "./menu/Page.astro";
@@ -20,6 +21,7 @@ export const MODULE_PAGES = {
   writing: WritingPage,
   "music-wall": MusicWallPage,
   "my-music": MyMusicPage,
+  photography: PhotographyPage,
   knowledge: KnowledgePage,
   life: LifePage,
   menu: MenuPage,

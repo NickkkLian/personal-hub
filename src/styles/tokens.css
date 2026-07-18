@@ -22,12 +22,14 @@
   --paint-violet: #8b7e94; /* 紫灰 — social */
   --paint-deepmist: #6b7f95; /* 深雾蓝 — my-music */
   --paint-verd: #5f8076; /* 铜绿 — special（奖章/铜匾，呼应黄铜金属） */
+  --paint-slate: #5f6b6e; /* 暗房青灰 — photography（银盐/暗房气质） */
 
   /* ---------- 模块房间色（同一家族、不同房间） ---------- */
   --room-projects: var(--paint-graphite);
   --room-writing: var(--paint-sage);
   --room-music-wall: var(--paint-mist);
   --room-my-music: var(--paint-deepmist);
+  --room-photography: var(--paint-slate);
   --room-knowledge: var(--paint-night);
   --room-life: var(--paint-rose);
   --room-menu: var(--paint-ochre);

@@ -5,6 +5,7 @@ export type ModuleId =
   | "writing"
   | "music-wall"
   | "my-music"
+  | "photography"
   | "knowledge"
   | "life"
   | "menu"
@@ -34,13 +35,14 @@ export const MODULE_REGISTRY: Record<ModuleId, ModuleMeta> = {
   writing: { id: "writing", slug: "writing", room: "--room-writing", roomNo: "II", order: 2 },
   "music-wall": { id: "music-wall", slug: "albums", room: "--room-music-wall", roomNo: "III", order: 3 },
   "my-music": { id: "my-music", slug: "music", room: "--room-my-music", roomNo: "IV", order: 4 },
-  knowledge: { id: "knowledge", slug: "knowledge", room: "--room-knowledge", roomNo: "V", order: 5 },
-  life: { id: "life", slug: "life", room: "--room-life", roomNo: "VI", order: 6 },
-  menu: { id: "menu", slug: "menu", room: "--room-menu", roomNo: "VII", order: 7 },
-  mystery: { id: "mystery", slug: "mystery", room: "--room-mystery", roomNo: "VIII", order: 8 },
-  social: { id: "social", slug: "channels", room: "--room-social", roomNo: "IX", order: 9 },
-  special: { id: "special", slug: "special", room: "--room-special", roomNo: "X", order: 10 },
-  about: { id: "about", slug: "about", room: "--room-about", roomNo: "XI", order: 11 },
+  photography: { id: "photography", slug: "photography", room: "--room-photography", roomNo: "V", order: 5 },
+  knowledge: { id: "knowledge", slug: "knowledge", room: "--room-knowledge", roomNo: "VI", order: 6 },
+  life: { id: "life", slug: "life", room: "--room-life", roomNo: "VII", order: 7 },
+  menu: { id: "menu", slug: "menu", room: "--room-menu", roomNo: "VIII", order: 8 },
+  mystery: { id: "mystery", slug: "mystery", room: "--room-mystery", roomNo: "IX", order: 9 },
+  social: { id: "social", slug: "channels", room: "--room-social", roomNo: "X", order: 10 },
+  special: { id: "special", slug: "special", room: "--room-special", roomNo: "XI", order: 11 },
+  about: { id: "about", slug: "about", room: "--room-about", roomNo: "XII", order: 12 },
 };
 
 export interface SiteConfig {

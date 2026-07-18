@@ -5,6 +5,7 @@
     "writing": "文字",
     "music-wall": "专辑墙",
     "my-music": "原创音乐",
+    "photography": "摄影",
     "knowledge": "知识图谱",
     "life": "生活地图",
     "menu": "私房菜单",
@@ -35,6 +36,11 @@
       "title": "原创音乐",
       "ghost": "STUDIO",
       "intro": "来灵感了"
+    },
+    "photography": {
+      "title": "摄影",
+      "ghost": "OBJECTIF",
+      "intro": "在现场捕捉的瞬间。"
     },
     "knowledge": {
       "title": "知识图谱",
@@ -162,5 +168,11 @@
     "verify": "验证",
     "verified": "可在线验证",
     "onRecord": "在册"
+  },
+  "photography": {
+    "darkroomTag": "摄影 — 现场捕捉的瞬间",
+    "shotAt": "拍摄于",
+    "published": "发表于",
+    "viewOriginal": "看原文 ↗"
   }
 }

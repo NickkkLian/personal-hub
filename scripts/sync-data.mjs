@@ -47,6 +47,7 @@ const MODULE_ORDER = [
   "writing",
   "music-wall",
   "my-music",
+  "photography",
   "knowledge",
   "life",
   "menu",
