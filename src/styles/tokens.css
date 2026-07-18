@@ -22,14 +22,14 @@
   --paint-violet: #8b7e94; /* 紫灰 — social */
   --paint-deepmist: #6b7f95; /* 深雾蓝 — my-music */
   --paint-verd: #5f8076; /* 铜绿 — special（奖章/铜匾，呼应黄铜金属） */
-  --paint-slate: #5f6b6e; /* 暗房青灰 — photography（银盐/暗房气质） */
+  --paint-safelight: #8a4f47; /* 暗房安全灯红 — photography（冲印暗房红灯；青灰与 special 铜绿撞色已弃） */
 
   /* ---------- 模块房间色（同一家族、不同房间） ---------- */
   --room-projects: var(--paint-graphite);
   --room-writing: var(--paint-sage);
   --room-music-wall: var(--paint-mist);
   --room-my-music: var(--paint-deepmist);
-  --room-photography: var(--paint-slate);
+  --room-photography: var(--paint-safelight);
   --room-knowledge: var(--paint-night);
   --room-life: var(--paint-rose);
   --room-menu: var(--paint-ochre);
@@ -91,6 +91,7 @@
   --paint-violet: #a195ab;
   --paint-deepmist: #8298ae;
   --paint-verd: #79988d;
+  --paint-safelight: #b57a6e;
   --brass: #c3a06a;
   --brass-hi: #e3c993;
 
