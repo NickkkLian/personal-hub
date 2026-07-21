@@ -24,7 +24,7 @@
     },
     "writing": {
       "title": "Writing",
-      "ghost": "BIBLIOTHÈQUE",
+      "ghost": "PENSÉES",
       "intro": "Fragments of thought"
     },
     "music-wall": {
@@ -115,10 +115,7 @@
     "filterHint": "Filter by language or topic"
   },
   "writing": {
-    "shelfHint": "Pull a spine to open it",
     "new": "NEW",
-    "back": "Back to the shelf",
-    "open": "Open",
     "read": "Read full text",
     "close": "Close",
     "empty": "No public writing yet — essays will hang on this wall once published."
