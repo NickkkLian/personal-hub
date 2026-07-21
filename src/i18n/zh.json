@@ -115,6 +115,7 @@
     "filterHint": "按语言或主题筛选"
   },
   "writing": {
+    "roomTag": "文字 — 随笔与思考",
     "new": "NEW",
     "read": "阅读全文",
     "close": "关闭",

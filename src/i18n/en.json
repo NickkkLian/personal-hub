@@ -115,6 +115,7 @@
     "filterHint": "Filter by language or topic"
   },
   "writing": {
+    "roomTag": "WRITING — ESSAYS & NOTES",
     "new": "NEW",
     "read": "Read full text",
     "close": "Close",

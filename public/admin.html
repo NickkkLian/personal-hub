@@ -562,13 +562,28 @@
         photography: "摄影展厅",
       };
       const I18N_MODFIELD_CN = { title: "展厅标题", ghost: "背景大字（幽灵字水印）", intro: "一句话简介" };
+      // 各展厅左上角小标注行（写法各异，统一标注）
+      const I18N_LEAF_CN = {
+        annotation: "左上角标注行",
+        studioTag: "左上角标注行",
+        darkroomTag: "左上角标注行",
+        cabinetTag: "左上角标注行",
+        roomTag: "左上角标注行",
+        new: "NEW 角标",
+        read: "阅读按钮",
+        close: "关闭按钮",
+        empty: "空态提示",
+      };
       function friendlyLabel(path, zh) {
         const p = path.split(".");
         const zhTitle = (id) => (zh.module && zh.module[id] && zh.module[id].title) || id;
         if (p[0] === "module" && p.length === 3) return `「${zhTitle(p[1])}」· ${I18N_MODFIELD_CN[p[2]] || p[2]}`;
         if (p[0] === "nav" && p.length === 2) return `导航栏 · ${zhTitle(p[1])}`;
         const g = I18N_GROUP_CN[p[0]];
-        if (g) return p.length > 1 ? `${g} · ${p.slice(1).join(" › ")}` : g;
+        if (g) {
+          const leafCn = p.length === 2 ? I18N_LEAF_CN[p[1]] : null;
+          return leafCn ? `${g} · ${leafCn}` : p.length > 1 ? `${g} · ${p.slice(1).join(" › ")}` : g;
+        }
         return path;
       }
 
