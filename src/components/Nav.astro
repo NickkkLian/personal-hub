@@ -18,7 +18,9 @@ function isActive(href: string): boolean {
 }
 ---
 
-<header class="fixed inset-x-0 top-0 z-50 border-b border-hair bg-bg/80 backdrop-blur-md">
+<header
+  class="fixed inset-x-0 top-0 z-50 border-b border-hair [background-color:var(--nav-bg)] backdrop-blur-md"
+>
   <nav
     aria-label={t(locale, "a11y.mainNav")}
     class="mx-auto flex h-14 max-w-6xl items-center gap-4 px-5 sm:px-8"
@@ -81,7 +83,11 @@ function isActive(href: string): boolean {
   </nav>
 
   <!-- 移动端抽屉 -->
-  <div id="mobile-nav" hidden class="border-t border-hair bg-bg/95 px-5 py-4 backdrop-blur-md md:hidden">
+  <div
+    id="mobile-nav"
+    hidden
+    class="border-t border-hair [background-color:var(--nav-bg-strong)] px-5 py-4 backdrop-blur-md md:hidden"
+  >
     <ul class="flex flex-col gap-1">
       <li>
         <a

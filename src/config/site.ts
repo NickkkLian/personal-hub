@@ -59,6 +59,8 @@ export interface SiteConfig {
   fonts?: { display?: string; mono?: string };
   /** 各模块 feature 卡选中的条目 id（站长在 admin 后台填；留空 = 自动选置顶/最新一条） */
   featured?: Record<string, string>;
+  /** 写作卡片体裁标注（admin 后台可编辑；替代原来源自动抓取的 sectionLabel，留空不显示） */
+  writingLabel?: { en?: string; zh?: string };
   about: {
     bio: { en: string; zh: string };
     timeline: { year: string; en: string; zh: string }[];

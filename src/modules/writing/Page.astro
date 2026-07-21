@@ -3,6 +3,9 @@
  * Writing（详情卡片网格 · 站长要求去掉书架）：
  * 条目直接以"翻开的书"详情卡呈现——封面画 + 标题/摘要/正文节选/日期，按年份分层成网格；
  * 保留 NEW 标记与全站连续展品编号。
+ * - 整卡可点 → 全屏阅读弹窗（全文；ClientRouter 换页安全：document 级委托）。
+ * - 卡片体裁标注不再自动抓取来源 sectionLabel（旧「完整观点」），改读 site.config.writingLabel
+ *   （站长在文本后台可编辑，双语，留空不显示）。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ExhibitFrame from "../../components/gallery/ExhibitFrame.astro";
@@ -10,7 +13,7 @@ import Cover from "../../components/gallery/Cover.astro";
 import FeatureCard from "../../components/gallery/FeatureCard.astro";
 import RoomBand from "../../components/gallery/RoomBand.astro";
 import { t, pickLang, type Locale } from "../../i18n";
-import { MODULE_REGISTRY } from "../../config/site";
+import { MODULE_REGISTRY, siteConfig } from "../../config/site";
 import { entries, exhibitNo, isNew, pickFeatured } from "../../lib/data";
 
 interface Props {
@@ -21,6 +24,10 @@ const meta = MODULE_REGISTRY.writing;
 const all = entries("writing");
 const featured = pickFeatured("writing", all);
 const rest = all.filter((e) => e !== featured);
+
+// 站长自定义体裁标注（admin 后台『写作卡片标注』；替代原来源自动抓取）
+const wl = siteConfig.writingLabel ?? {};
+const badge = (locale === "zh" ? wl.zh || wl.en : wl.en || wl.zh) || "";
 
 // 按年份分层（无日期归入最早层底部）
 const groups = new Map<string, typeof rest>();
@@ -60,12 +67,13 @@ const title = t(locale, "module.writing.title");
           entry={featured}
           module="writing"
           label={t(locale, "common.featured")}
-          meta={[featured.extra.sectionLabel, featured.date].filter(Boolean).join(" · ")}
+          meta={[badge, featured.date].filter(Boolean).join(" · ")}
         />
       )
     }
 
-    <hr class="hairline my-10" />
+    {all.length > 0 && <hr class="hairline my-10" />}
+    {all.length === 0 && <p class="wr-empty meta-mono enter-rise is-in">{t(locale, "writing.empty")}</p>}
 
     {
       years.map((y) => (
@@ -77,6 +85,10 @@ const title = t(locale, "module.writing.title");
             {groups.get(y)!.map((e, i) => {
               const tt = pickLang(e.title, locale);
               const sm = pickLang(e.summary, locale).value;
+              const paras = String(e.extra.content ?? "")
+                .split(/\n+/)
+                .map((p) => p.trim())
+                .filter(Boolean);
               return (
                 <li class="enter-rise" style={`transition-delay:${Math.min(i * 50, 280)}ms`}>
                   <ExhibitFrame interactive class="wr-card">
@@ -87,7 +99,7 @@ const title = t(locale, "module.writing.title");
                     <div class="wr-body">
                       <p class="meta-mono wr-no">
                         {exhibitNo(e)} · WRITING
-                        {e.extra.sectionLabel ? ` · ${e.extra.sectionLabel}` : ""}
+                        {badge ? ` · ${badge}` : ""}
                       </p>
                       <h3 class="font-display wr-title">{tt.value}</h3>
                       {sm && <p class="wr-summary">{sm}</p>}
@@ -101,7 +113,38 @@ const title = t(locale, "module.writing.title");
                         {e.date ?? ""}
                       </p>
                     </div>
+                    <button
+                      type="button"
+                      class="wr-open"
+                      aria-label={t(locale, "writing.read") + ": " + tt.value}
+                    ></button>
                   </ExhibitFrame>
+                  <!-- 全文（弹窗内容源；hidden 不显示，点击时克隆进弹窗） -->
+                  <div class="wr-full" hidden>
+                    <div class="wrr-article">
+                      <p class="meta-mono wrr-meta">
+                        {exhibitNo(e)} · WRITING
+                        {badge ? ` · ${badge}` : ""}
+                        {e.date ? ` · ${e.date}` : ""}
+                      </p>
+                      <h2 class="font-display wrr-title">{tt.value}</h2>
+                      {sm && <p class="wrr-lede">{sm}</p>}
+                      <div class="wrr-content">
+                        {paras.map((p) => (
+                          <p>{p}</p>
+                        ))}
+                      </div>
+                      {e.links.length > 0 && (
+                        <p class="wrr-links meta-mono">
+                          {e.links.map((l) => (
+                            <a href={l.url} target="_blank" rel="noopener noreferrer">
+                              {l.label} ↗
+                            </a>
+                          ))}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </li>
               );
             })}
@@ -109,8 +152,43 @@ const title = t(locale, "module.writing.title");
         </section>
       ))
     }
+
+    <dialog id="wr-reader" class="wrr" aria-label={t(locale, "writing.read")}>
+      <button type="button" class="wrr-close" aria-label={t(locale, "writing.close")}>×</button>
+      <div class="wrr-scroll">
+        <div class="wrr-slot"></div>
+      </div>
+    </dialog>
   </article>
 </BaseLayout>
+
+<script>
+  /** ClientRouter 换页不重跑本脚本 → document 级委托 + 每次现查 #wr-reader（同摄影页视频弹窗的坑）。 */
+  const getReader = () => document.getElementById("wr-reader") as HTMLDialogElement | null;
+
+  document.addEventListener("click", (ev) => {
+    const dlg = getReader();
+    if (!dlg) return; // 不在写作页
+    const t = ev.target as Element;
+    const open = t.closest(".wr-open");
+    if (open) {
+      const full = open.closest("li")?.querySelector(".wr-full");
+      const slot = dlg.querySelector(".wrr-slot")!;
+      if (full && full.firstElementChild) {
+        slot.replaceChildren(full.firstElementChild.cloneNode(true));
+        if (typeof dlg.showModal === "function") dlg.showModal();
+        dlg.querySelector(".wrr-scroll")!.scrollTop = 0;
+      }
+      return;
+    }
+    if (t.closest(".wrr-close")) dlg.close();
+  });
+  // 换页离开时收起
+  document.addEventListener("astro:before-swap", () => {
+    const dlg = getReader();
+    if (dlg?.open) dlg.close();
+  });
+</script>
 
 <style>
   .module-head {
@@ -130,6 +208,10 @@ const title = t(locale, "module.writing.title");
     margin-top: 1.6rem;
     max-width: 36rem;
     font-size: 1.05rem;
+    color: var(--muted);
+  }
+  .wr-empty {
+    margin: 3rem 0 5rem;
     color: var(--muted);
   }
 
@@ -174,6 +256,20 @@ const title = t(locale, "module.writing.title");
   .wr-card:hover .wr-art :global(.cover-art),
   .wr-card:hover .wr-art :global(.cover-img) {
     transform: scale(1.05);
+  }
+  /* 整卡可点：透明覆盖按钮（在射灯层之上） */
+  .wr-open {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    border-radius: inherit;
+  }
+  .wr-open:focus-visible {
+    outline: 2px solid var(--room);
+    outline-offset: 2px;
   }
   /* NEW 黄铜书腰 → 角标 */
   .wr-new {
@@ -227,5 +323,83 @@ const title = t(locale, "module.writing.title");
   }
   .wr-orig {
     color: color-mix(in oklab, var(--room) 50%, var(--muted));
+  }
+
+  /* —— 全屏阅读弹窗 —— */
+  .wrr {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+  }
+  .wrr::backdrop {
+    background: rgb(0 0 0 / 0.3);
+  }
+  .wrr-scroll {
+    height: 100%;
+    overflow-y: auto;
+    padding: clamp(3.6rem, 9vh, 6rem) 1.4rem 5rem;
+  }
+  .wrr-slot :global(.wrr-article) {
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  .wrr-slot :global(.wrr-meta) {
+    color: color-mix(in oklab, var(--room) 55%, var(--text));
+    margin-bottom: 1.1rem;
+  }
+  .wrr-slot :global(.wrr-title) {
+    font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+    line-height: 1.12;
+    font-weight: 560;
+    margin-bottom: 1.1rem;
+  }
+  .wrr-slot :global(.wrr-lede) {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 1.8rem;
+  }
+  .wrr-slot :global(.wrr-content p) {
+    margin: 0 0 1.15em;
+    font-size: 1.02rem;
+    line-height: 1.85;
+  }
+  .wrr-slot :global(.wrr-links) {
+    margin-top: 2rem;
+  }
+  .wrr-slot :global(.wrr-links a) {
+    margin-right: 1.2rem;
+    color: color-mix(in oklab, var(--room) 60%, var(--text));
+  }
+  .wrr-slot :global(.wrr-links a:hover) {
+    text-decoration: underline;
+  }
+  .wrr-close {
+    position: fixed;
+    top: 0.9rem;
+    right: 1rem;
+    z-index: 2;
+    width: 2.3rem;
+    height: 2.3rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--text);
+    background: color-mix(in oklab, var(--text) 7%, var(--bg));
+    border: 1px solid color-mix(in oklab, var(--text) 18%, transparent);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .wrr-close:hover {
+    background: color-mix(in oklab, var(--text) 14%, var(--bg));
   }
 </style>

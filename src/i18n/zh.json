@@ -118,7 +118,10 @@
     "shelfHint": "抽出一本书脊翻开它",
     "new": "NEW",
     "back": "放回书架",
-    "open": "翻开"
+    "open": "翻开",
+    "read": "阅读全文",
+    "close": "关闭",
+    "empty": "这面墙还空着——文章公开后会挂上来。"
   },
   "aboutPage": {
     "portrait": "策展人肖像",

@@ -301,6 +301,19 @@
           <div id="special-items"></div>
           <button id="btn-add-badge" type="button" style="margin-top: 0.8rem">+ 添加徽章</button>
         </section>
+
+        <!-- 摄影展厅（content/photography.json） -->
+        <section class="card">
+          <h2 class="sec">摄影展厅</h2>
+          <p class="hint">
+            新闻纪实/摄影作品。封面图先放到仓库 <code>public/photography/</code>，「封面路径」填
+            <code>/photography/文件名.jpg</code>（建议 16:9）。「视频地址」填 m3u8 流即可点封面站内播放；
+            「发表链接」每行一条、格式 <code>名称|https://链接</code>（同一作品被多家转发就写多行）。
+            每条需勾选「公开」才会上墙。<b>只放已公开发表的作品。</b>
+          </p>
+          <div id="photo-items"></div>
+          <button id="btn-add-shot" type="button" style="margin-top: 0.8rem">+ 添加作品</button>
+        </section>
       </div>
     </main>
 
@@ -319,6 +332,7 @@
         en: "src/i18n/en.json",
         zh: "src/i18n/zh.json",
         special: "content/special-collections.json",
+        photography: "content/photography.json",
       };
       let loaded = {}; // { config:{json,sha}, en:{...}, zh:{...} }
 
@@ -421,10 +435,16 @@
           } catch {
             loaded.special = { json: { items: [] }, sha: null };
           }
+          try {
+            loaded.photography = await ghGet(FILES.photography);
+          } catch {
+            loaded.photography = { json: { items: [] }, sha: null };
+          }
           buildFonts();
           buildConfig();
           buildI18n();
           buildSpecial();
+          buildPhotography();
           $("#editor").classList.remove("hidden");
           $("#savebar").classList.remove("hidden");
           setStatus("#setup-status", "已载入 ✓", "ok");
@@ -460,6 +480,14 @@
               "featured",
               root.featured,
               "精选条目 feature 卡（填条目 id，留空 = 自动选最新/置顶一条）",
+            ),
+          );
+        if (root.writingLabel)
+          host.appendChild(
+            renderConfigGroup(
+              "writingLabel",
+              root.writingLabel,
+              "写作卡片标注（替代原自动抓取的『完整观点』；双语，留空不显示）",
             ),
           );
         host.appendChild(renderModules(root.modules));
@@ -632,6 +660,101 @@
         return data;
       }
 
+      // ---- 摄影展厅编辑器 ----
+      function buildPhotography() {
+        const host = $("#photo-items");
+        host.innerHTML = "";
+        const items = (loaded.photography.json && loaded.photography.json.items) || [];
+        items.forEach((it) => host.appendChild(shotRow(it)));
+      }
+      function shotRow(it) {
+        it = it || {};
+        const ex = it.extra || {};
+        const title = it.title || {};
+        const summary = it.summary || {};
+        const tags = Array.isArray(it.tags) ? it.tags.join(", ") : "";
+        const links = (Array.isArray(it.links) ? it.links : [])
+          .map((l) => `${l.label || "link"}|${l.url || ""}`)
+          .join("\n");
+        const d = document.createElement("details");
+        d.className = "badge-row";
+        d.open = true;
+        d.dataset.id = it.id || "";
+        const nameLabel = title.zh || title.en || "（新作品）";
+        d.innerHTML = `
+          <summary>📷 ${esc(nameLabel)}</summary>
+          <div class="bi">
+            <div><label class="mono">标题 EN</label><input data-f="title.en" type="text" value="${esc(title.en || "")}"/></div>
+            <div><label class="mono">标题 ZH</label><input data-f="title.zh" type="text" value="${esc(title.zh || "")}"/></div>
+          </div>
+          <div class="bi">
+            <div><label class="mono">简介 EN</label><textarea data-f="summary.en" rows="2">${esc(summary.en || "")}</textarea></div>
+            <div><label class="mono">简介 ZH</label><textarea data-f="summary.zh" rows="2">${esc(summary.zh || "")}</textarea></div>
+          </div>
+          <div class="bi">
+            <div><label class="mono">日期 date（YYYY-MM-DD）</label><input data-f="date" type="text" value="${esc(it.date || "")}"/></div>
+            <div><label class="mono">标签 tags（逗号分隔）</label><input data-f="tags" type="text" value="${esc(tags)}"/></div>
+          </div>
+          <div class="bi">
+            <div><label class="mono">封面路径 cover（/photography/…）</label><input data-f="cover" type="text" value="${esc(it.cover || "")}"/></div>
+            <div><label class="mono">拍摄地 location</label><input data-f="location" type="text" value="${esc(ex.location || "")}"/></div>
+          </div>
+          <label class="mono">视频地址 video（m3u8，留空 = 纯图片）</label>
+          <input data-f="video" type="text" placeholder="https://…m3u8" value="${esc(ex.video || "")}"/>
+          <label class="mono">发表链接（每行一条：名称|https://链接）</label>
+          <textarea data-f="links" rows="2" placeholder="文汇报|https://…\n点新闻|https://…">${esc(links)}</textarea>
+          <div style="margin-top:.6rem;display:flex;align-items:center;gap:1rem">
+            <label class="chk"><input data-f="public" type="checkbox" ${it.public === false ? "" : "checked"}/> 公开（上墙）</label>
+            <button type="button" class="btn-del-shot">删除此作品</button>
+          </div>`;
+        d.querySelector(".btn-del-shot").addEventListener("click", () => d.remove());
+        return d;
+      }
+      $("#btn-add-shot").addEventListener("click", () => {
+        $("#photo-items").appendChild(shotRow({ public: true }));
+      });
+      function collectPhotography() {
+        const data = JSON.parse(JSON.stringify(loaded.photography.json || { items: [] }));
+        const out = [];
+        document.querySelectorAll("#photo-items .badge-row").forEach((row) => {
+          const g = (f) => row.querySelector(`[data-f="${f}"]`);
+          const val = (f) => (g(f) ? g(f).value.trim() : "");
+          const titleEn = val("title.en"),
+            titleZh = val("title.zh");
+          if (!titleEn && !titleZh) return; // 无标题的空行丢弃
+          const links = val("links")
+            .split("\n")
+            .map((line) => {
+              const i = line.indexOf("|");
+              if (i < 0) return null;
+              const url = line.slice(i + 1).trim();
+              return /^https?:\/\//.test(url) ? { label: line.slice(0, i).trim() || "link", url } : null;
+            })
+            .filter(Boolean);
+          const extra = {};
+          if (val("location")) extra.location = val("location");
+          if (val("video")) extra.video = val("video");
+          out.push({
+            id: row.dataset.id || slugify(titleEn || titleZh),
+            title: { en: titleEn || null, zh: titleZh || null },
+            summary: { en: val("summary.en") || null, zh: val("summary.zh") || null },
+            date: val("date") || null,
+            tags: val("tags")
+              ? val("tags")
+                  .split(",")
+                  .map((t) => t.trim())
+                  .filter(Boolean)
+              : [],
+            cover: val("cover") || null,
+            links,
+            public: g("public") ? g("public").checked : true,
+            extra,
+          });
+        });
+        data.items = out;
+        return data;
+      }
+
       // ---- 收集 + 保存 ----
       function collect() {
         const config = JSON.parse(JSON.stringify(loaded.config.json));
@@ -667,6 +790,7 @@
             ["en", FILES.en, next.en],
             ["zh", FILES.zh, next.zh],
             ["special", FILES.special, collectSpecial()],
+            ["photography", FILES.photography, collectPhotography()],
           ];
           let n = 0;
           for (const [key, path, obj] of jobs) {

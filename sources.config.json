@@ -9,16 +9,15 @@
       "mock": "scripts/mock/develop.public.json"
     },
     {
+      "$comment": "写作两源不再配 mock（站长 2026-07-19 要求删占位文稿）：真实源发布前展厅为空态，发布后自动上墙",
       "module": "writing",
       "adapter": "public-json",
-      "file": "writing.public.json",
-      "mock": "scripts/mock/writing.public.json"
+      "file": "writing.public.json"
     },
     {
       "module": "writing",
       "adapter": "public-json",
-      "file": "thoughts.public.json",
-      "mock": "scripts/mock/thoughts.public.json"
+      "file": "thoughts.public.json"
     },
     {
       "module": "music-wall",

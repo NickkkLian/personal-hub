@@ -118,7 +118,10 @@
     "shelfHint": "Pull a spine to open it",
     "new": "NEW",
     "back": "Back to the shelf",
-    "open": "Open"
+    "open": "Open",
+    "read": "Read full text",
+    "close": "Close",
+    "empty": "No public writing yet — essays will hang on this wall once published."
   },
   "aboutPage": {
     "portrait": "PORTRAIT OF THE CURATOR",

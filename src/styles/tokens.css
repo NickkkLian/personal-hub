@@ -39,9 +39,12 @@
   --room-about: var(--paint-rose);
 
   /* ---------- 语义令牌 · 浅色（日场画廊） ---------- */
-  --bg: #f3eee5;
+  --bg: #ffffff; /* 站长指定纯白（2026-07-19 由画布暖白 #f3eee5 改；景深/分层装饰全保留，仅最底层变白） */
   --surface: #faf7f0; /* 比墙面略亮的"画布"面 */
   --surface-2: #ece5d8; /* 凹陷面 / 标签底 */
+  /* 导航条底色（站长指定：浅樱花粉半透明，仅浅色模式；深色沿用旧 bg 半透明观感） */
+  --nav-bg: rgb(255 224 233 / 0.62);
+  --nav-bg-strong: rgb(255 224 233 / 0.92); /* 移动端下拉菜单用更实的一档 */
   --text: #1c1a17;
   --muted: #6f6a60;
   --accent: var(--brass);
@@ -98,6 +101,9 @@
   --bg: #171513;
   --surface: #201d1a;
   --surface-2: #2a2622;
+  /* 深色导航维持旧观感（= 原 bg-bg/80 与 /95） */
+  --nav-bg: rgb(23 21 19 / 0.8);
+  --nav-bg-strong: rgb(23 21 19 / 0.95);
   --text: #ece7dc;
   --muted: #9a948a;
   --accent: var(--brass);

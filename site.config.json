@@ -109,5 +109,10 @@
       "enabled": true,
       "nav": true
     }
+  },
+  "writingLabel": {
+    "$comment": "写作卡片体裁标注（双语，留空不显示）——替代原自动抓取的『完整观点』，在 admin 后台『写作卡片标注』编辑",
+    "en": "",
+    "zh": ""
   }
 }
