@@ -14,50 +14,25 @@ interface Props {
   room?: string;
   ghost?: string;
 }
-import { floralArch } from "../../lib/floral-arch";
 const { room, ghost } = Astro.props;
 // 门厅（无 room）默认取雾蓝而非黄铜金——黄铜作氛围主色会让整页发黄（2026-07-21 站长反映）
 const roomVar = room ? `var(${room})` : "var(--paint-mist)";
-const floral = floralArch(); // 印象派花艺拱廊（确定性生成）
 ---
 
 <div class="backdrop" aria-hidden="true" style={`--room-paint: ${roomVar}`}>
-  {/* ③ 建筑暗示层：印象派花艺拱廊——细藤架结构 + 消失点柔光 + 从下往上一路生花（三层景深） */}
-  <svg
-    class="arch"
-    viewBox="0 0 600 640"
-    preserveAspectRatio="xMidYMax meet"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs set:html={floral.defs}></defs>
-    <defs>
-      {/* 拱内远空气（冷灰）+ 远端柔光 */}
-      <radialGradient id="vault-depth" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--paint-ink)" stop-opacity="0.4"></stop>
-        <stop offset="60%" stop-color="var(--paint-ink)" stop-opacity="0.12"></stop>
-        <stop offset="100%" stop-color="var(--paint-ink)" stop-opacity="0"></stop>
-      </radialGradient>
-      <radialGradient id="vault-core" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--paint-canvas)" stop-opacity="0.95"></stop>
-        <stop offset="100%" stop-color="var(--paint-canvas)" stop-opacity="0"></stop>
-      </radialGradient>
-    </defs>
-    {/* 结构层：拱内空气 + 呼吸光核 + 细藤架轮廓（花攀附其上） */}
-    <g class="arch-structure">
-      <ellipse cx="300" cy="392" rx="126" ry="96" fill="url(#vault-depth)"></ellipse>
-      <ellipse class="vault-light" cx="300" cy="418" rx="50" ry="36" fill="url(#vault-core)"></ellipse>
-      <path
-        d="M158 640 V262 a142 142 0 0 1 284 0 V640"
-        fill="none"
-        stroke="var(--text)"
-        stroke-opacity="0.13"
-        stroke-width="1"></path>
-    </g>
-    {/* 花艺三层景深：远（糊冷淡）→ 中（主花）→ 近（点睛清晰），从下往上生花 */}
-    <g class="fa-back" set:html={floral.back}></g>
-    <g class="fa-mid" set:html={floral.mid}></g>
-    <g class="fa-front" set:html={floral.front}></g>
-  </svg>
+  {/* ③ 花艺层：写实油画花艺（CC0 Fantin-Latour《花卉静物》抠底）——前后双层景深 +
+      微风轻摇 + 露珠微光 + 底部承影，营造真实感油画插花 */}
+  <div class="florals">
+    <div class="floral-glow"></div>
+    <img class="floral-back" src="/floral/arrangement.webp" alt="" aria-hidden="true" decoding="async" />
+    <img class="floral-front" src="/floral/arrangement.webp" alt="" aria-hidden="true" decoding="async" />
+    <span class="dew" style="left:20%;bottom:46%;--dd:0s"></span>
+    <span class="dew" style="left:38%;bottom:52%;--dd:-3s"></span>
+    <span class="dew" style="left:52%;bottom:44%;--dd:-6s"></span>
+    <span class="dew" style="left:64%;bottom:36%;--dd:-1.5s"></span>
+    <span class="dew" style="left:30%;bottom:34%;--dd:-4.5s"></span>
+    <span class="dew" style="left:73%;bottom:30%;--dd:-2.2s"></span>
+  </div>
 
   {/* ② 颜料雾（重模糊氛围层） + 幽灵字 */}
   {
@@ -147,39 +122,60 @@ const floral = floralArch(); // 印象派花艺拱廊（确定性生成）
   }
 
   /* ③ 建筑暗示层：远厅拱门门洞，看得见的纵深开口 */
-  .arch {
+  /* —— 写实油画花艺（背景纵深主角）—— */
+  .florals {
     position: absolute;
     left: 50%;
-    bottom: -2%;
-    width: min(86vw, 920px);
-    height: auto;
+    bottom: -17%;
+    width: min(820px, 68vw);
     transform: translateX(-50%);
-    opacity: 0.82; /* 花艺是主角，需有存在感（仍是背景，靠柔渐变+景深不压内容） */
+    pointer-events: none;
   }
-  :global([data-theme="dark"]) .arch {
-    opacity: 0.7;
+  .floral-front,
+  .floral-back {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    height: auto;
+    transform-origin: 50% 100%; /* 从根部随风摇 */
   }
-  /* 结构层（藤架/拱内空气）保持含蓄，让花攀在上面 */
-  .arch-structure {
-    opacity: 0.2;
+  /* 近层：清晰 + 右下柔投影＝影子/立体 */
+  .floral-front {
+    left: 0;
+    width: 100%;
+    opacity: 0.86;
+    filter: drop-shadow(5px 8px 9px rgb(28 26 23 / 0.16));
   }
-  /* 三层景深：远糊冷淡 → 中 → 近清晰点睛（大气透视） */
-  .fa-back {
-    filter: blur(3px);
-    opacity: 0.6;
+  /* 远层：放大、模糊、去饱和提亮＝大气透视纵深 */
+  .floral-back {
+    left: -8%;
+    width: 116%;
+    opacity: 0.4;
+    filter: blur(6px) saturate(0.82) brightness(1.06);
   }
-  .fa-mid {
-    filter: blur(1px);
-    opacity: 0.85;
+  /* 花后柔光晕（展厅透光） */
+  .floral-glow {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    width: 78%;
+    height: 62%;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at 50% 62%, var(--paint-canvas) 0%, transparent 66%);
+    opacity: 0.5;
   }
-  .fa-front {
-    opacity: 0.98;
+  /* 露珠：花瓣上的高光水珠 */
+  .dew {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, #fff 0%, rgb(255 255 255 / 0.45) 55%, transparent 100%);
+    box-shadow: 0 0 4px rgb(255 255 255 / 0.7);
+    opacity: 0.75;
   }
-  /* 消失点光核：极慢呼吸（远厅透光的微妙起伏） */
-  .vault-light {
-    opacity: 0.85;
-    transform-box: fill-box;
-    transform-origin: center;
+  :global([data-theme="dark"]) .floral-glow {
+    opacity: 0.16;
   }
 
   /* ② 颜料雾：重模糊的展厅空气（弥散氛围，无明显边界） */
@@ -325,11 +321,16 @@ const floral = floralArch(); // 印象派花艺拱廊（确定性生成）
 
   /* ---- 七层视差：translate3d 由 --sy 驱动，速率递增 ---- */
   @media (prefers-reduced-motion: no-preference) {
-    .arch {
-      transform: translateX(-50%) translate3d(0, calc(var(--sy, 0) * -0.018px), 0);
+    /* 微风轻摇：前后两层不同相位/速度，从根部摆动＝风吹叶动 */
+    .floral-front {
+      animation: sway-b 9s ease-in-out infinite;
     }
-    .vault-light {
-      animation: vault-breathe 14s var(--ease-gallery) infinite alternate;
+    .floral-back {
+      animation: sway-a 13s ease-in-out infinite;
+    }
+    .dew {
+      animation: dew-shimmer 5s ease-in-out infinite;
+      animation-delay: var(--dd, 0s);
     }
     .ghost {
       transform: translate3d(0, calc(var(--sy, 0) * -0.04px), 0);
@@ -386,14 +387,33 @@ const floral = floralArch(); // 印象派花艺拱廊（确定性生成）
       transform: scale(1.16);
     }
   }
-  @keyframes vault-breathe {
-    from {
-      opacity: 0.55;
-      transform: scale(0.9);
+  @keyframes sway-a {
+    0%,
+    100% {
+      transform: rotate(-0.55deg);
     }
-    to {
-      opacity: 1;
-      transform: scale(1.08);
+    50% {
+      transform: rotate(0.5deg);
+    }
+  }
+  @keyframes sway-b {
+    0%,
+    100% {
+      transform: rotate(0.45deg);
+    }
+    50% {
+      transform: rotate(-0.42deg);
+    }
+  }
+  @keyframes dew-shimmer {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(0.78);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(1.18);
     }
   }
   @keyframes drift-a {
