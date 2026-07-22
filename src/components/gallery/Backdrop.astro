@@ -15,33 +15,43 @@ interface Props {
   ghost?: string;
 }
 const { room, ghost } = Astro.props;
-const roomVar = room ? `var(${room})` : "var(--brass)";
+// 门厅（无 room）默认取雾蓝而非黄铜金——黄铜作氛围主色会让整页发黄（2026-07-21 站长反映）
+const roomVar = room ? `var(${room})` : "var(--paint-mist)";
 ---
 
 <div class="backdrop" aria-hidden="true" style={`--room-paint: ${roomVar}`}>
-  {/* ③ 建筑暗示层：下一间展厅的拱门门洞（有色填充，看得见的"通往下一厅"开口） */}
+  {/* ③ 建筑暗示层：一点透视连拱穹顶——多层递退拱肋 + 消失点深度 + 呼吸光核，营造真实纵深 */}
   <svg
     class="arch"
-    viewBox="0 0 600 620"
+    viewBox="0 0 600 640"
     preserveAspectRatio="xMidYMax meet"
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
-      <linearGradient id="arch-depth" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--paint-ink)" stop-opacity="0.9"></stop>
-        <stop offset="70%" stop-color="var(--paint-ink)" stop-opacity="0.35"></stop>
+      {/* 消失点：远厅暗空气（冷灰，大气透视） */}
+      <radialGradient id="vault-depth" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--paint-ink)" stop-opacity="0.55"></stop>
+        <stop offset="58%" stop-color="var(--paint-ink)" stop-opacity="0.16"></stop>
         <stop offset="100%" stop-color="var(--paint-ink)" stop-opacity="0"></stop>
-      </linearGradient>
+      </radialGradient>
+      {/* 光核：远厅透进来的暖光 */}
+      <radialGradient id="vault-core" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--paint-canvas)" stop-opacity="0.95"></stop>
+        <stop offset="100%" stop-color="var(--paint-canvas)" stop-opacity="0"></stop>
+      </radialGradient>
     </defs>
-    {/* 门内更深的空气（看进下一间暗厅） */}
-    <path d="M150 620 V250 a150 150 0 0 1 300 0 V620 Z" fill="url(#arch-depth)"></path>
-    {/* 门框发丝边 */}
-    <path
-      d="M150 620 V250 a150 150 0 0 1 300 0 V620"
-      fill="none"
-      stroke="var(--text)"
-      stroke-width="1.5"
-      stroke-opacity="0.5"></path>
+    {/* 远厅暗空气（静） */}
+    <ellipse cx="300" cy="402" rx="126" ry="92" fill="url(#vault-depth)"></ellipse>
+    {/* 远端光核（极慢呼吸，reduced-motion 关） */}
+    <ellipse class="vault-light" cx="300" cy="426" rx="48" ry="34" fill="url(#vault-core)"></ellipse>
+    {/* 递退拱肋：前→后越远越淡（大气透视），左上定向光下右肋略实 */}
+    <g fill="none" stroke="var(--text)" stroke-linecap="round">
+      <path d="M150 640 V250 a150 150 0 0 1 300 0 V640" stroke-opacity="0.5" stroke-width="1.4"></path>
+      <path d="M178 640 V278 a122 122 0 0 1 244 0 V640" stroke-opacity="0.37" stroke-width="1.2"></path>
+      <path d="M205 640 V305 a95 95 0 0 1 190 0 V640" stroke-opacity="0.26" stroke-width="1.1"></path>
+      <path d="M233 640 V333 a67 67 0 0 1 134 0 V640" stroke-opacity="0.17" stroke-width="1"></path>
+      <path d="M260 640 V360 a40 40 0 0 1 80 0 V640" stroke-opacity="0.11" stroke-width="0.9"></path>
+    </g>
   </svg>
 
   {/* ② 颜料雾（重模糊氛围层） + 幽灵字 */}
@@ -122,13 +132,19 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     position: absolute;
     left: 50%;
     bottom: -2%;
-    width: min(88vw, 940px);
+    width: min(84vw, 900px);
     height: auto;
     transform: translateX(-50%);
-    opacity: 0.1;
+    opacity: 0.16;
   }
   :global([data-theme="dark"]) .arch {
-    opacity: 0.26;
+    opacity: 0.3;
+  }
+  /* 消失点光核：极慢呼吸（远厅透光的微妙起伏） */
+  .vault-light {
+    opacity: 0.85;
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
   /* ② 颜料雾：重模糊的展厅空气（弥散氛围，无明显边界） */
@@ -144,15 +160,16 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     top: -24vmax;
     left: -18vmax;
     background: radial-gradient(circle, var(--room-paint) 0%, transparent 60%);
-    opacity: 0.22;
+    opacity: 0.18;
   }
   .haze-b {
     width: 56vmax;
     height: 56vmax;
     bottom: -20vmax;
     right: -16vmax;
-    background: radial-gradient(circle, var(--brass) 0%, transparent 60%);
-    opacity: 0.16;
+    /* 由黄铜金改雾蓝：与暖场平衡、去黄（莫奈冷暖并置） */
+    background: radial-gradient(circle, var(--paint-mist) 0%, transparent 60%);
+    opacity: 0.12;
   }
 
   /* ② 柔和色场圆：轻模糊、看得见边界的圆（参考图墙上色光） */
@@ -167,8 +184,9 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     height: 32vmax;
     top: 10vh;
     right: 7vw;
+    /* 干玫瑰保留一抹暖意（莫奈的灰粉），但大幅降透明度不再压场 */
     background: radial-gradient(circle, var(--paint-rose) 0%, transparent 68%);
-    opacity: 0.42;
+    opacity: 0.2;
   }
   .field-b {
     width: 24vmax;
@@ -176,15 +194,16 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     top: 42vh;
     left: 5vw;
     background: radial-gradient(circle, var(--room-paint) 0%, transparent 68%);
-    opacity: 0.4;
+    opacity: 0.26;
   }
   .field-c {
     width: 28vmax;
     height: 28vmax;
     bottom: 6vh;
     right: 24vw;
-    background: radial-gradient(circle, var(--brass-hi) 0%, transparent 68%);
-    opacity: 0.32;
+    /* 由浅黄铜改鼠尾草绿：这层原是最大的"黄"源（0.32），换冷绿去黄 */
+    background: radial-gradient(circle, var(--paint-sage) 0%, transparent 68%);
+    opacity: 0.16;
   }
   :global([data-theme="dark"]) .haze-a {
     opacity: 0.3;
@@ -218,7 +237,7 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     height: 38vmax;
     border-radius: 50%;
     filter: blur(60px);
-    opacity: 0.26;
+    opacity: 0.2;
     will-change: transform;
   }
   .fg-left {
@@ -229,8 +248,9 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
   .fg-right {
     top: -9vmax;
     right: -8vmax;
-    background: radial-gradient(circle, var(--brass) 0%, transparent 60%);
-    opacity: 0.2;
+    /* 由黄铜金改雾蓝，去黄 */
+    background: radial-gradient(circle, var(--paint-mist) 0%, transparent 60%);
+    opacity: 0.14;
   }
 
   .grain {
@@ -249,6 +269,9 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
   @media (prefers-reduced-motion: no-preference) {
     .arch {
       transform: translateX(-50%) translate3d(0, calc(var(--sy, 0) * -0.018px), 0);
+    }
+    .vault-light {
+      animation: vault-breathe 14s var(--ease-gallery) infinite alternate;
     }
     .ghost {
       transform: translate3d(0, calc(var(--sy, 0) * -0.04px), 0);
@@ -288,6 +311,16 @@ const roomVar = room ? `var(${room})` : "var(--brass)";
     }
   }
 
+  @keyframes vault-breathe {
+    from {
+      opacity: 0.55;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+  }
   @keyframes drift-a {
     to {
       transform: translate(6vmax, 4vmax);
