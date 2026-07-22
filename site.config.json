@@ -26,8 +26,8 @@
     "umamiWebsiteId": ""
   },
   "fonts": {
-    "$comment": "标题字 display ∈ fraunces|playfair|cormorant；小字标签 mono ∈ manrope|space-mono|ibm-plex-mono。正文固定 Inter。改完重新部署即生效。",
-    "display": "fraunces",
+    "$comment": "标题字 display ∈ fraunces|playfair|cormorant|marcellus；小字标签 mono ∈ manrope|space-mono|ibm-plex-mono。正文固定 Inter。改完重新部署即生效。",
+    "display": "marcellus",
     "mono": "manrope"
   },
   "featured": {

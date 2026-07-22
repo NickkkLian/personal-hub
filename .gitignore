@@ -24,3 +24,14 @@ src/data/*.normalized.json
 
 # claude code personal local settings (skills/ 等项目级配置仍纳入版本控制)
 .claude/settings.local.json
+
+# 第三方 agent skills（emilkowalski 等，本地参考用，不入网站仓）
+.agents/
+.claude/skills/animation-vocabulary
+.claude/skills/apple-design
+.claude/skills/emil-design-eng
+.claude/skills/find-animation-opportunities
+.claude/skills/improve-animations
+.claude/skills/pick-ui-library
+.claude/skills/review-animations
+skills-lock.json

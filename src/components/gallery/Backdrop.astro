@@ -14,44 +14,49 @@ interface Props {
   room?: string;
   ghost?: string;
 }
+import { floralArch } from "../../lib/floral-arch";
 const { room, ghost } = Astro.props;
 // 门厅（无 room）默认取雾蓝而非黄铜金——黄铜作氛围主色会让整页发黄（2026-07-21 站长反映）
 const roomVar = room ? `var(${room})` : "var(--paint-mist)";
+const floral = floralArch(); // 印象派花艺拱廊（确定性生成）
 ---
 
 <div class="backdrop" aria-hidden="true" style={`--room-paint: ${roomVar}`}>
-  {/* ③ 建筑暗示层：一点透视连拱穹顶——多层递退拱肋 + 消失点深度 + 呼吸光核，营造真实纵深 */}
+  {/* ③ 建筑暗示层：印象派花艺拱廊——细藤架结构 + 消失点柔光 + 从下往上一路生花（三层景深） */}
   <svg
     class="arch"
     viewBox="0 0 600 640"
     preserveAspectRatio="xMidYMax meet"
     xmlns="http://www.w3.org/2000/svg"
   >
+    <defs set:html={floral.defs}></defs>
     <defs>
-      {/* 消失点：远厅暗空气（冷灰，大气透视） */}
+      {/* 拱内远空气（冷灰）+ 远端柔光 */}
       <radialGradient id="vault-depth" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--paint-ink)" stop-opacity="0.55"></stop>
-        <stop offset="58%" stop-color="var(--paint-ink)" stop-opacity="0.16"></stop>
+        <stop offset="0%" stop-color="var(--paint-ink)" stop-opacity="0.4"></stop>
+        <stop offset="60%" stop-color="var(--paint-ink)" stop-opacity="0.12"></stop>
         <stop offset="100%" stop-color="var(--paint-ink)" stop-opacity="0"></stop>
       </radialGradient>
-      {/* 光核：远厅透进来的暖光 */}
       <radialGradient id="vault-core" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="var(--paint-canvas)" stop-opacity="0.95"></stop>
         <stop offset="100%" stop-color="var(--paint-canvas)" stop-opacity="0"></stop>
       </radialGradient>
     </defs>
-    {/* 远厅暗空气（静） */}
-    <ellipse cx="300" cy="402" rx="126" ry="92" fill="url(#vault-depth)"></ellipse>
-    {/* 远端光核（极慢呼吸，reduced-motion 关） */}
-    <ellipse class="vault-light" cx="300" cy="426" rx="48" ry="34" fill="url(#vault-core)"></ellipse>
-    {/* 递退拱肋：前→后越远越淡（大气透视），左上定向光下右肋略实 */}
-    <g fill="none" stroke="var(--text)" stroke-linecap="round">
-      <path d="M150 640 V250 a150 150 0 0 1 300 0 V640" stroke-opacity="0.5" stroke-width="1.4"></path>
-      <path d="M178 640 V278 a122 122 0 0 1 244 0 V640" stroke-opacity="0.37" stroke-width="1.2"></path>
-      <path d="M205 640 V305 a95 95 0 0 1 190 0 V640" stroke-opacity="0.26" stroke-width="1.1"></path>
-      <path d="M233 640 V333 a67 67 0 0 1 134 0 V640" stroke-opacity="0.17" stroke-width="1"></path>
-      <path d="M260 640 V360 a40 40 0 0 1 80 0 V640" stroke-opacity="0.11" stroke-width="0.9"></path>
+    {/* 结构层：拱内空气 + 呼吸光核 + 细藤架轮廓（花攀附其上） */}
+    <g class="arch-structure">
+      <ellipse cx="300" cy="392" rx="126" ry="96" fill="url(#vault-depth)"></ellipse>
+      <ellipse class="vault-light" cx="300" cy="418" rx="50" ry="36" fill="url(#vault-core)"></ellipse>
+      <path
+        d="M158 640 V262 a142 142 0 0 1 284 0 V640"
+        fill="none"
+        stroke="var(--text)"
+        stroke-opacity="0.13"
+        stroke-width="1"></path>
     </g>
+    {/* 花艺三层景深：远（糊冷淡）→ 中（主花）→ 近（点睛清晰），从下往上生花 */}
+    <g class="fa-back" set:html={floral.back}></g>
+    <g class="fa-mid" set:html={floral.mid}></g>
+    <g class="fa-front" set:html={floral.front}></g>
   </svg>
 
   {/* ② 颜料雾（重模糊氛围层） + 幽灵字 */}
@@ -70,14 +75,28 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
   <div class="field field-b" data-par="field-b"></div>
   <div class="field field-c" data-par="field-c"></div>
 
-  {/* ⑤ 微尘层 */}
+  {/* ⑤ 立体微粒层：空中浮粒，带高光与微投影＝立体；近大清、远小糊 */}
   <div class="dust" data-par="dust">
-    <i style="left:12%;top:22%;animation-delay:0s"></i>
-    <i style="left:78%;top:14%;animation-delay:-6s"></i>
-    <i style="left:62%;top:58%;animation-delay:-12s"></i>
-    <i style="left:28%;top:74%;animation-delay:-18s"></i>
-    <i style="left:88%;top:42%;animation-delay:-9s"></i>
-    <i style="left:44%;top:36%;animation-delay:-15s"></i>
+    <i style="left:12%;top:22%;--sz:7px;--bl:0px;animation-delay:0s"></i>
+    <i style="left:78%;top:14%;--sz:3px;--bl:1.4px;animation-delay:-6s"></i>
+    <i style="left:62%;top:58%;--sz:5px;--bl:0.4px;animation-delay:-12s"></i>
+    <i style="left:28%;top:74%;--sz:8px;--bl:0px;animation-delay:-18s"></i>
+    <i style="left:88%;top:42%;--sz:3px;--bl:1.6px;animation-delay:-9s"></i>
+    <i style="left:44%;top:36%;--sz:4px;--bl:0.8px;animation-delay:-15s"></i>
+    <i style="left:20%;top:50%;--sz:6px;--bl:0.2px;animation-delay:-3s"></i>
+    <i style="left:70%;top:78%;--sz:3px;--bl:1.8px;animation-delay:-21s"></i>
+    <i style="left:54%;top:18%;--sz:5px;--bl:0.5px;animation-delay:-11s"></i>
+    <i style="left:36%;top:64%;--sz:2px;--bl:2px;animation-delay:-7s"></i>
+  </div>
+
+  {/* 亮色点光源：花间光斑，柔光晕 + 极慢呼吸微闪 */}
+  <div class="lights" data-par="lights">
+    <span style="left:31%;top:38%;--lz:14px;animation-delay:0s"></span>
+    <span style="left:66%;top:30%;--lz:9px;animation-delay:-4s"></span>
+    <span style="left:48%;top:60%;--lz:18px;animation-delay:-8s"></span>
+    <span style="left:24%;top:66%;--lz:7px;animation-delay:-2s"></span>
+    <span style="left:80%;top:56%;--lz:11px;animation-delay:-6s"></span>
+    <span style="left:58%;top:80%;--lz:8px;animation-delay:-10s"></span>
   </div>
 
   {/* ④ 画布纹理：内联 feTurbulence 油画布噪点 */}
@@ -132,13 +151,29 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     position: absolute;
     left: 50%;
     bottom: -2%;
-    width: min(84vw, 900px);
+    width: min(86vw, 920px);
     height: auto;
     transform: translateX(-50%);
-    opacity: 0.16;
+    opacity: 0.82; /* 花艺是主角，需有存在感（仍是背景，靠柔渐变+景深不压内容） */
   }
   :global([data-theme="dark"]) .arch {
-    opacity: 0.3;
+    opacity: 0.7;
+  }
+  /* 结构层（藤架/拱内空气）保持含蓄，让花攀在上面 */
+  .arch-structure {
+    opacity: 0.2;
+  }
+  /* 三层景深：远糊冷淡 → 中 → 近清晰点睛（大气透视） */
+  .fa-back {
+    filter: blur(3px);
+    opacity: 0.6;
+  }
+  .fa-mid {
+    filter: blur(1px);
+    opacity: 0.85;
+  }
+  .fa-front {
+    opacity: 0.98;
   }
   /* 消失点光核：极慢呼吸（远厅透光的微妙起伏） */
   .vault-light {
@@ -160,7 +195,7 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     top: -24vmax;
     left: -18vmax;
     background: radial-gradient(circle, var(--room-paint) 0%, transparent 60%);
-    opacity: 0.18;
+    opacity: 0.26;
   }
   .haze-b {
     width: 56vmax;
@@ -169,7 +204,7 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     right: -16vmax;
     /* 由黄铜金改雾蓝：与暖场平衡、去黄（莫奈冷暖并置） */
     background: radial-gradient(circle, var(--paint-mist) 0%, transparent 60%);
-    opacity: 0.12;
+    opacity: 0.18;
   }
 
   /* ② 柔和色场圆：轻模糊、看得见边界的圆（参考图墙上色光） */
@@ -186,7 +221,7 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     right: 7vw;
     /* 干玫瑰保留一抹暖意（莫奈的灰粉），但大幅降透明度不再压场 */
     background: radial-gradient(circle, var(--paint-rose) 0%, transparent 68%);
-    opacity: 0.2;
+    opacity: 0.3;
   }
   .field-b {
     width: 24vmax;
@@ -194,7 +229,7 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     top: 42vh;
     left: 5vw;
     background: radial-gradient(circle, var(--room-paint) 0%, transparent 68%);
-    opacity: 0.26;
+    opacity: 0.36;
   }
   .field-c {
     width: 28vmax;
@@ -203,7 +238,7 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     right: 24vw;
     /* 由浅黄铜改鼠尾草绿：这层原是最大的"黄"源（0.32），换冷绿去黄 */
     background: radial-gradient(circle, var(--paint-sage) 0%, transparent 68%);
-    opacity: 0.16;
+    opacity: 0.24;
   }
   :global([data-theme="dark"]) .haze-a {
     opacity: 0.3;
@@ -223,11 +258,34 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
   }
   .dust i {
     position: absolute;
-    width: 4px;
-    height: 4px;
+    width: var(--sz, 4px);
+    height: var(--sz, 4px);
     border-radius: 50%;
-    background: var(--room-paint);
-    opacity: 0.3;
+    /* 左上高光的颜料珠＝立体（呼应统一左上光源） */
+    background: radial-gradient(circle at 34% 30%, #fff 0%, var(--room-paint) 62%, transparent 100%);
+    filter: blur(var(--bl, 0));
+    box-shadow: 0 1px 2px rgb(28 26 23 / 0.14); /* 微投影＝影子 */
+    opacity: 0.4;
+  }
+
+  /* 亮色点光源：暖白柔光晕 */
+  .lights {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+  }
+  .lights span {
+    position: absolute;
+    width: var(--lz, 10px);
+    height: var(--lz, 10px);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgb(255 253 244 / 0.95) 0%,
+      rgb(255 244 214 / 0.5) 34%,
+      transparent 70%
+    );
+    opacity: 0.7;
   }
 
   /* ⑦ 失焦前景：重度虚化颜料色形，贴边出血 */
@@ -297,6 +355,12 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
     .dust i {
       animation: float 24s linear infinite;
     }
+    .lights {
+      transform: translate3d(0, calc(var(--sy, 0) * -0.13px), 0);
+    }
+    .lights span {
+      animation: twinkle 6.5s var(--ease-gallery) infinite alternate;
+    }
     .fg-left {
       transform: translate3d(0, calc(var(--sy, 0) * -0.2px), 0);
     }
@@ -306,11 +370,22 @@ const roomVar = room ? `var(${room})` : "var(--paint-mist)";
   }
   /* 移动端减量：隐藏微尘与失焦前景的视差负担 */
   @media (max-width: 640px) {
-    .dust {
+    .dust,
+    .lights {
       display: none;
     }
   }
 
+  @keyframes twinkle {
+    from {
+      opacity: 0.28;
+      transform: scale(0.72);
+    }
+    to {
+      opacity: 0.85;
+      transform: scale(1.16);
+    }
+  }
   @keyframes vault-breathe {
     from {
       opacity: 0.55;

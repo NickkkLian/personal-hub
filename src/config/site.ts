@@ -76,6 +76,7 @@ export const FONT_FAMILIES: { display: Record<string, string>; mono: Record<stri
     fraunces: '"Fraunces Variable"',
     playfair: '"Playfair Display Variable"',
     cormorant: '"Cormorant Variable"',
+    marcellus: '"Marcellus"', // 古典罗马碑刻风（单一字重 400，站长 2026-07-21 选定为主字体）
   },
   // "mono" 槽位现作「小字标签字体」——含等宽与精致无衬线两类，值自带兜底栈
   mono: {
