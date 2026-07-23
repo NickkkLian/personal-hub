@@ -123,9 +123,9 @@ export function flattenPublicPayload(payload, module) {
         id: it.id,
         title: it.name,
         summary: it.summary,
-        date: asDate(it.updatedAt),
+        date: asDate(it.date || it.updatedAt), // 站长手填年月日优先，退回自动 updatedAt
         tags: it.tags,
-        cover: null,
+        cover: typeof it.image === "string" && it.image ? it.image : null, // 公开首图（Mind-Archive 导出）
         links: Array.isArray(it.links) ? it.links : [],
         extra: {
           content: it.content || null,

@@ -122,6 +122,7 @@ const title = t(locale, "module.writing.title");
                   <!-- 全文（弹窗内容源；hidden 不显示，点击时克隆进弹窗） -->
                   <div class="wr-full" hidden>
                     <div class="wrr-article">
+                      {e.cover && <img class="wrr-cover" src={e.cover} alt="" loading="lazy" decoding="async" />}
                       <p class="meta-mono wrr-meta">
                         {exhibitNo(e)} · WRITING
                         {badge ? ` · ${badge}` : ""}
@@ -350,6 +351,15 @@ const title = t(locale, "module.writing.title");
   .wrr-slot :global(.wrr-article) {
     max-width: 42rem;
     margin: 0 auto;
+  }
+  .wrr-slot :global(.wrr-cover) {
+    display: block;
+    width: 100%;
+    max-height: 340px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1.4rem;
+    box-shadow: var(--shadow-exhibit);
   }
   .wrr-slot :global(.wrr-meta) {
     color: color-mix(in oklab, var(--room) 55%, var(--text));
